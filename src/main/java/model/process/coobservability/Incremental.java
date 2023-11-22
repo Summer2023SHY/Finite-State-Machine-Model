@@ -97,7 +97,7 @@ public class Incremental extends IncrementalMemoryMeasure {
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public boolean decideIncrementalCondition(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<Agent> agents) throws Exception{
+    public boolean decideIncrementalCondition(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<Agent> agents) {
         ArrayList<TransitionSystem> copyPlants = new ArrayList<TransitionSystem>();
         ArrayList<TransitionSystem> copySpecs = new ArrayList<TransitionSystem>();
         copyPlants.addAll(plants);

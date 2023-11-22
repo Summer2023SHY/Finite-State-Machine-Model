@@ -101,12 +101,11 @@ public class GenerateFSM {
      * @param sizeTrans
      * @param nonDet
      * @return
-     * @throws Exception
      */
 
-    public static String createNewFSM(String name, int sizeStates, int sizeEvents, int sizeTrans, boolean det) throws Exception{
+    public static String createNewFSM(String name, int sizeStates, int sizeEvents, int sizeTrans, boolean det) {
         if(stateAttributes == null || eventAttributes == null || transitionAttributes == null) {
-            throw new Exception("Error: FSM Attribute Component Not Defined; Check State/Event/Transition Attribute Assignment");
+            throw new IllegalStateException("Error: FSM Attribute Component Not Defined; Check State/Event/Transition Attribute Assignment");
         }
         StringBuilder out = new StringBuilder();
         out.append(name + "\n");

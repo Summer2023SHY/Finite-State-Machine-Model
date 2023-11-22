@@ -3,6 +3,7 @@ package ui;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -167,7 +168,7 @@ public class FSMUI implements InputHandler{
         try {
             return Integer.parseInt(requestUserInput(phrase));
         }
-        catch(Exception e) {
+        catch(NumberFormatException e) {
             return null;
         }
     }
@@ -259,7 +260,7 @@ public class FSMUI implements InputHandler{
         try {
             return Integer.parseInt(getTextContent(code));
         }
-        catch(Exception e) {
+        catch(NumberFormatException e) {
             e.printStackTrace();
             displayAlert("Illegal numeric entry for code: " + code + ". Check that an input expecting a number was not given a non-numeric value.");
             return null;
@@ -270,7 +271,7 @@ public class FSMUI implements InputHandler{
         try {
             return Integer.parseInt(getTextContent(code, posit));
         }
-        catch(Exception e) {
+        catch(NumberFormatException e) {
             e.printStackTrace();
             displayAlert("Illegal numeric entry for code: " + code + ". Check that an input expecting a number was not given a non-numeric value.");
             return null;
@@ -287,17 +288,11 @@ public class FSMUI implements InputHandler{
 
 //---  Mechanical   ---------------------------------------------------------------------------
 
-    public BufferedReader retrieveFileReader(String pathIn) {
+    public BufferedReader retrieveFileReader(String pathIn) throws IOException {
         String path = pathIn.replace("\\", "/");
         InputStream is = FSMUI.class.getResourceAsStream(path);
         if(is == null) {
-            try {
-                is = new FileInputStream(new File(path));
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+            is = new FileInputStream(new File(path));
         }
         return new BufferedReader(new InputStreamReader(is));
     }

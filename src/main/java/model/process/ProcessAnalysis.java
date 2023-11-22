@@ -25,10 +25,9 @@ public class ProcessAnalysis {
      * It marks bad states along the way.
      *
      * @return - Returns a boolean value; true if the FSM is found to be blocking, false otherwise.
-     * @throws Exception
      */
 
-    public static Boolean isBlocking(TransitionSystem in) throws Exception {
+    public static Boolean isBlocking(TransitionSystem in)  {
         if(!in.hasStateAttribute(attributeInitialRef)) {
             return null;
         }

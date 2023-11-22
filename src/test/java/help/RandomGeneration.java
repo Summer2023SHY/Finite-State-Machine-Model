@@ -65,10 +65,9 @@ public class RandomGeneration {
      * @param numContrEve
      * @param badTran
      * @return
-     * @throws Exception
      */
 
-    public static String generateRandomFSM(String nom, Manager model, int numStates, int numEvents, int numTransition, boolean accessible) throws Exception {
+    public static String generateRandomFSM(String nom, Manager model, int numStates, int numEvents, int numTransition, boolean accessible)  {
         String out;
         do {
             model.removeFSM(nom);
@@ -103,11 +102,8 @@ public class RandomGeneration {
      * @param eventSizeAverage
      * @param eventVariance
      * @param eventShareRate
-     * @throws Exception
      */
-
-
-    public static ArrayList<String> generateRandomSystemSet(String prefixNom, Manager model, RandomGenStats info) throws Exception {
+    public static ArrayList<String> generateRandomSystemSet(String prefixNom, Manager model, RandomGenStats info)  {
         Random rand = new Random();
         HashMap<String, ArrayList<String>> plantEvents = new HashMap<String, ArrayList<String>>();
 

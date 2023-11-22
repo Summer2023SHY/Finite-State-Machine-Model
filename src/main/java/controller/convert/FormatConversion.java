@@ -1,6 +1,7 @@
 package controller.convert;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This class handles the transfer of an object from the fsm package to a .dot format
@@ -88,7 +89,7 @@ public class FormatConversion {
      * @param name - A String object representing the file name to save the new file to.
      */
 
-    public static String createTikZFromSVG(String fsm, String name) {
+    public static String createTikZFromSVG(String fsm, String name) throws IOException {
         if(initializeCheck()) {
             return SVGtoTikZ.convertSVGToTikZ(generateDotFile(fsm, name, TYPE_SVG), WORKING_PATH + "//" + name).getAbsolutePath();
         }
@@ -106,7 +107,7 @@ public class FormatConversion {
      * @param FSMUI.ADDRESS_CONFIG - A String object denoting the name to the GraphViz config file.
      */
 
-    public static String createTikZFromFSM(String fsm, String name) {
+    public static String createTikZFromFSM(String fsm, String name) throws IOException {
         if(initializeCheck()) {
             File out = generateDotFile(fsm, "DEMOLISH", TYPE_SVG);
             String ret = SVGtoTikZ.convertSVGToTikZ(out, WORKING_PATH + "//" + name).getAbsolutePath();

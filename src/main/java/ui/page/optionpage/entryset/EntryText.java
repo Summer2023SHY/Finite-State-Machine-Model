@@ -45,7 +45,7 @@ public class EntryText extends EntrySet{
             String tex = p.getElementStoredText(formTextEntryName(ind));
             setContent(tex, ind);
         }
-        catch(Exception e) {
+        catch(RuntimeException e) {
 
         }
         return getCodeMapping(code).equals("");

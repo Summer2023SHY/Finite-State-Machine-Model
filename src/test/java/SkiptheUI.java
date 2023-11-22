@@ -61,7 +61,7 @@ public class SkiptheUI {
      * @param args
      */
 
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) {
         //Backend stuff to let us generate our FSM Images, should prompt to set up GraphViz location as that makes our graphs.
         FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES, FiniteStateMachine.ADDRESS_CONFIG);
         FiniteStateMachine.fileConfiguration();

@@ -44,7 +44,7 @@ public class EntryList extends EntryTextDisplay{
             p.removeElementPrefixed(prefix());
             return false;
         }
-        catch(Exception e) {
+        catch(RuntimeException e) {
 
         }
         return true;

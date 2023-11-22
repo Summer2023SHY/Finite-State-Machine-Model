@@ -16,7 +16,7 @@ public class DataGatheringManager implements TestReset{
 
     public static volatile boolean check;
 
-    public void runTest() throws Exception{
+    public void runTest() {
         clockTimer = new Timer();
         setTimeOutShort();
         Timer timer = new Timer();
@@ -73,7 +73,7 @@ public class DataGatheringManager implements TestReset{
             try {
                 data.allInOneRunTests();
             }
-            catch(Exception e) {
+            catch(RuntimeException e) {
                 e.printStackTrace();
             }
         }

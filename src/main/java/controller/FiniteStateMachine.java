@@ -3,7 +3,9 @@ package controller;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -280,7 +282,11 @@ public class FiniteStateMachine implements InputReceiver{
                 view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Image file saved to: " + generateDotImage(currFSM));
                 break;
             case CodeReference.CODE_SAVE_TKZ:
-                view.displayAlert((currFSM == null) ? "Error: No selected FSM" : ".tkz file saved to: " + FormatConversion.createTikZFromFSM(model.generateFSMDot(currFSM), currFSM));
+                try {
+                    view.displayAlert((currFSM == null) ? "Error: No selected FSM" : ".tkz file saved to: " + FormatConversion.createTikZFromFSM(model.generateFSMDot(currFSM), currFSM));
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
                 break;
             case CodeReference.CODE_SAVE_SVG:
                 view.displayAlert((currFSM == null) ? "Error: No selected FSM" : ".svg file saved to: " + FormatConversion.createSVGFromFSM(model.generateFSMDot(currFSM), currFSM));
@@ -316,7 +322,7 @@ public class FiniteStateMachine implements InputReceiver{
                 try {
                     ret = model.trim(currFSM);
                     allotFSMToView(ret);
-                } catch (Exception e) {
+                } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to trim did not possess attributes: State - Initial, Marked");
                     e.printStackTrace();
                 }
@@ -334,7 +340,7 @@ public class FiniteStateMachine implements InputReceiver{
                 try {
                     ret = model.makeCoAccessible(currFSM);
                     allotFSMToView(ret);
-                } catch (Exception e) {
+                } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to make coaccessible did not possess attributes: State - Initial, Marked");
                     e.printStackTrace();
                 }
@@ -381,7 +387,7 @@ public class FiniteStateMachine implements InputReceiver{
                 try {
                     res = model.isBlocking(currFSM);
                     view.displayAlert("FSM is " + (res ? "" : "not") + " blocking");
-                } catch (Exception e) {
+                } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to query Blocking did not possess attributes: State - Initial");
                     e.printStackTrace();
                 }
@@ -488,15 +494,13 @@ public class FiniteStateMachine implements InputReceiver{
         view.startLoading();
         File f = new File(path);
         StringBuilder use = new StringBuilder();
-        try {
-            Scanner sc = new Scanner(f);
+        try (Scanner sc = new Scanner(f)) {
             while(sc.hasNextLine()) {
                 use.append(sc.nextLine() + "\n");
             }
-            sc.close();
             allotFSMToView(model.readInFSM(use.toString()));
         }
-        catch(Exception e) {
+        catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -504,13 +508,10 @@ public class FiniteStateMachine implements InputReceiver{
     private void saveFSM(String currFSM) {
         String src = model.exportFSM(currFSM);
         File f = new File(ADDRESS_SOURCES + "/" + currFSM + ".fsm");
-        RandomAccessFile raf;
-        try {
-            raf = new RandomAccessFile(f, "rw");
+        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
             raf.writeBytes(src);
-            raf.close();
         }
-        catch(Exception e) {
+        catch(IOException e) {
             e.printStackTrace();
         }
         System.out.println(f.getPath());
@@ -550,7 +551,7 @@ public class FiniteStateMachine implements InputReceiver{
 
             try {
                 allotFSMToView(    model.readInFSM(model.generateRandomFSM(nom, st, ev, tr, det)));
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 view.displayAlert("Failure to Generate new Random FSM, check you have assigned Attributes Correctly.");
             }
         }

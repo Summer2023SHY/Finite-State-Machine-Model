@@ -127,10 +127,11 @@ public class Entity {
 
 //---  Miscellaneous   ------------------------------------------------------------------------
 
+    @Override
     public boolean equals(Object other) {
-        if(other == null)
-            return false;
-        try {
+        if (this == other)
+            return true;
+        else if (other instanceof Entity) {
             Entity ot = (Entity)other;
             boolean result = getName().equals(ot.getName());
             result = result && (getAttributes().equals(ot.getAttributes()));
@@ -138,10 +139,8 @@ public class Entity {
                 result = result && (getAttributeValue(s) == ot.getAttributeValue(s));
             }
             return result;
-        }
-        catch(Exception e) {
+        } else
             return false;
-        }
     }
 
 }

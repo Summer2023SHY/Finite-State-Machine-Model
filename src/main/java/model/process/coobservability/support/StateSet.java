@@ -111,14 +111,13 @@ public class StateSet {
 
     @Override
     public boolean equals(Object o) {
-        try {
+        if (this == o)
+            return true;
+        else if (o instanceof StateSet) {
             StateSet ot = (StateSet)o;
             return getPairName().equals(ot.getPairName());
-        }
-        catch(Exception e) {
-            e.printStackTrace();
+        } else
             return false;
-        }
     }
 
     @Override

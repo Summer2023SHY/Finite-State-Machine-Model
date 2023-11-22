@@ -2,7 +2,9 @@ package datagathering;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
@@ -191,13 +193,17 @@ public class DataGathering {
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public void allInOneRunTests() throws Exception{
+    public void allInOneRunTests() {
         finished = false;
-        runTests(initializeDataGathering());
+        try {
+            runTests(initializeDataGathering());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
         finished = true;
     }
 
-    public void runTests(File f) throws Exception{
+    public void runTests(File f) throws IOException {
         heuristics = false;
 
         boolean runThrough = false;         //set true if you want to force it to go through and rewrite the analysis files/check for gaps
@@ -233,7 +239,7 @@ public class DataGathering {
 
     }
 
-    private void runBasicTests(File f, boolean runThrough) throws Exception{
+    private void runBasicTests(File f, boolean runThrough) throws IOException {
         clock.setTimeOutShort();
         //Coobs and SB
         int testNum = 0;
@@ -266,7 +272,7 @@ public class DataGathering {
         }
     }
 
-    private void runIncrementalTests(File f, boolean runThrough) throws Exception{
+    private void runIncrementalTests(File f, boolean runThrough) throws IOException {
         clock.setTimeOutShort();
         // SB and Inc
         int testNum = 4;
@@ -296,7 +302,7 @@ public class DataGathering {
 
     }
 
-    private void runHeuristicTests(File f, boolean runThrough) throws Exception{
+    private void runHeuristicTests(File f, boolean runThrough) throws IOException {
         heuristics = true;
         //Heuristics Test (SB Inc and Coobs Inc)
         int testNum = 7;
@@ -317,7 +323,7 @@ public class DataGathering {
         heuristics = false;
     }
 
-    private void runBasicExamples(File f, boolean runThrough) throws Exception {
+    private void runBasicExamples(File f, boolean runThrough)  {
         initializeTestFolder(f, TEST_NAMES[9]);
         if(!testsCompletedNonRandom(TEST_NAMES[9], ANALYSIS_COOBS, TEST_SIZES[9]) || runThrough) {
             testBasicConfigDTP();
@@ -341,7 +347,7 @@ public class DataGathering {
         }
     }
 
-    private void runIncrementalExamples(File f, boolean runThrough) throws Exception {
+    private void runIncrementalExamples(File f, boolean runThrough)  {
 
         initializeTestFolder(f, TEST_NAMES[12]);
         if(!testsCompletedNonRandom(TEST_NAMES[12], ANALYSIS_COOBS, TEST_SIZES[12]) || runThrough) {
@@ -442,9 +448,8 @@ public class DataGathering {
         f.delete();
         g.delete();
 
-        try {
+        try (RandomAccessFile rag = new RandomAccessFile(g, "rw")) {
             RandomAccessFile raf;
-            RandomAccessFile rag = new RandomAccessFile(g, "rw");
             while(counter <= size+1) {
 
                 if(f.exists()) {
@@ -489,9 +494,8 @@ public class DataGathering {
                 }
                 f = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + ANALYSIS_FILE + type + ".txt");
             }
-            rag.close();
         }
-        catch(Exception e) {
+        catch(IOException e) {
             System.out.println(f.getAbsolutePath());
             e.printStackTrace();
         }
@@ -528,7 +532,7 @@ public class DataGathering {
                 raf.close();
             }
         }
-        catch(Exception e) {
+        catch (IOException e) {
             System.out.println(f.getAbsolutePath());
             e.printStackTrace();
         }
@@ -538,19 +542,18 @@ public class DataGathering {
     private void outputInterpretDataSimple(InterpretData hold, String path, String type, String suffix) {
         File f = new File(path + "/" + PROCESS_FILE + type + (suffix.equals("") ? "" : "_") + suffix + ".txt");
         f.delete();
-        try {
-            RandomAccessFile raf = new RandomAccessFile(f, "rw");
+        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
             fileWriteInterpretDataGeneral(hold, raf);
             raf.writeBytes("\n\n");
             fileWriteInterpretDataOverleafTableGeneral(hold, raf);
             raf.close();
         }
-        catch(Exception e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void fileWriteInterpretDataGeneral(InterpretData hold, RandomAccessFile raf) throws Exception {
+    private void fileWriteInterpretDataGeneral(InterpretData hold, RandomAccessFile raf) throws IOException {
         String[] attributes = hold.getAttributes();
 
         raf.writeBytes("\t\t\t\t\t\t");
@@ -619,9 +622,8 @@ public class DataGathering {
         f.delete();
         g.delete();
 
-        try {
+        try (RandomAccessFile rag = new RandomAccessFile(g, "rw")) {
             RandomAccessFile raf;
-            RandomAccessFile rag = new RandomAccessFile(g, "rw");
             while(counter <= size+1) {
 
                 if(f.exists()) {
@@ -677,9 +679,8 @@ public class DataGathering {
                 }
                 f = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + ANALYSIS_FILE + type + ".txt");
             }
-            rag.close();
         }
-        catch(Exception e) {
+        catch(IOException e) {
             System.out.println(f.getAbsolutePath());
             e.printStackTrace();
         }
@@ -722,7 +723,7 @@ public class DataGathering {
                 raf.close();
             }
         }
-        catch(Exception e) {
+        catch(IOException e) {
             System.out.println(f.getAbsolutePath());
             e.printStackTrace();
         }
@@ -733,8 +734,7 @@ public class DataGathering {
     private void outputInterpretDataIncremental(InterpretDataNested hold, String path, String type, String suffix) {
         File f = new File(path + "/" + PROCESS_FILE + type + "_" + suffix + ".txt");
         f.delete();
-        try {
-            RandomAccessFile raf = new RandomAccessFile(f, "rw");
+        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
             fileWriteInterpretDataGeneral(hold, raf);
             raf.writeBytes("\n\nAnalysis of Incremental Subsystems\n");
             fileWriteInterpretDataIncremental(hold, raf);
@@ -744,12 +744,12 @@ public class DataGathering {
 
             raf.close();
         }
-        catch(Exception e) {
+        catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void fileWriteInterpretDataIncremental(InterpretDataNested holdIn, RandomAccessFile raf) throws Exception {
+    private void fileWriteInterpretDataIncremental(InterpretDataNested holdIn, RandomAccessFile raf) throws IOException {
         String[] attributes = holdIn.getAttributes();
 
         raf.writeBytes("\t\t\t\t\t\t");
@@ -801,7 +801,7 @@ public class DataGathering {
         raf.writeBytes("\nNumber of DNFs:\t\t\t" + numDNF);
     }
 
-    private void fileWriteInterpretDataOverleafTableGeneral(InterpretData holdIn, RandomAccessFile raf) throws Exception {
+    private void fileWriteInterpretDataOverleafTableGeneral(InterpretData holdIn, RandomAccessFile raf) throws IOException {
         String[] attributes = holdIn.getAttributes();
 
         String part = "{|";
@@ -871,7 +871,7 @@ public class DataGathering {
 
     }
 
-    private void testBasicConfigDTP() throws Exception {
+    private void testBasicConfigDTP()  {
 
         ArrayList<String> names = SystemGeneration.generateSystemSetDTP();
 
@@ -886,7 +886,7 @@ public class DataGathering {
         }, TEST_BASIC);
     }
 
-    private void testBasicConfigHISCHigh() throws Exception {
+    private void testBasicConfigHISCHigh()  {
 
         ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCHighLevel();
 
@@ -900,7 +900,7 @@ public class DataGathering {
 
     }
 
-    private void testBasicConfigHISCLow() throws Exception {
+    private void testBasicConfigHISCLow()  {
 
         ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCLowLevel();
 
@@ -914,7 +914,7 @@ public class DataGathering {
 
     }
 
-    private void testIncrementalConfigDTP() throws Exception {
+    private void testIncrementalConfigDTP()  {
 
         ArrayList<String> names = SystemGeneration.generateSystemSetDTP();
 
@@ -930,7 +930,7 @@ public class DataGathering {
 
     }
 
-    private void testIncrementalConfigHISC() throws Exception {
+    private void testIncrementalConfigHISC()  {
 
         ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISC();
 
@@ -944,7 +944,7 @@ public class DataGathering {
 
     }
 
-    private void testIncrementalConfigHISCHigh() throws Exception {
+    private void testIncrementalConfigHISCHigh()  {
 
         ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCHighLevel();
 
@@ -958,7 +958,7 @@ public class DataGathering {
 
     }
 
-    private void testIncrementalConfigHISCLow() throws Exception {
+    private void testIncrementalConfigHISCLow()  {
 
         ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCLowLevel();
 
@@ -972,7 +972,7 @@ public class DataGathering {
 
     }
 
-    private void testExistingSystem(String testBatch, ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, BatchSetup systemStart, int testChoice) throws Exception {
+    private void testExistingSystem(String testBatch, ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, BatchSetup systemStart, int testChoice)  {
         int counter = 0;
 
         while(counter <= NUMBER_EXISTING_TEST_RUNS) {
@@ -1030,7 +1030,7 @@ public class DataGathering {
 
       //- Basic ---------------------------
 
-    private void testBasicConfigOne(int count) throws Exception{
+    private void testBasicConfigOne(int count) throws IOException{
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 2;
@@ -1053,7 +1053,7 @@ public class DataGathering {
         runBasicTest(info, count, "Test Basic Config One");
     }
 
-    private void testBasicConfigTwo(int count) throws Exception{
+    private void testBasicConfigTwo(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 3;
@@ -1076,7 +1076,7 @@ public class DataGathering {
         runBasicTest(info, count, "Test Basic Config Two");
     }
 
-    private void testBasicConfigThree(int count) throws Exception{
+    private void testBasicConfigThree(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 1;
@@ -1099,7 +1099,7 @@ public class DataGathering {
         runBasicTest(info, count, "Test Basic Config Three");
     }
 
-    private void testBasicConfigFour(int count) throws Exception{
+    private void testBasicConfigFour(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 1;
@@ -1122,7 +1122,7 @@ public class DataGathering {
         runBasicTest(info, count, "Test Basic Config Four");
     }
 
-    private void runBasicTest(RandomGenStats info, int count, String testBatch) throws Exception{
+    private void runBasicTest(RandomGenStats info, int count, String testBatch) throws IOException {
         int trueResults = generateInterpretDataSimple(defaultWritePath, ANALYSIS_COOBS).getNumberTrueResults();
 
         int counter = 0;
@@ -1138,7 +1138,7 @@ public class DataGathering {
 
       //- Incremental ---------------------
 
-    private void testIncConfigOne(int count) throws Exception{
+    private void testIncConfigOne(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 2;
@@ -1161,7 +1161,7 @@ public class DataGathering {
         runIncTest(info, count, "Test Inc Config One", true);
     }
 
-    private void testIncConfigTwo(int count) throws Exception{
+    private void testIncConfigTwo(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 3;
@@ -1184,7 +1184,7 @@ public class DataGathering {
         runIncTest(info, count, "Test Inc Config Two", true);
     }
 
-    private void testIncConfigThree(int count) throws Exception{
+    private void testIncConfigThree(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 5;
@@ -1207,7 +1207,7 @@ public class DataGathering {
         runIncTest(info, count, "Test Inc Config Three", true);
     }
 
-    private void runIncTest(RandomGenStats info, int count, String testBatch, boolean sb) throws Exception{
+    private void runIncTest(RandomGenStats info, int count, String testBatch, boolean sb) throws IOException {
         int trueResults = generateInterpretDataSimple(defaultWritePath, ANALYSIS_COOBS).getNumberTrueResults();
 
         int counter = 0;
@@ -1223,7 +1223,7 @@ public class DataGathering {
 
       //- Heuristics ----------------------
 
-    private void testHeuristicConfigOne(int count) throws Exception{
+    private void testHeuristicConfigOne(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 2;
@@ -1254,7 +1254,7 @@ public class DataGathering {
         }
     }
 
-    private void testHeuristicConfigTwo(int count) throws Exception{
+    private void testHeuristicConfigTwo(int count) throws IOException {
         Incremental.assignIncrementalOptions(0, 1, 1);
 
         int numPlants = 5;
@@ -1305,7 +1305,7 @@ public class DataGathering {
         }
     }
 
-    private boolean autoTestRandomSystem(int count, RandomGenStats info, int testChoice) throws Exception {
+    private boolean autoTestRandomSystem(int count, RandomGenStats info, int testChoice) throws IOException {
         String testName = TEST_NAME + "_" +  count;
         File f;
         f = new File(defaultWritePath + "/" + testName);
@@ -1383,7 +1383,7 @@ public class DataGathering {
         }
     }
 
-    private void autoGenerateNewRandomSystem(int count, RandomGenStats info) throws Exception {
+    private void autoGenerateNewRandomSystem(int count, RandomGenStats info) throws IOException {
         String testName = TEST_NAME + "_" +  count;
         File f;
         f = new File(defaultWritePath + "/" + testName);
@@ -1408,13 +1408,8 @@ public class DataGathering {
         ArrayList<HashMap<String, ArrayList<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
         f = new File(writePath + "/" + (testName + "_agents.txt"));
-        try {
-            RandomAccessFile raf = new RandomAccessFile(f, "rw");
+        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
             raf.writeBytes(model.exportAgents(testName + "_agents", agents, eventAtt));
-            raf.close();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
         }
 
         printOut("Agent Information: \n" + agents.toString().replace("},", "},\n").replaceAll("[\\[\\]]", " "));
@@ -1423,19 +1418,14 @@ public class DataGathering {
         for(String s : names) {
             //makeImageDisplay(s, s);
             f = new File(writePath + "/" + s + ".txt");
-            try {
-                RandomAccessFile raf = new RandomAccessFile(f, "rw");
+            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
                 raf.writeBytes(model.exportFSM(s));
-                raf.close();
-            }
-            catch(Exception e) {
-                e.printStackTrace();
             }
             Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + "/" + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
-    private boolean autoTestSystemFull(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) throws Exception{
+    private boolean autoTestSystemFull(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
         printCoobsLabel(prefixNom, false);
         boolean coobs = checkCoobservable(plantNames, specNames, agents, false);
 
@@ -1468,13 +1458,13 @@ public class DataGathering {
         }
 
         if(error) {
-            throw new Exception("Logic Conflict in Data Output");
+            throw new RuntimeException("Logic Conflict in Data Output");
         }
         resetModel();
         return coobs;
     }
 
-    private Boolean autoTestSystemCoobsSB(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) throws Exception{
+    private Boolean autoTestSystemCoobsSB(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) {
         Boolean coobs = null;
         if(contains(completedTests, ANALYSIS_COOBS) == finishCount && !memoryError.contains(ANALYSIS_COOBS)) {
             printCoobsLabel(prefixNom, false);
@@ -1498,13 +1488,13 @@ public class DataGathering {
             error = true;
         }
         if(error) {
-            throw new Exception("Logic Conflict in Data Output: " + prefixNom);
+            throw new RuntimeException("Logic Conflict in Data Output: " + prefixNom);
         }
         resetModel();
         return coobs;
     }
 
-    private boolean autoTestSystemIncr(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) throws Exception{
+    private boolean autoTestSystemIncr(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) {
         Boolean icCoobs = null;
         if(contains(completedTests, ANALYSIS_INC_COOBS) == finishCount && !memoryError.contains(ANALYSIS_INC_COOBS)) {
             printIncrementalLabel(prefixNom, false);
@@ -1529,13 +1519,13 @@ public class DataGathering {
         }
 
         if(error) {
-            throw new Exception("Logic Conflict in Data Output: " + prefixNom);
+            throw new RuntimeException("Logic Conflict in Data Output: " + prefixNom);
         }
         resetModel();
         return icCoobs == null ? (icSbCoobs == null ? false : icSbCoobs) : icCoobs;
     }
 
-    private boolean autoTestSystemSBIncr(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) throws Exception{
+    private boolean autoTestSystemSBIncr(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) {
         Boolean icCoobs = null;
         if(contains(completedTests, ANALYSIS_INC_COOBS) == finishCount && !memoryError.contains(ANALYSIS_INC_COOBS)) {
             printIncrementalLabel(prefixNom, false);
@@ -1569,13 +1559,13 @@ public class DataGathering {
             error = true;
         }
         if(error) {
-            throw new Exception("Logic Conflict in Data Output: " + prefixNom);
+            throw new RuntimeException("Logic Conflict in Data Output: " + prefixNom);
         }
         resetModel();
         return icCoobs == null ? (sbCoobs == null ? (icSbCoobs == null ? false : icSbCoobs) : sbCoobs) : icCoobs;
     }
 
-    private Boolean autoTestHeuristics(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, ArrayList<String> completedTests, ArrayList<String> memoryError) throws Exception{
+    private Boolean autoTestHeuristics(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, ArrayList<String> completedTests, ArrayList<String> memoryError) {
         Boolean expectedCoob = null;
         Boolean expectedSB = null;
 
@@ -1605,8 +1595,7 @@ public class DataGathering {
                     }
 
                     if((expectedCoob != null && icCoobs != null && expectedCoob != icCoobs) || (expectedSB != null && icSbCoobs != null && expectedSB != icSbCoobs)) {
-                        System.out.println("Change in Heuristics caused difference result: " + post);
-                        throw new Exception("Change in Heuristics caused difference result: " + post);
+                        throw new RuntimeException("Change in Heuristics caused difference result: " + post);
                     }
                 //}
             }
@@ -1616,14 +1605,14 @@ public class DataGathering {
             printOut("Of interest, incremental co-observability returned True and incremental SB returned False overall");
         }
         else if((expectedCoob != null && expectedSB != null) && (!expectedCoob && expectedSB)) {
-            throw new Exception("Logic Error: Incremental co-observability found False while incremental SB returned True overall");
+            throw new RuntimeException("Logic Error: Incremental co-observability found False while incremental SB returned True overall");
         }
         return expectedCoob;
     }
 
     //-- Coobservability Testing  -----------------------------
 
-    private boolean checkCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf)throws Exception {
+    private boolean checkCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_COOBS);
@@ -1640,7 +1629,7 @@ public class DataGathering {
 
     //-- SB Coobservability Testing  --------------------------
 
-    private boolean checkSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) throws Exception{
+    private boolean checkSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_SB);
@@ -1657,7 +1646,7 @@ public class DataGathering {
 
     //-- Incremental Testing  ---------------------------------
 
-    private boolean checkIncrementalCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) throws Exception{
+    private boolean checkIncrementalCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_INC_COOBS);
@@ -1668,7 +1657,7 @@ public class DataGathering {
         return result;
     }
 
-    private boolean checkIncrementalSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) throws Exception{
+    private boolean checkIncrementalSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_INC_SB);
@@ -1909,13 +1898,11 @@ public class DataGathering {
     private void printOut(String text) {
         if(writePath != null) {
             File f = new File(writePath + "/" + RESULTS_FILE);
-            try {
-                RandomAccessFile raf = new RandomAccessFile(f, "rw");
+            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
                 raf.seek(raf.length());
                 raf.writeBytes(text + "\n");
-                raf.close();
             }
-            catch(Exception e) {
+            catch(IOException e) {
                 e.printStackTrace();
             }
         }
@@ -1924,27 +1911,25 @@ public class DataGathering {
     private void printEquivalentResults(ArrayList<String> guide, long time, double overallMem, ArrayList<Double> vals) {
         if(writePath != null) {
             File f = new File(writePath + "/" + ANALYSIS_FILE + analysisSubtype + TEXT_EXTENSION);
-            try {
-            RandomAccessFile raf = new RandomAccessFile(f, "rw");
-            raf.seek(raf.length());
-            if(raf.length() == 0) {
-                for(String s : guide)
-                    raf.writeBytes(s + ", ");
+            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+                raf.seek(raf.length());
+                if(raf.length() == 0) {
+                    for(String s : guide)
+                        raf.writeBytes(s + ", ");
+                    raf.writeBytes("\n");
+                }
+                raf.writeBytes(time + ", \t" + threeSig(overallMem) + ", \t");
+                for(int i = 0; i < vals.size(); i++){
+                    Double d = vals.get(i);
+                    if(d != null)
+                        raf.writeBytes(threeSig(d) + (i + 1 < vals.size() ? ", \t" : ""));
+                    else {
+                        raf.writeBytes("\n, , \t\t\t");
+                    }
+                }
                 raf.writeBytes("\n");
             }
-            raf.writeBytes(time + ", \t" + threeSig(overallMem) + ", \t");
-            for(int i = 0; i < vals.size(); i++){
-                Double d = vals.get(i);
-                if(d != null)
-                    raf.writeBytes(threeSig(d) + (i + 1 < vals.size() ? ", \t" : ""));
-                else {
-                    raf.writeBytes("\n, , \t\t\t");
-                }
-            }
-            raf.writeBytes("\n");
-            raf.close();
-            }
-            catch(Exception e) {
+            catch(IOException e) {
                 e.printStackTrace();
             }
         }
@@ -1971,16 +1956,15 @@ public class DataGathering {
         if(!g.exists()) {
             return false;
         }
-        try {
-            RandomAccessFile raf = new RandomAccessFile(g, "r");
+        try (RandomAccessFile raf = new RandomAccessFile(g, "r")) {
+            ;
             String line = raf.readLine();
             while(line != null && !line.equals(phrase)) {
                 line = raf.readLine();
             }
-            raf.close();
             return line != null && line.equals(phrase);
         }
-        catch(Exception e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -1992,8 +1976,8 @@ public class DataGathering {
         if(!g.exists()) {
             return out;
         }
-        try {
-            RandomAccessFile raf = new RandomAccessFile(g, "r");
+        try (RandomAccessFile raf = new RandomAccessFile(g, "r")) {
+            ;
             String line = raf.readLine();
             int counter = 1;
             while(line != null) {
@@ -2003,16 +1987,15 @@ public class DataGathering {
                 counter++;
                 line = raf.readLine();
             }
-            raf.close();
             return out;
         }
-        catch(Exception e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
         return new ArrayList<Integer>();
     }
 
-    private ArrayList<String> getPlants(String prefix) throws Exception{
+    private ArrayList<String> getPlants(String prefix) throws IOException {
         ArrayList<String> plants = new ArrayList<String>();
         int counter = 0;
         String hold = pullSourceData(writePath + "/" + prefix + "_p_" + counter++ + ".txt");
@@ -2023,7 +2006,7 @@ public class DataGathering {
         return plants;
     }
 
-    private ArrayList<String> getSpecs(String prefix) throws Exception{
+    private ArrayList<String> getSpecs(String prefix) throws IOException {
         ArrayList<String> plants = new ArrayList<String>();
         int counter = 0;
         String hold = pullSourceData(writePath + "/" + prefix + "_s_" + counter++ + ".txt");
@@ -2034,7 +2017,7 @@ public class DataGathering {
         return plants;
     }
 
-    private ArrayList<HashMap<String, ArrayList<Boolean>>> getAgents(String prefix) throws Exception{
+    private ArrayList<HashMap<String, ArrayList<Boolean>>> getAgents(String prefix) throws IOException {
         String hold = pullSourceData(writePath + "/" + prefix + "_agents.txt");
         return model.readInAgents(hold);
     }

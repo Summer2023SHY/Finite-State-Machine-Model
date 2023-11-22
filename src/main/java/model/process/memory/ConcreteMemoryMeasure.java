@@ -30,7 +30,7 @@ public class ConcreteMemoryMeasure implements MemoryMeasure {
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public void logMemoryUsage() throws Exception{
+    public void logMemoryUsage() {
         spaceUsage.add(getMemoryUsage());
     }
 

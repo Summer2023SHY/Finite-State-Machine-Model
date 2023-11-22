@@ -97,7 +97,7 @@ public class DecideCoobs implements DecideCondition{
 //---  Operations   ---------------------------------------------------------------------------
 
     @Override
-    public boolean decideCondition() throws Exception{
+    public boolean decideCondition() {
         //System.out.println("--- Deciding Coobservability ---");
         //System.out.println("--- Using: " + plants + ", " + specs + " ---");
         Long memory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -287,7 +287,7 @@ public class DecideCoobs implements DecideCondition{
         // --- Experimental Solution ---
         try {
             ultPlant = ProcessDES.makeAccessible(ultPlant);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         // --- */
