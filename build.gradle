@@ -1,0 +1,38 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+application {
+    mainClass = 'controller.Main'
+}
+
+dependencies {
+    implementation name: 'svi_18'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.10.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+test {
+    dependsOn cleanTest
+    testLogging.showStandardStreams = true
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

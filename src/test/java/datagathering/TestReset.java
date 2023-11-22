@@ -1,4 +1,4 @@
-package test.datagathering;
+package datagathering;
 
 public interface TestReset {
 

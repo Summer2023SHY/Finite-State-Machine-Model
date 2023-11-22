@@ -1,2 +1,7 @@
-bin
-/Finite State Machine Model/
+**/bin/**
+diagram
+.classpath
+.settings/
+src/main/MainTest.java
+.gradle/**
+**/build/**

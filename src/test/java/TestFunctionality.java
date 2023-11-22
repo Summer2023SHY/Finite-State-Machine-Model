@@ -1,5 +1,3 @@
-package test;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
@@ -16,11 +14,11 @@ import controller.convert.FormatConversion;
 import model.Manager;
 import model.fsm.TransitionSystem;
 import model.process.coobservability.Incremental;
-import test.help.AgentChicanery;
-import test.help.EventSets;
-import test.help.RandomGenStats;
-import test.help.RandomGeneration;
-import test.help.SystemGeneration;
+import help.AgentChicanery;
+import help.EventSets;
+import help.RandomGenStats;
+import help.RandomGeneration;
+import help.SystemGeneration;
 import visual.composite.ImageDisplay;
 import visual.frame.WindowFrame;
 import visual.panel.ElementPanel;

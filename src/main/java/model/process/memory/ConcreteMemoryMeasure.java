@@ -3,7 +3,6 @@ package model.process.memory;
 import java.util.ArrayList;
 
 import model.fsm.TransitionSystem;
-import test.datagathering.DataGatheringManager;
 
 public class ConcreteMemoryMeasure implements MemoryMeasure {
 	
@@ -33,9 +32,6 @@ public class ConcreteMemoryMeasure implements MemoryMeasure {
 	
 	public void logMemoryUsage() throws Exception{
 		spaceUsage.add(getMemoryUsage());
-		if(DataGatheringManager.check) {
-			throw new Exception("Time Ran Out Error, Throw Exception Back To Thread Timer");
-		}
 	}
 	
 	@Override

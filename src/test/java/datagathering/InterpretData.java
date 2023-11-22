@@ -1,4 +1,4 @@
-package test.datagathering;
+package datagathering;
 
 import java.util.ArrayList;
 import java.util.Collections;

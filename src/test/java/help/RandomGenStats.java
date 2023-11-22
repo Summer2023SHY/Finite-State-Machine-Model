@@ -1,4 +1,4 @@
-package test.help;
+package help;
 
 public class RandomGenStats {
 

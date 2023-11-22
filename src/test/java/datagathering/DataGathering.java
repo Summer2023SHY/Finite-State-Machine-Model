@@ -1,4 +1,4 @@
-package test.datagathering;
+package datagathering;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,11 +16,11 @@ import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
 import model.Manager;
 import model.process.coobservability.Incremental;
-import test.help.AgentChicanery;
-import test.help.EventSets;
-import test.help.RandomGenStats;
-import test.help.RandomGeneration;
-import test.help.SystemGeneration;
+import help.AgentChicanery;
+import help.EventSets;
+import help.RandomGenStats;
+import help.RandomGeneration;
+import help.SystemGeneration;
 
 /**
  * 
