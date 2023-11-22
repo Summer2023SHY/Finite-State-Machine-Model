@@ -14,180 +14,180 @@ import java.util.LinkedList;
  */
 
 public class EventMap {
-	
+
 //---  Instance Variables   -------------------------------------------------------------------
-	
-	/** HashMap<<r>String, Entity> mapping String object names of events to their corresponding Entity objects. */
-	private HashMap<String, Entity> events;
-	
-	private ArrayList<String> attributes;
-	
+
+    /** HashMap<<r>String, Entity> mapping String object names of events to their corresponding Entity objects. */
+    private HashMap<String, Entity> events;
+
+    private ArrayList<String> attributes;
+
 //---  Constructors   -------------------------------------------------------------------------
-	
-	/**
-	 * Constructor for an EventMap object that initializes the events HashMap<<r>String, Entity>.
-	 */
-	
-	public EventMap(ArrayList<String> defAttrib) {
-		events = new HashMap<String, Entity>();
-		attributes = defAttrib == null ? new ArrayList<String>() : defAttrib;
-	}
+
+    /**
+     * Constructor for an EventMap object that initializes the events HashMap<<r>String, Entity>.
+     */
+
+    public EventMap(ArrayList<String> defAttrib) {
+        events = new HashMap<String, Entity>();
+        attributes = defAttrib == null ? new ArrayList<String>() : defAttrib;
+    }
 
 //---  Operations   ---------------------------------------------------------------------------
-	
-	/**
-	 * Renames the Entity corresponding to the oldName String with the newName String.
-	 * 
-	 * @param oldName - String object representing the name of the Entity.
-	 * @param newName - String object representing the desired new name of the Entity.
-	 */
-	
-	public void renameEvent(String oldName, String newName) {
-		Entity event = events.get(oldName);
-		event.setName(newName);
-		events.remove(oldName);
-		events.put(newName, event);
-	}
 
-	public void mergeEventMaps(EventMap in) {
-		mergeEvents(in);
-	}
-	
-	public void mergeEvents(EventMap in) {
-		for(String s : in.getEvents().keySet()) {
-			if(events.get(s) == null)
-				addEvent(s, in);
-			else {
-				//TODO: Merge events?
-			}
-		}
-	}
-	
+    /**
+     * Renames the Entity corresponding to the oldName String with the newName String.
+     * 
+     * @param oldName - String object representing the name of the Entity.
+     * @param newName - String object representing the desired new name of the Entity.
+     */
+
+    public void renameEvent(String oldName, String newName) {
+        Entity event = events.get(oldName);
+        event.setName(newName);
+        events.remove(oldName);
+        events.put(newName, event);
+    }
+
+    public void mergeEventMaps(EventMap in) {
+        mergeEvents(in);
+    }
+
+    public void mergeEvents(EventMap in) {
+        for(String s : in.getEvents().keySet()) {
+            if(events.get(s) == null)
+                addEvent(s, in);
+            else {
+                //TODO: Merge events?
+            }
+        }
+    }
+
 //---  Adder Methods   ------------------------------------------------------------------------
-	
-	/**
-	 * Adds an event to the map which is mapped to the name indicated. The new event initializes with
-	 * the default settings for the given Entity class. If the event already existed, no new object is
-	 * created.
-	 * 
-	 * @param eventName - String object representing the name of the Entity extending object to add to this EventMap object.
-	 * @return - Returns an Entity extending object representing the Entity in three cases: the Entity already existed,
-	 * the Entity was newly made, or null if there was an error instantiating the event.
-	 */
-	
-	public void addEvent(String eventName) {
-		if(events.get(eventName) != null) {
-			return;
-		}
-		events.put(eventName, new Entity(eventName));
-		LinkedList<String> use = new LinkedList<String>();
-		use.addAll(attributes);
-		events.get(eventName).setAttributes(use);
-	}
 
-	public void addEvent(String eventName, EventMap context) {
-		events.put(eventName, context.getEvent(eventName).copy());
-	}
-	
+    /**
+     * Adds an event to the map which is mapped to the name indicated. The new event initializes with
+     * the default settings for the given Entity class. If the event already existed, no new object is
+     * created.
+     * 
+     * @param eventName - String object representing the name of the Entity extending object to add to this EventMap object.
+     * @return - Returns an Entity extending object representing the Entity in three cases: the Entity already existed,
+     * the Entity was newly made, or null if there was an error instantiating the event.
+     */
+
+    public void addEvent(String eventName) {
+        if(events.get(eventName) != null) {
+            return;
+        }
+        events.put(eventName, new Entity(eventName));
+        LinkedList<String> use = new LinkedList<String>();
+        use.addAll(attributes);
+        events.get(eventName).setAttributes(use);
+    }
+
+    public void addEvent(String eventName, EventMap context) {
+        events.put(eventName, context.getEvent(eventName).copy());
+    }
+
 //---  Remover Methods   ----------------------------------------------------------------------
 
-	/**
-	 * Removes the Entity corresponding to the provided String from the mapping if present.
-	 * 
-	 * @param eventName - String object representing the name of the Entity to remove from this Entity Map.
-	 */
-	
-	public void removeEvent(String eventName) {
-		events.remove(eventName);
-	}
+    /**
+     * Removes the Entity corresponding to the provided String from the mapping if present.
+     * 
+     * @param eventName - String object representing the name of the Entity to remove from this Entity Map.
+     */
+
+    public void removeEvent(String eventName) {
+        events.remove(eventName);
+    }
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-	public void addAttributes(ArrayList<String> attrib) {
-		for(String s : attrib) {
-			if(!attributes.contains(s)) {
-				attributes.add(s);
-			}
-		}
-		for(Entity e : events.values()) {
-			LinkedList<String> use = new LinkedList<String>();
-			use.addAll(attributes);
-			e.addAttributes(use);
-		}
-	}
-	
-	public void overwriteAttributes(ArrayList<String> attrib) {
-		attributes = attrib;
-		for(Entity e : events.values()) {
-			LinkedList<String> use = new LinkedList<String>();
-			use.addAll(attributes);
-			e.setAttributes(use);
-		}
-	}
-	
-	public void setEventAttribute(String nom, String ref, boolean val) {
-		if(events.get(nom) != null) {
-			events.get(nom).setAttributeValue(ref, val);
-		}
-	}
-	
+    public void addAttributes(ArrayList<String> attrib) {
+        for(String s : attrib) {
+            if(!attributes.contains(s)) {
+                attributes.add(s);
+            }
+        }
+        for(Entity e : events.values()) {
+            LinkedList<String> use = new LinkedList<String>();
+            use.addAll(attributes);
+            e.addAttributes(use);
+        }
+    }
+
+    public void overwriteAttributes(ArrayList<String> attrib) {
+        attributes = attrib;
+        for(Entity e : events.values()) {
+            LinkedList<String> use = new LinkedList<String>();
+            use.addAll(attributes);
+            e.setAttributes(use);
+        }
+    }
+
+    public void setEventAttribute(String nom, String ref, boolean val) {
+        if(events.get(nom) != null) {
+            events.get(nom).setAttributeValue(ref, val);
+        }
+    }
+
 //---  Getter Methods   -----------------------------------------------------------------------
-	
-	protected Entity getEvent(String eventName) {
-		return events.get(eventName);
-	}
-	
-	public ArrayList<String> getAttributes(){
-		return attributes;
-	}
-	
-	public ArrayList<String> getEventNames(){
-		ArrayList<String> out = new ArrayList<String>();
-		out.addAll(events.keySet());
-		return out;
-	}
 
-	public ArrayList<String> getEventsWithAttribute(String attrib){
-		ArrayList<String> out = new ArrayList<String>();
-		for(String s : events.keySet()) {
-			if(getEventAttribute(s, attrib)) {
-				out.add(s);
-			}
-		}
-		return out;
-	}
-	
-	public Boolean getEventAttribute(String nom, String ref) {
-		if(events.get(nom) != null) {
-			return events.get(nom).getAttributeValue(ref);
-		}
-		return null;
-	}
-	
-	/**
-	 * Getter method that returns a boolean value describing whether or not a given Entity extending
-	 * object exists within this EventMap as denoted by a provided String object.
-	 * 
-	 * @param eventName - String object representing the Entity extending object to look for.
-	 * @return - Returns a boolean value; true if the Entity extending object exists in the map, false otherwise.
-	 */
-	
-	public boolean eventExists(String eventName) {
-		return events.containsKey(eventName);
-	}
+    protected Entity getEvent(String eventName) {
+        return events.get(eventName);
+    }
 
-	protected HashMap<String, Entity> getEvents(){
-		return events;
-	}
+    public ArrayList<String> getAttributes(){
+        return attributes;
+    }
+
+    public ArrayList<String> getEventNames(){
+        ArrayList<String> out = new ArrayList<String>();
+        out.addAll(events.keySet());
+        return out;
+    }
+
+    public ArrayList<String> getEventsWithAttribute(String attrib){
+        ArrayList<String> out = new ArrayList<String>();
+        for(String s : events.keySet()) {
+            if(getEventAttribute(s, attrib)) {
+                out.add(s);
+            }
+        }
+        return out;
+    }
+
+    public Boolean getEventAttribute(String nom, String ref) {
+        if(events.get(nom) != null) {
+            return events.get(nom).getAttributeValue(ref);
+        }
+        return null;
+    }
+
+    /**
+     * Getter method that returns a boolean value describing whether or not a given Entity extending
+     * object exists within this EventMap as denoted by a provided String object.
+     * 
+     * @param eventName - String object representing the Entity extending object to look for.
+     * @return - Returns a boolean value; true if the Entity extending object exists in the map, false otherwise.
+     */
+
+    public boolean eventExists(String eventName) {
+        return events.containsKey(eventName);
+    }
+
+    protected HashMap<String, Entity> getEvents(){
+        return events;
+    }
 
 //---  Manipulations   ------------------------------------------------------------------------
 
-	public boolean contains(String in) {
-		for(Entity e : this.getEvents().values()) {
-			if((e.getName()).equals(in))
-				return true;
-		}
-		return false;
-	}
-	
+    public boolean contains(String in) {
+        for(Entity e : this.getEvents().values()) {
+            if((e.getName()).equals(in))
+                return true;
+        }
+        return false;
+    }
+
 }

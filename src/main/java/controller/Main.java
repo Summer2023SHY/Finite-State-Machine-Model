@@ -2,8 +2,8 @@ package controller;
 
 public class Main {
 
-	public static void main(String[] args) {
-		FiniteStateMachine fsm = new FiniteStateMachine();
-	}
-	
+    public static void main(String[] args) {
+        FiniteStateMachine fsm = new FiniteStateMachine();
+    }
+
 }
