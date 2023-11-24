@@ -3,6 +3,12 @@ package ui.page.displaypage;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +44,16 @@ public class DisplayPage {
     private final static String TITLE_TRANS = "Transitions";
 
     private final static double VERT_PROP = 7 / (double)12;
+
+    private static final File CYCLE_IMG;
+    static {
+        try (InputStream is = DisplayPage.class.getClassLoader().getResourceAsStream("ui/cycle.png")) {
+            CYCLE_IMG = File.createTempFile("tmp", ".png");
+            Files.copy(is, CYCLE_IMG.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -169,7 +185,7 @@ public class DisplayPage {
     private void drawCycleImageButton() {
         int size = getVertBuffer(p);
         p.handleRectangle("cycle_display_rect", "no_move", 45, p.getWidth() - size, size, size, size, Color.white, Color.black);
-        p.handleImageButton("cycle_display", "no_move", 50, p.getWidth() - size, size, size, size, "src/assets/ui/cycle.png", CodeReference.CODE_DISPLAY_CYCLE_VIEW);
+        p.handleImageButton("cycle_display", "no_move", 50, p.getWidth() - size, size, size, size, CYCLE_IMG.getAbsolutePath(), CodeReference.CODE_DISPLAY_CYCLE_VIEW);
     }
 
     public void drawDefault() {

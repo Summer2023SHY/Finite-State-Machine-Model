@@ -2,6 +2,12 @@ package ui.page.optionpage;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,16 @@ public abstract class OptionPage {
 
     private final static Font HELP_FONT = new Font("Serif", Font.BOLD, 18);
     protected final static Font OPTIONS_FONT = new Font("Serif", Font.BOLD, 12);
+
+    private static final File QUESTION_MARK_IMG;
+    static {
+        try (InputStream is = OptionPage.class.getClassLoader().getResourceAsStream("ui/question_mark.png")) {
+            QUESTION_MARK_IMG = File.createTempFile("tmp", ".png");
+            Files.copy(is, QUESTION_MARK_IMG.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -71,7 +87,7 @@ public abstract class OptionPage {
         codeStart++;
         p.handleRectangle("help_butt_rect", "move", 5, wid - wid / 15, wid / 20, wid / 20, wid / 20, Color.gray, Color.black);
         p.handleButton("help_butt_button", "move", 15, wid - wid / 15,  wid / 20, wid / 20, wid / 20, helpKey);
-        p.handleImage("help_butt_img", "move", 15, wid - wid / 15, wid / 20, "/assets/ui/question_mark.png", 3);
+        p.handleImage("help_butt_img", "move", 15, wid - wid / 15, wid / 20, QUESTION_MARK_IMG.getAbsolutePath(), 3);
         for(int i = 0; i < categories.size(); i++) {
             Category cat = categories.get(i);
             startY = cat.draw(startY, hei / lineHeightFraction, p);

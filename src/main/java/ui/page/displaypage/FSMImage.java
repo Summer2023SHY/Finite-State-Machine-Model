@@ -1,5 +1,12 @@
 package ui.page.displaypage;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 import visual.composite.HandlePanel;
 import visual.composite.ImageDisplay;
 
@@ -7,7 +14,15 @@ public class FSMImage {
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private static final String DEFAULT_IMAGE_PATH = "src/assets/default.png";
+    private static final File DEFAULT_IMAGE;
+    static {
+        try (InputStream is = FSMImage.class.getClassLoader().getResourceAsStream("default.png")) {
+            DEFAULT_IMAGE = File.createTempFile("tmp", ".png");
+            Files.copy(is, DEFAULT_IMAGE.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     private static final String EVENT_RECEIVER_NAME = "Image Display Event Receiver";
 
@@ -39,7 +54,7 @@ public class FSMImage {
 
     public static void attachPanel(HandlePanel p) {
         if(iD == null) {
-            iD = new ImageDisplay(DEFAULT_IMAGE_PATH, p);
+            iD = new ImageDisplay(DEFAULT_IMAGE.getAbsolutePath(), p);
             iD.toggleUI();
             iD.toggleDisableToggleUI();
         }
@@ -49,7 +64,7 @@ public class FSMImage {
 
     public static void dettachPanel(HandlePanel p) {
         if(iD == null)
-            iD = new ImageDisplay(DEFAULT_IMAGE_PATH, p);
+            iD = new ImageDisplay(DEFAULT_IMAGE.getAbsolutePath(), p);
         p.removeEventReceiver(EVENT_RECEIVER_NAME);
     }
 
