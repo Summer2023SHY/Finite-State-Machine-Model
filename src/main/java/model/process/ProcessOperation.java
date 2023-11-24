@@ -15,6 +15,9 @@ public class ProcessOperation {
     public static String attributeObservableRef;
     public static String attributeInitialRef;
 
+    /** Private constructor */
+    private ProcessOperation() {
+    }
 
 //---  Static Assignments   -------------------------------------------------------------------
 

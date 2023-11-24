@@ -98,4 +98,9 @@ public class CodeReference {
     public final static int CODE_BUILD_USTRUCT = 303;
     public final static int CODE_TOGGLE_USTRUCT = 304;
     public final static int CODE_DISPLAY_BAD_TRANS_START = 500;
+
+    /** Private constructor */
+    private CodeReference() {
+    }
+
 }

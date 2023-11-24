@@ -40,6 +40,10 @@ public class AttributeList {
 
     private static HashMap<String, Boolean> map;
 
+    /** Private constructor */
+    private AttributeList() {
+    }
+
 //---  Getter Methods   -----------------------------------------------------------------------
 
     public static boolean getAON(String ref) {

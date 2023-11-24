@@ -36,6 +36,10 @@ public class FormatConversion {
 
 //---  Initialization   -----------------------------------------------------------------------
 
+    /** Private constructor. */
+    private FormatConversion() {
+    }
+
     public static void assignPaths(String workingPath, String configPath) {
         WORKING_PATH = workingPath;
         CONFIG_PATH = configPath;

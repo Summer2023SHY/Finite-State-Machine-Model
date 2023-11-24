@@ -14,6 +14,10 @@ public class ReadWrite {
     private static String TRUE_SYMBOL;
     private static String FALSE_SYMBOL;
 
+    /** Private constructor */
+    private ReadWrite() {
+    }
+
 //---  Operations   ---------------------------------------------------------------------------
 
     public static void assignConstants(String separator, String regionSeparator, String trueSymbol, String falseSymbol) {

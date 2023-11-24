@@ -55,6 +55,10 @@ public class GenerateFSM {
     private static ArrayList<String> defaultStateSet;
     private static ArrayList<String> defaultEventSet;
 
+    /** Private constructor */
+    private GenerateFSM() {
+    }
+
 //---  Static Assignment   --------------------------------------------------------------------
 
     public static void assignStateAttributes(ArrayList<String> in, ArrayList<Integer> amounts) {
