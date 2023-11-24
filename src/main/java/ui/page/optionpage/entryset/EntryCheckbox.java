@@ -9,7 +9,7 @@ public class EntryCheckbox extends EntrySet{
 
     public EntryCheckbox(String pref, String name, boolean butt, int code) {
         super(pref, name, butt, code);
-        ArrayList<String> use = new ArrayList<String>();
+        ArrayList<String> use = new ArrayList<>();
         use.add("f");
         setContents(use);
     }

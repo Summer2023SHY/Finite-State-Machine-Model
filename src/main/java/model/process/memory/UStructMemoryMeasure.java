@@ -1,6 +1,7 @@
 package model.process.memory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
 
@@ -8,9 +9,9 @@ public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
 
     private int transSize;
 
-    private ArrayList<Integer> numberAgentGroups;
+    private List<Integer> numberAgentGroups;
 
-    private ArrayList<Integer> sizeStateGroups;
+    private List<Integer> sizeStateGroups;
 
     public void assignStateSize(int in) {
         stateSize = in;
@@ -42,7 +43,7 @@ public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
         return threeSig(averageList(sizeStateGroups));
     }
 
-    private double averageList(ArrayList<Integer> in) {
+    private double averageList(List<Integer> in) {
         int total = 0;
         for(int i : in) {
             total += i;
@@ -73,8 +74,8 @@ public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
     }
 
     @Override
-    public ArrayList<String> getOutputGuide(){
-        ArrayList<String> out = super.getOutputGuide();
+    public List<String> getOutputGuide(){
+        List<String> out = super.getOutputGuide();
         out.add("Number of States in UStructure");
         out.add("Number of Transitions in UStructure");
         if(numberAgentGroups != null) {
@@ -86,8 +87,8 @@ public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
     }
 
     @Override
-    public ArrayList<Double> getStoredData(){
-        ArrayList<Double> out = super.getStoredData();
+    public List<Double> getStoredData(){
+        List<Double> out = super.getStoredData();
         out.add((double)stateSize);
         out.add((double)transSize);
         if(numberAgentGroups != null) {

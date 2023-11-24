@@ -1,13 +1,13 @@
 package model.process.coobservability.support;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.List;
 
-public class StateSetPath extends StateSet implements Comparator<StateSetPath>, Comparable<StateSetPath>{
+public class StateSetPath extends StateSet implements Comparable<StateSetPath>{
 
     private StateSetPath parent;
 
-    private ArrayList<String> eventPath;
+    private List<String> eventPath;
 
     private String problemEvent;
 
@@ -45,12 +45,8 @@ public class StateSetPath extends StateSet implements Comparator<StateSetPath>, 
     }
 
 
-    public ArrayList<String> getEventPath(){
-        ArrayList<String> out = new ArrayList<String>();
-        for(String s : eventPath == null ? new ArrayList<String>() : eventPath) {
-            out.add(s);
-        }
-        return out;
+    public List<String> getEventPath(){
+        return eventPath == null ? new ArrayList<>() : new ArrayList<>(eventPath);
     }
 
     @Override
@@ -71,11 +67,6 @@ public class StateSetPath extends StateSet implements Comparator<StateSetPath>, 
     @Override
     public int compareTo(StateSetPath o) {
         return toString().compareTo(o.toString());
-    }
-
-    @Override
-    public int compare(StateSetPath o1, StateSetPath o2) {
-        return o1.compareTo(o2);
     }
 
 }

@@ -2,6 +2,7 @@ package ui.page.optionpage;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import input.CustomEventReceiver;
 import ui.InputHandler;
@@ -179,12 +180,12 @@ public class OptionPageManager {
         return getCurrentPage().getCheckboxContentsFromCode(code);
     }
 
-    public ArrayList<String> getContent(int code){
+    public List<String> getContent(int code){
         return getCurrentPage().getContentFromCode(code);
     }
 
-    public ArrayList<String> getOptionPageNames(){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getOptionPageNames(){
+        List<String> out = new ArrayList<String>();
         for(OptionPage bodyPanel : optionPages) {
             out.add(bodyPanel.getHeader());
         }

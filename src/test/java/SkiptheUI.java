@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
@@ -45,9 +47,9 @@ public class SkiptheUI {
 
     private static Manager model;
 
-    private static ArrayList<HashMap<String, ArrayList<Boolean>>> agents;
+    private static List<Map<String, List<Boolean>>> agents;
 
-    private static ArrayList<String> eventAtt;
+    private static List<String> eventAtt;
 
 //---  Operations   ---------------------------------------------------------------------------
 
@@ -265,7 +267,7 @@ public class SkiptheUI {
                                                          }
                                                         };
 
-        agents = new ArrayList<HashMap<String, ArrayList<Boolean>>>();
+        agents = new ArrayList<Map<String, List<Boolean>>>();
 
         /*
          * So, ideally this should be in the right order but the reason I did the awkward data format for
@@ -282,10 +284,10 @@ public class SkiptheUI {
          */
 
         for(int i = 0; i < agentInfo.length; i++) {
-            HashMap<String, ArrayList<Boolean>> agen = new HashMap<String, ArrayList<Boolean>>();
+            Map<String, List<Boolean>> agen = new HashMap<>();
             for(int j = 0; j < EVENT_LIST.length; j++) {
                 String e = EVENT_LIST[j];
-                ArrayList<Boolean> att = new ArrayList<Boolean>();
+                List<Boolean> att = new ArrayList<>();
                 for(int k = 0; k < eventAtt.size(); k++) {
                     att.add(agentInfo[i][j][k]);
                 }

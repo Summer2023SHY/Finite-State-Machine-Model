@@ -1,12 +1,13 @@
 package model.process.memory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
 
-    private ArrayList<MemoryMeasure> endStates;
-    private ArrayList<Integer> endNumComponents;
-    private ArrayList<ArrayList<String>> componentNames;
+    private List<MemoryMeasure> endStates;
+    private List<Integer> endNumComponents;
+    private List<List<String>> componentNames;
     private int[] heuristics;
 
     public void logHeuristics(int[] in) {
@@ -27,9 +28,9 @@ public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
         endNumComponents.add(in);
     }
 
-    public void logComponentNames(ArrayList<String> in) {
+    public void logComponentNames(List<String> in) {
         if(componentNames == null) {
-            componentNames = new ArrayList<ArrayList<String>>();
+            componentNames = new ArrayList<List<String>>();
         }
         componentNames.add(in);
     }
@@ -54,8 +55,8 @@ public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
     }
 
     @Override
-    public ArrayList<String> getOutputGuide(){
-        ArrayList<String> out = endStates != null  ? endStates.get(0).getOutputGuide() : super.getOutputGuide();
+    public List<String> getOutputGuide(){
+        List<String> out = endStates != null  ? endStates.get(0).getOutputGuide() : super.getOutputGuide();
 
         out.add("Num Components");
 
@@ -69,8 +70,8 @@ public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
     }
 
     @Override
-    public ArrayList<Double> getStoredData(){
-        ArrayList<Double> out = super.getStoredData();
+    public List<Double> getStoredData(){
+        List<Double> out = super.getStoredData();
 
         boolean printOnce = true;
 

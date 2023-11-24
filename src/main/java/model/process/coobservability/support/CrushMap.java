@@ -3,18 +3,21 @@ package model.process.coobservability.support;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CrushMap {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
     // Maps the State name to a list of group IDs they belong to
-    private HashMap<String, HashSet<Integer>> crushMapping;
+    private Map<String, Set<Integer>> crushMapping;
 
 //---  Constructors   -------------------------------------------------------------------------
 
     public CrushMap() {
-        crushMapping = new HashMap<String, HashSet<Integer>>();
+        crushMapping = new HashMap<String, Set<Integer>>();
     }
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -26,10 +29,10 @@ public class CrushMap {
         crushMapping.get(state).add(group);
     }
 
-    public String getOutput(ArrayList<String> importantStates) {
+    public String getOutput(List<String> importantStates) {
         StringBuilder sb = new StringBuilder();
 
-        HashMap<Integer, HashSet<String>> mapCrush = new HashMap<Integer, HashSet<String>>();
+        Map<Integer, Set<String>> mapCrush = new HashMap<Integer, Set<String>>();
 
         for(String s : crushMapping.keySet()) {
             for(int i : crushMapping.get(s)) {
@@ -49,7 +52,7 @@ public class CrushMap {
         }
 
 
-        if(importantStates != null && importantStates.size() != 0) {
+        if(importantStates != null && !importantStates.isEmpty()) {
             sb.append("By request, in particular:\n");
             for(String s : importantStates) {
                 sb.append("\t" + s + ": ");
@@ -65,13 +68,11 @@ public class CrushMap {
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public ArrayList<Integer> getStateMemberships(String stateName){
+    public List<Integer> getStateMemberships(String stateName){
         if(!crushMapping.containsKey(stateName)) {
             return null;
         }
-        ArrayList<Integer> out = new ArrayList<Integer>();
-        out.addAll(crushMapping.get(stateName));
-        return out;
+        return new ArrayList<>(crushMapping.get(stateName));
     }
 
     public boolean hasStateMembership(String stateName, int group) {

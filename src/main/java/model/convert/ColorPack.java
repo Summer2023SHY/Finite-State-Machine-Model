@@ -8,16 +8,16 @@ public class ColorPack {
     private int g;
     private int b;
 
-    public ColorPack(int a, int d, int c) {
-        r = affixColor(a);
-        g = affixColor(d);
-        b = affixColor(c);
+    public ColorPack(int r, int g, int b) {
+        this.r = affixColor(r);
+        this.g = affixColor(g);
+        this.b = affixColor(b);
     }
 
-    public ColorPack(String a, String d, String c) {
-        r = affixColor(Integer.parseInt(a, 16));
-        g = affixColor(Integer.parseInt(d, 16));
-        b = affixColor(Integer.parseInt(c, 16));
+    public ColorPack(String r, String g, String b) {
+        this.r = affixColor(Integer.parseInt(r, 16));
+        this.g = affixColor(Integer.parseInt(g, 16));
+        this.b = affixColor(Integer.parseInt(b, 16));
     }
 
     public String getGraphvizColor() {

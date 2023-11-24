@@ -1,25 +1,25 @@
 package model.process.memory;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.fsm.TransitionSystem;
 
 public interface MemoryMeasure {
 
-    public abstract double getAverageMemoryUsage();
+    public double getAverageMemoryUsage();
 
-    public abstract double getMaximumMemoryUsage();
+    public double getMaximumMemoryUsage();
 
-    public abstract boolean getTestResult();
+    public boolean getTestResult();
 
-    public abstract String produceOutputLog();
+    public String produceOutputLog();
 
-    public abstract ArrayList<String> getOutputGuide();
+    public List<String> getOutputGuide();
 
-    public abstract ArrayList<Double> getStoredData();
+    public List<Double> getStoredData();
 
-    public abstract TransitionSystem getReserveSystem();
+    public TransitionSystem getReserveSystem();
 
-    public abstract void reserveTransitionSystem(TransitionSystem in);
+    public void reserveTransitionSystem(TransitionSystem in);
 
 }

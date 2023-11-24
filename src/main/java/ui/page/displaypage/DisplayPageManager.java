@@ -1,7 +1,8 @@
 package ui.page.displaypage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import controller.CodeReference;
 import input.CustomEventReceiver;
@@ -24,7 +25,7 @@ public class DisplayPageManager implements InputHandler{
 
     private HandlePanel p;
 
-    private ArrayList<FSMInfo> fsms;
+    private List<FSMInfo> fsms;
 
     private int index;
 
@@ -97,8 +98,8 @@ public class DisplayPageManager implements InputHandler{
 
     }
 
-    public void updateFSMInfo(String ref, ArrayList<String> stateAttrib, ArrayList<String> eventAttrib, ArrayList<String> tranAttrib,
-            HashMap<String, ArrayList<Boolean>> stateMap, HashMap<String, ArrayList<Boolean>> eventMap, HashMap<String, ArrayList<Boolean>> transMap) {
+    public void updateFSMInfo(String ref, List<String> stateAttrib, List<String> eventAttrib, List<String> tranAttrib,
+            Map<String, List<Boolean>> stateMap, Map<String, List<Boolean>> eventMap, Map<String, List<Boolean>> transMap) {
         FSMInfo use = getFSMInfo(ref);
         if(use == null) {
             use = new FSMInfo(ref);
@@ -137,7 +138,7 @@ public class DisplayPageManager implements InputHandler{
 //---  Getter Methods   -----------------------------------------------------------------------
 
     public String getCurrentFSM() {
-        return fsms.size() == 0 ? null : fsms.get(index).getName();
+        return fsms.isEmpty() ? null : fsms.get(index).getName();
     }
 
     private FSMInfo getCurrentFSMInfo() {
@@ -156,8 +157,8 @@ public class DisplayPageManager implements InputHandler{
         return null;
     }
 
-    private ArrayList<String> getDisplayNames(){
-        ArrayList<String> out = new ArrayList<String>();
+    private List<String> getDisplayNames(){
+        List<String> out = new ArrayList<>();
         for(FSMInfo f : fsms) {
             out.add(f.getName());
         }

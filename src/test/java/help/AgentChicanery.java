@@ -2,6 +2,8 @@ package help;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -23,7 +25,7 @@ public class AgentChicanery {
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsA() {
+    public static List<Map<String, List<Boolean>>> generateAgentsA() {
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, false},    //a1
               {true, false},    //a2
@@ -42,7 +44,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_A);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsB(){
+    public static List<Map<String, List<Boolean>>> generateAgentsB(){
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, false},    //a
               {false, false},    //b
@@ -69,7 +71,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_B);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsB2(){
+    public static List<Map<String, List<Boolean>>> generateAgentsB2(){
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, false},    //a
               {false, false},    //b
@@ -89,7 +91,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_B);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsC() {
+    public static List<Map<String, List<Boolean>>> generateAgentsC() {
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, false},    //a1
               {true, false},    //a2
@@ -110,7 +112,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_C);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsD() {
+    public static List<Map<String, List<Boolean>>> generateAgentsD() {
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, false},    //a
               {false, false},    //b
@@ -125,7 +127,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_D);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsE(){
+    public static List<Map<String, List<Boolean>>> generateAgentsE(){
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, false},    //a1
               {true, false},    //a2
@@ -163,7 +165,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_E);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsFinn5(){
+    public static List<Map<String, List<Boolean>>> generateAgentsFinn5(){
         boolean[][][] agentInfo = new boolean[][][] {    {
             //Agent 1
               {true, false},    //a1
@@ -200,7 +202,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_FINN5);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsLiuOne() {
+    public static List<Map<String, List<Boolean>>> generateAgentsLiuOne() {
         boolean[][][] agentInfo = new boolean[][][] {    {    //Agent 1
               {true, true},        //a
               {false, false},    //b
@@ -215,7 +217,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_LIU_ONE);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsUrvashi(){
+    public static List<Map<String, List<Boolean>>> generateAgentsUrvashi(){
         boolean[][][] agentInfo = new boolean[][][] { {
                 {true, false},
                 {false, false},
@@ -230,7 +232,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_D);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsDTP(){
+    public static List<Map<String, List<Boolean>>> generateAgentsDTP(){
         String[] events = EventSets.EVENT_LIST_DTP;
         boolean[][][] agentInfo = makeDefaultAgentArray(events, 2);
         assignEventAgentInfo(agentInfo, events, 0, OBS, "getFrame", "send_0", "send_1", "rcvAck_0", "rcvAck_1", "loss");
@@ -242,7 +244,7 @@ public class AgentChicanery {
         return generateAgentSet(agentInfo, EventSets.EVENT_LIST_DTP);
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentsHISC(int num){
+    public static List<Map<String, List<Boolean>>> generateAgentsHISC(int num){
         String[] events = new String[EventSets.EVENT_LIST_HISC.length + num * EventSets.EVENT_LIST_HISC_J.length];
         for(int i = 0; i < EventSets.EVENT_LIST_HISC.length; i++) {
             events[i] = EventSets.EVENT_LIST_HISC[i];
@@ -289,14 +291,14 @@ public class AgentChicanery {
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    protected static ArrayList<HashMap<String, ArrayList<Boolean>>> generateAgentSet(boolean[][][] agentInfo, String[] eventList){
-        ArrayList<HashMap<String, ArrayList<Boolean>>> use = new ArrayList<HashMap<String, ArrayList<Boolean>>>();
+    protected static List<Map<String, List<Boolean>>> generateAgentSet(boolean[][][] agentInfo, String[] eventList){
+        List<Map<String, List<Boolean>>> use = new ArrayList<>();
 
         for(int i = 0; i < agentInfo.length; i++) {
-            HashMap<String, ArrayList<Boolean>> agen = new HashMap<String, ArrayList<Boolean>>();
+            Map<String, List<Boolean>> agen = new HashMap<>();
             for(int j = 0; j < eventList.length; j++) {
                 String e = eventList[j];
-                ArrayList<Boolean> att = new ArrayList<Boolean>();
+                List<Boolean> att = new ArrayList<>();
                 for(int k = 0; k < EventSets.EVENT_ATTR_LIST.length; k++) {
                     att.add(agentInfo[i][j][k]);
                 }

@@ -3,6 +3,7 @@ package ui.popups;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import visual.composite.popout.PopoutWindow;
 
@@ -24,14 +25,14 @@ public class PopoutAgentSelection extends PopoutWindow{
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private ArrayList<AgentRep> agents;
-    private ArrayList<String> refEvents;
-    private ArrayList<String> attributes;
+    private List<AgentRep> agents;
+    private List<String> refEvents;
+    private List<String> attributes;
     private volatile boolean ready;
 
 //---  Constructors   -------------------------------------------------------------------------
 
-    public PopoutAgentSelection(ArrayList<String> inAge, ArrayList<String> inEven, ArrayList<String> inAttrib) {
+    public PopoutAgentSelection(List<String> inAge, List<String> inEven, List<String> inAttrib) {
         super(WIDTH, HEIGHT);
         setTitle("Configure Agents");
         refEvents = inEven;
@@ -171,9 +172,9 @@ public class PopoutAgentSelection extends PopoutWindow{
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public ArrayList<String> getResult(){
+    public List<String> getResult(){
         while(!ready) {    }
-        ArrayList<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<String>();
         for(AgentRep a : agents) {
             System.out.println(a.toString());
             out.add(a.toString());

@@ -2,6 +2,7 @@ package model.process.coobservability.support;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import model.fsm.component.EventMap;
 
@@ -23,7 +24,7 @@ public class Agent {
      * @param inEvents
      */
 
-    public Agent(ArrayList<String> attr, ArrayList<String> inEvents) {
+    public Agent(List<String> attr, List<String> inEvents) {
         events = new EventMap(attr);
         if(inEvents != null) {
             for(String e : inEvents)
@@ -67,7 +68,7 @@ public class Agent {
      * @param names
      */
 
-    public void setAttributeTrue(String attrib, ArrayList<String> names) {
+    public void setAttributeTrue(String attrib, List<String> names) {
         for(String s : names) {
             events.setEventAttribute(s, attrib, true);
         }
@@ -93,12 +94,12 @@ public class Agent {
         return events.getEventAttribute(event, attrib);
     }
 
-    public ArrayList<String> getEvents(){
+    public List<String> getEvents(){
         return events.getEventNames();
     }
 
-    public ArrayList<String> getEventsAttributeSet(String attrib, boolean val){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getEventsAttributeSet(String attrib, boolean val){
+        List<String> out = new ArrayList<>();
         for(String s : events.getEventNames()) {
             Boolean b = events.getEventAttribute(s, attrib);
             if(b != null && b == val) {

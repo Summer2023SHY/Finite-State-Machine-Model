@@ -7,19 +7,19 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
-import model.Manager;
-import model.fsm.TransitionSystem;
-import model.process.coobservability.Incremental;
 import help.AgentChicanery;
 import help.EventSets;
 import help.RandomGenStats;
 import help.RandomGeneration;
 import help.SystemGeneration;
+import model.Manager;
+import model.process.coobservability.Incremental;
 import visual.composite.ImageDisplay;
 import visual.frame.WindowFrame;
 import visual.panel.ElementPanel;
@@ -37,7 +37,7 @@ public class TestFunctionality {
 
     private static Manager model;
 
-    private static ArrayList<String> eventAtt;
+    private static List<String> eventAtt;
 
     private static String defaultWritePath;
 
@@ -91,7 +91,7 @@ public class TestFunctionality {
         /*
         SystemGeneration.generateSystemA("A");
         SystemGeneration.generateSystemB("B");
-        ArrayList<String> use = new ArrayList<String>();
+        List<String> use = new ArrayList<String>();
         use.add("A"); use.add("B");
         String nom = model.performParallelComposition(use);
         makeImageDisplay("A", "A");
@@ -115,9 +115,9 @@ public class TestFunctionality {
         */
         Incremental.assignIncrementalOptions(0, 1, 1);
 
-        ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISC();
-        ArrayList<String> plant = names.get(0);
-        ArrayList<String> spec = names.get(1);
+        List<List<String>> names = SystemGeneration.generateSystemSetHISC();
+        List<String> plant = names.get(0);
+        List<String> spec = names.get(1);
 
         /*for(String s : spec) {
             makeImageDisplay(s, s);
@@ -194,7 +194,7 @@ public class TestFunctionality {
 
         makeImageDisplay("spec", "spec");
 
-        ArrayList<String> use = new ArrayList<String>();
+        List<String> use = new ArrayList<String>();
         use.add("plant");
         use.add("spec");
 
@@ -338,7 +338,7 @@ public class TestFunctionality {
         SystemGeneration.generateSystemA(SystemA);
         makeImageDisplay(SystemA, "Example 1");
 
-        ArrayList<String> ustruct = model.buildUStructureCrush(SystemA, eventAtt, AgentChicanery.generateAgentsA());
+        List<String> ustruct = model.buildUStructureCrush(SystemA, eventAtt, AgentChicanery.generateAgentsA());
         for(String s : ustruct)
             makeImageDisplay(s, s);
     }
@@ -348,7 +348,7 @@ public class TestFunctionality {
         SystemGeneration.generateSystemB(SystemB);
         makeImageDisplay(SystemB, "Example 2");
 
-        ArrayList<String> ustruct = model.buildUStructureCrush(SystemB, eventAtt, AgentChicanery.generateAgentsB2());
+        List<String> ustruct = model.buildUStructureCrush(SystemB, eventAtt, AgentChicanery.generateAgentsB2());
         for(String s : ustruct) {
             makeImageDisplay(s, s);
             model.exportFSM(s);
@@ -360,7 +360,7 @@ public class TestFunctionality {
         SystemGeneration.generateSystemE(SystemE);
         makeImageDisplay(SystemE, "Example 5");
 
-        ArrayList<String> ustruct = model.buildUStructureCrush(SystemE, eventAtt, AgentChicanery.generateAgentsE());
+        List<String> ustruct = model.buildUStructureCrush(SystemE, eventAtt, AgentChicanery.generateAgentsE());
         for(String s : ustruct) {
             makeSVGImage(s, s);
             model.exportFSM(s);
@@ -371,7 +371,7 @@ public class TestFunctionality {
         String SystemFinn = "Example Finn";
         SystemGeneration.generateSystemFinn(SystemFinn);
         makeImageDisplay(SystemFinn, SystemFinn);
-        ArrayList<String> ustruct = model.buildUStructureCrush(SystemFinn, eventAtt, AgentChicanery.generateAgentsFinn5());
+        List<String> ustruct = model.buildUStructureCrush(SystemFinn, eventAtt, AgentChicanery.generateAgentsFinn5());
         for(String s : ustruct) {
             makeImageDisplay(s, s);
             model.exportFSM(s);
@@ -401,10 +401,10 @@ public class TestFunctionality {
         printOut("---------------------------------------------\n");
 
         RandomGenStats info = new RandomGenStats(numPlants, numSpecs, numStates, numStateVar, numEve, numEveVar, shareRate, numAgents, numAgentVar, obsRate, ctrRate);
-        ArrayList<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
-        ArrayList<String> names = RandomGeneration.getComponentNames(testName, numPlants, numSpecs);
+        List<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
+        List<String> names = RandomGeneration.getComponentNames(testName, numPlants, numSpecs);
 
-        ArrayList<HashMap<String, ArrayList<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
+        List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
         f = new File(writePath + "/" + (testName + "_agents.txt"));
         try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
@@ -428,7 +428,7 @@ public class TestFunctionality {
 
     private static void autoTestOldSystem(String prefixNom) throws IOException {
         String path = defaultWritePath + "/" + prefixNom;
-        ArrayList<String> plants = new ArrayList<String>();
+        List<String> plants = new ArrayList<String>();
         int counter = 0;
         String hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
         while(hold != null) {
@@ -436,7 +436,7 @@ public class TestFunctionality {
             hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
         }
 
-        ArrayList<String> specs = new ArrayList<String>();
+        List<String> specs = new ArrayList<String>();
         counter = 0;
         hold = pullSourceData(path + "/" + prefixNom + "_s_" + counter++ + ".txt");
         while(hold != null) {
@@ -446,7 +446,7 @@ public class TestFunctionality {
 
         hold = pullSourceData(path + "/" + prefixNom + "_agents.txt");
 
-        ArrayList<HashMap<String, ArrayList<Boolean>>> agents = model.readInAgents(hold);
+        List<Map<String, List<Boolean>>> agents = model.readInAgents(hold);
 
         printOut("Agent Information: \n" + agents.toString().replace("},", "},\n").replaceAll("[\\[\\]]", " "));
         printOut("\n---------------------------------------------\n");
@@ -465,7 +465,7 @@ public class TestFunctionality {
         }
     }
 
-    private static void autoTestSystemFull(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean displays) {
+    private static void autoTestSystemFull(String prefixNom, List<String> plantNames, List<String> specNames, List<Map<String, List<Boolean>>> agents, boolean displays) {
         printCoobsLabel(prefixNom, false);
         boolean coobs = checkCoobservable(plantNames, specNames, agents, false);
 
@@ -543,10 +543,10 @@ public class TestFunctionality {
         printOut("---------------------------------------------\n");
 
         RandomGenStats info = new RandomGenStats(numPlants, numSpecs, numStates, numStateVar, numEve, numEveVar, shareRate, numAgents, numAgentVar, obsRate, ctrRate);
-        ArrayList<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
-        ArrayList<String> names = RandomGeneration.getComponentNames(testName, numPlants, numSpecs);
+        List<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
+        List<String> names = RandomGeneration.getComponentNames(testName, numPlants, numSpecs);
 
-        ArrayList<HashMap<String, ArrayList<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
+        List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
         printOut("Agent Information: \n" + agents.toString().replace("},", "},\n").replaceAll("[\\[\\]]", " "));
         printOut("\n---------------------------------------------\n");
@@ -584,7 +584,7 @@ public class TestFunctionality {
 
     //-- Coobservable  ------------------------------------------------------------------------
 
-    private static boolean checkCoobservable(String name, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
+    private static boolean checkCoobservable(String name, List<Map<String, List<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         boolean result = inf ? model.isInferenceCoobservableUStruct(name, eventAtt, agents) : model.isCoobservableUStruct(name, eventAtt, agents);
@@ -594,7 +594,7 @@ public class TestFunctionality {
         return result;
     }
 
-    private static boolean checkCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
+    private static boolean checkCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         boolean result = inf ? model.isInferenceCoobservableUStruct(plants, specs, eventAtt, agents) : model.isCoobservableUStruct(plants, specs, eventAtt, agents);
@@ -628,7 +628,7 @@ public class TestFunctionality {
         makeImageDisplay(SystemB, SystemB);
         printCoobsLabel(SystemB, inf);
         checkCoobservable(SystemB, AgentChicanery.generateAgentsB(), inf);
-        ArrayList<String> ustruct = model.buildUStructureCrush(SystemB, eventAtt, AgentChicanery.generateAgentsB());
+        List<String> ustruct = model.buildUStructureCrush(SystemB, eventAtt, AgentChicanery.generateAgentsB());
         for(String s : ustruct) {
             makeImageDisplay(s, s);
             model.exportFSM(s);
@@ -664,9 +664,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemLiuOneCoobservable(boolean inf) {
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> plant = new ArrayList<String>();
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         names.add("G1");
         plant.add("G1");
         names.add("H1");
@@ -677,9 +677,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemLiuTwoCoobservable(boolean inf) {
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> plant = new ArrayList<String>();
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         names.add("G3");
         plant.add("G3");
         names.add("G4");
@@ -693,7 +693,7 @@ public class TestFunctionality {
 
     //-- SBCoobservable  ----------------------------------------------------------------------
 
-    private static boolean checkSBCoobservable(String name, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private static boolean checkSBCoobservable(String name, List<Map<String, List<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         boolean result = prepSoloSpecRunSB(name, agents);
@@ -703,7 +703,7 @@ public class TestFunctionality {
         return result;
     }
 
-    private static boolean checkSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private static boolean checkSBCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         boolean result = model.isSBCoobservableUrvashi(plants, specs, eventAtt, agents);
@@ -713,11 +713,11 @@ public class TestFunctionality {
         return result;
     }
 
-    private static boolean prepSoloSpecRunSB(String name, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private static boolean prepSoloSpecRunSB(String name, List<Map<String, List<Boolean>>> agents) {
         String b = name + "_spec";
         generateSoloSpecPlant(name, b);
-        ArrayList<String> plants = new ArrayList<String>();
-        ArrayList<String> specs = new ArrayList<String>();
+        List<String> plants = new ArrayList<String>();
+        List<String> specs = new ArrayList<String>();
         plants.add(name);
         specs.add(b);
         return model.isSBCoobservableUrvashi(plants, specs, eventAtt, agents);
@@ -763,9 +763,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemUrvashiSBCoobservable() {
-        ArrayList<String> plant = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
         plant.add("plant");
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         spec.add("spec");
         SystemGeneration.generateSystemSetUrvashi(plant.get(0), spec.get(0));
         printSBCoobsLabel("System Urvashi");
@@ -773,9 +773,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemLiuOneSBCoobservable() {
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> plant = new ArrayList<String>();
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         names.add("G1");
         plant.add("G1");
         names.add("H1");
@@ -786,9 +786,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemLiuTwoSBCoobservable() {
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> plant = new ArrayList<String>();
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         names.add("G3");
         plant.add("G3");
         names.add("G4");
@@ -802,7 +802,7 @@ public class TestFunctionality {
 
     //-- Incremental Coobservable  ------------------------------------------------------------
 
-    private static boolean checkIncrementalCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
+    private static boolean checkIncrementalCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         boolean result = inf ? model.isIncrementalInferenceCoobservable(plants, specs, eventAtt, agents) : model.isIncrementalCoobservable(plants, specs, eventAtt, agents);
@@ -812,7 +812,7 @@ public class TestFunctionality {
         return result;
     }
 
-    private static boolean checkIncrementalSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private static boolean checkIncrementalSBCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         boolean result = model.isIncrementalSBCoobservable(plants, specs, eventAtt, agents);
@@ -831,9 +831,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemLiuOneIncrementalCoobservable() {
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> plant = new ArrayList<String>();
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         names.add("G1");
         plant.add("G1");
         names.add("H1");
@@ -844,9 +844,9 @@ public class TestFunctionality {
     }
 
     private static void checkSystemLiuTwoIncrementalCoobservable() {
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> plant = new ArrayList<String>();
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         names.add("G3");
         plant.add("G3");
         names.add("G4");
@@ -889,8 +889,8 @@ public class TestFunctionality {
         double val = inMB(getCurrentMemoryUsage() - hold);
         val = val < 0 ? 0 : val;
         printMemoryUsage(val);
-        ArrayList<Double> data = model.getLastProcessData().getStoredData();
-        ArrayList<String> use = model.getLastProcessData().getOutputGuide();
+        List<Double> data = model.getLastProcessData().getStoredData();
+        List<String> use = model.getLastProcessData().getOutputGuide();
 
         use.add(0, "Total Time (ms)");
         use.add(1, "Overall Memory Usage (Mb)");
@@ -913,7 +913,7 @@ public class TestFunctionality {
             System.out.println(text);
     }
 
-    private static void printEquivalentResults(ArrayList<String> guide, long time, double overallMem, ArrayList<Double> vals) {
+    private static void printEquivalentResults(List<String> guide, long time, double overallMem, List<Double> vals) {
         if(writePath != null) {
             File f = new File(writePath + "/" + ANALYSIS_FILE);
             try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {

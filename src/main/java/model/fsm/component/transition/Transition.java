@@ -1,28 +1,28 @@
 package model.fsm.component.transition;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import model.fsm.component.Entity;
 
-import java.util.ArrayList;
-
 /**
- * This interface provides the framework for the structure of Transition objects, leaving
- * the implementation to the classes that use this interface.
+ * Representation of a transition.
  * 
  * This interface is part of the support.transition package.
  * 
- * @author Ada Clevinger and Graeme Zinck
+ * @author Ada Clevinger
+ * @author Graeme Zinck
  */
 
 public class Transition extends Entity implements Comparable<Transition> {
 
-//--- Instance Variables   --------------------------------------------------------------------
+    // Instance Variables
 
-    /** ArrayList<<r>State> object holding all State objects associated to the String associated to this Transition object*/
-    private ArrayList<String> states;
+    /** Holds all states associated with this transition. */
+    private List<String> states;
 
-//--- Constructors   --------------------------------------------------------------------------
+    // Constructors
 
     public Transition(String inEvent, String state) {
         super(inEvent);
@@ -31,13 +31,15 @@ public class Transition extends Entity implements Comparable<Transition> {
     }
 
     /**
-     * Constructor for a Transition object, assigning a single String object and a list of States which the event can lead to.
+     * Constructs a new {@code Transition} assigning a single String object and
+     * a list of States which the event can lead to.
      * 
-     * @param inString - String object representing the event that leads to the associated transition states.
-     * @param inStates - List of State objects representing the States led to by the String associated with this Transition object.
+     * @param inString string representation of the event that leads to the
+     *                 associated transition states
+     * @param inStates list of states led to by this transition
      */
 
-    public Transition(String inString, ArrayList<String> inStates) {
+    public Transition(String inString, List<String> inStates) {
         super(inString);
         states = inStates;
     }
@@ -48,26 +50,25 @@ public class Transition extends Entity implements Comparable<Transition> {
         states = new ArrayList<String>();
     }
 
-//---  Operations   ---------------------------------------------------------------------------
+    // Operations
 
     @Override
     public Transition copy() {
         Transition out = new Transition(this);
-        for(String s : states) {
+        for (String s : states) {
             out.addTransitionState(s);
         }
         return out;
     }
 
-//--- Setter Methods   ------------------------------------------------------------------------
+    // Setter Methods
 
     /**
-     * Setter method to replace the current ArrayList<<r>State> of State names with the provided one
+     * Sets the transition states for this transition.
      * 
-     * @param in - ArrayList<<r>State> object representing the list of States led to by the String associated to this Transition object
+     * @param in list of states led to by this transition
      */
-
-    public void setTransitionStates(ArrayList<String> in) {
+    public void setTransitionStates(List<String> in) {
         states = in;
     }
 
@@ -75,13 +76,13 @@ public class Transition extends Entity implements Comparable<Transition> {
         setName(in);
     }
 
-//--- Getter Methods   ------------------------------------------------------------------------
+    // Getter Methods
 
     public String getEvent() {
         return getName();
     }
 
-    public ArrayList<String> getStates() {
+    public List<String> getStates() {
         return states;
     }
 
@@ -90,17 +91,17 @@ public class Transition extends Entity implements Comparable<Transition> {
     }
 
     public boolean isEmpty() {
-        return states.size() == 0;
+        return states.isEmpty();
     }
 
-//---  Adder Methods   ------------------------------------------------------------------------
+    // Adder Methods
 
     public void addTransitionState(String in) {
-        if(!states.contains(in))
+        if (!states.contains(in))
             states.add(in);
     }
 
-//---  Remover Methods   ----------------------------------------------------------------------
+    // Remover Methods
 
     public void removeTransitionState(String stateName) {
         states.remove(stateName);
@@ -110,7 +111,7 @@ public class Transition extends Entity implements Comparable<Transition> {
         states.clear();
     }
 
-//---  Mechanics   ----------------------------------------------------------------------------
+    // Mechanics
 
     @Override
     public int compareTo(Transition o) {
@@ -121,9 +122,10 @@ public class Transition extends Entity implements Comparable<Transition> {
     public String toString() {
         StringBuilder sb = new StringBuilder(getName() + " goes to the states: ");
         Iterator<String> itr = states.iterator();
-        while(itr.hasNext()) {
+        while (itr.hasNext()) {
             sb.append(itr.next());
-            if(itr.hasNext()) sb.append(", ");
+            if (itr.hasNext())
+                sb.append(", ");
         }
         return sb.toString();
     }

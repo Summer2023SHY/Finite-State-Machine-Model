@@ -1,7 +1,13 @@
 package model.process.coobservability;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 import model.process.coobservability.support.Agent;
@@ -10,9 +16,6 @@ import model.process.coobservability.support.CrushIdentityGroup;
 import model.process.coobservability.support.CrushMap;
 import model.process.coobservability.support.IllegalConfig;
 import model.process.memory.UStructMemoryMeasure;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class UStructure extends UStructMemoryMeasure{
 
@@ -29,11 +32,11 @@ public class UStructure extends UStructMemoryMeasure{
     protected static String attributeGoodRef;
 
     private TransitionSystem uStructure;
-    private HashSet<IllegalConfig> goodBadStates;
-    private HashSet<IllegalConfig> badGoodStates;
+    private Set<IllegalConfig> goodBadStates;
+    private Set<IllegalConfig> badGoodStates;
 
-    private HashMap<String, AgentStates> objectMap;
-    private HashMap<String, String[]> eventNameMap;
+    private Map<String, AgentStates> objectMap;
+    private Map<String, String[]> eventNameMap;
 
     private CrushMap[] crushMap;
 
@@ -43,9 +46,9 @@ public class UStructure extends UStructMemoryMeasure{
 
 //---  Constructors   -------------------------------------------------------------------------
 
-    public UStructure(TransitionSystem thePlant, ArrayList<String> attr, ArrayList<Agent> theAgents) {
+    public UStructure(TransitionSystem thePlant, List<String> attr, List<Agent> theAgents) {
         super();
-        HashMap<String, HashSet<String>> badTransitions = initializeBadTransitions(thePlant);
+        Map<String, Set<String>> badTransitions = initializeBadTransitions(thePlant);
         agents = initializeAgents(thePlant, attr, theAgents);
         crushMap = new CrushMap[agents.length];
 
@@ -56,8 +59,8 @@ public class UStructure extends UStructMemoryMeasure{
         createUStructure(thePlant, badTransitions, agents, endAtFirstCounterexample);
     }
 
-    private HashMap<String, HashSet<String>> initializeBadTransitions(TransitionSystem thePlant){
-        HashMap<String, HashSet<String>> badTransitions = new HashMap<String, HashSet<String>>();
+    private Map<String, Set<String>> initializeBadTransitions(TransitionSystem thePlant){
+        Map<String, Set<String>> badTransitions = new HashMap<>();
         for(String s : thePlant.getStateNames()) {
             if(badTransitions.get(s) == null) {
                 badTransitions.put(s, new HashSet<String>());
@@ -71,7 +74,7 @@ public class UStructure extends UStructMemoryMeasure{
         return badTransitions;
     }
 
-    private Agent[] initializeAgents(TransitionSystem thePlant, ArrayList<String> attr, ArrayList<Agent> theAgents) {
+    private Agent[] initializeAgents(TransitionSystem thePlant, List<String> attr, List<Agent> theAgents) {
         Agent[] agents = new Agent[theAgents.size() + 1];
 
         agents[0] = new Agent(thePlant.getEventMap());
@@ -80,7 +83,7 @@ public class UStructure extends UStructMemoryMeasure{
             agents[i+1] = theAgents.get(i);
         }
 
-        HashSet<String> allEvents = new HashSet<String>();
+        Set<String> allEvents = new HashSet<String>();
         allEvents.add(UNOBSERVED_EVENT);
 
         for(Agent a : agents) {
@@ -109,14 +112,14 @@ public class UStructure extends UStructMemoryMeasure{
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public void createUStructure(TransitionSystem plant, HashMap<String, HashSet<String>> badTransitions, Agent[] agents, boolean endAtFirstCounterexample) {
+    public void createUStructure(TransitionSystem plant, Map<String, Set<String>> badTransitions, Agent[] agents, boolean endAtFirstCounterexample) {
         uStructure = initializeUStructure(plant);
         uStructure.setId("U-Struct - " + plant.getId());
 
         //System.out.println("---" + uStructure.getId());
 
-        LinkedList<AgentStates> queue = new LinkedList<AgentStates>();        //initialize queue
-        HashSet<String> visited = new HashSet<String>();
+        Queue<AgentStates> queue = new ArrayDeque<>();        //initialize queue
+        Set<String> visited = new HashSet<>();
 
         String[] starting = new String[agents.length];
         for(int i = 0; i < starting.length; i++) {
@@ -129,7 +132,7 @@ public class UStructure extends UStructMemoryMeasure{
         queue.add(bas);
 
         // Experiment with whether it matters that a system thinks an event is controllable or not
-        HashSet<String> controllable = new HashSet<String>();
+        Set<String> controllable = new HashSet<String>();
         for(Agent a : agents) {
             controllable.addAll(a.getEventsAttributeSet(attributeControllableRef, true));
         }
@@ -149,7 +152,7 @@ public class UStructure extends UStructMemoryMeasure{
             visited.add(currState);
 
 
-            HashSet<String> viableEvents = new HashSet<String>();
+            Set<String> viableEvents = new HashSet<>();
             for(String s : stateSetStates) {
                 for(String e : plant.getStateTransitionEvents(s)) {
                     viableEvents.add(e);
@@ -235,7 +238,7 @@ public class UStructure extends UStructMemoryMeasure{
                     }
                     if(result != null) {
                       uStructure.setStateAttribute(currState, !result ? attributeGoodRef : attributeBadRef, true);
-                      ArrayList<ArrayList<String>> observed = new  ArrayList<ArrayList<String>>();
+                      List<List<String>> observed = new ArrayList<>();
                       for(int i = 0; i < agents.length-1; i++) {
                           observed.add(stateSet.getObservedPath(i+1));
                       }
@@ -264,8 +267,8 @@ public class UStructure extends UStructMemoryMeasure{
     }
 
     private TransitionSystem initializeUStructure(TransitionSystem plant) {
-        TransitionSystem out = new TransitionSystem("U-struc", copy(plant.getStateAttributes()), copy(plant.getEventAttributes()), copy(plant.getTransitionAttributes()));
-        ArrayList<String> attr = out.getStateAttributes();
+        TransitionSystem out = new TransitionSystem("U-struc", new ArrayList<String>(plant.getStateAttributes()), new ArrayList<String>(plant.getEventAttributes()), new ArrayList<String>(plant.getTransitionAttributes()));
+        List<String> attr = out.getStateAttributes();
         attr.add(attributeBadRef);
         attr.add(attributeGoodRef);
         out.setStateAttributes(attr);
@@ -276,17 +279,17 @@ public class UStructure extends UStructMemoryMeasure{
         //TODO: For actual calculation, we ignore the plant crush map, so need a way to reduce work when wanting result but have it available when wanting the print out
         for(int i = display ? 0 : 1; i < agents.length; i++) {
             Agent age = agents[i];
-            HashSet<String> init = getReachableStates(uStructure.getStatesWithAttribute(attributeInitialRef).get(0), age, i);
+            Set<String> init = getReachableStates(uStructure.getStatesWithAttribute(attributeInitialRef).get(0), age, i);
             if(crushMap[i] != null) {
                 continue;
             }
             crushMap[i] = new CrushMap();
 
-            //TODO: Probably just need these HashSet<String> object to incorporate the event and state set that led to them
+            //TODO: Probably just need these Set<String> object to incorporate the event and state set that led to them
 
-            LinkedList<CrushIdentityGroup> queue = new LinkedList<CrushIdentityGroup>();
+            Queue<CrushIdentityGroup> queue = new ArrayDeque<>();
             queue.add(new CrushIdentityGroup(null, null, init));
-            HashSet<CrushIdentityGroup> visited = new HashSet<CrushIdentityGroup>();
+            Set<CrushIdentityGroup> visited = new HashSet<CrushIdentityGroup>();
             while(!queue.isEmpty()) {
                 CrushIdentityGroup curr = queue.poll();
 
@@ -299,7 +302,7 @@ public class UStructure extends UStructMemoryMeasure{
                 visited.add(curr);
 
                 for(String s : getPossibleVisibleEvents(curr.getGroup(), age, i)) {
-                    HashSet<String> reachable = new HashSet<String>();
+                    Set<String> reachable = new HashSet<>();
                     for(String t : getTargetStates(curr.getGroup(), s, age, i)) {
                         reachable.addAll(getReachableStates(t, age, i));
                     }
@@ -327,7 +330,7 @@ public class UStructure extends UStructMemoryMeasure{
             if(cm == null) {
                 continue;
             }
-            ArrayList<String> important = new ArrayList<String>();
+            List<String> important = new ArrayList<>();
 
             if(pointOut) {
                 for(IllegalConfig ic : goodBadStates) {
@@ -345,11 +348,11 @@ public class UStructure extends UStructMemoryMeasure{
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public HashSet<IllegalConfig> getFilteredIllegalConfigStates() {
+    public Set<IllegalConfig> getFilteredIllegalConfigStates() {
         calculateCrush(false);
-        HashSet<IllegalConfig> typeOne = new HashSet<IllegalConfig>();
+        Set<IllegalConfig> typeOne = new HashSet<>();
         typeOne.addAll(getIllegalConfigOneStates());
-        HashSet<IllegalConfig> typeTwo = new HashSet<IllegalConfig>();
+        Set<IllegalConfig> typeTwo = new HashSet<>();
         typeTwo.addAll(getIllegalConfigTwoStates());
 
         filterGroups(typeOne, typeTwo);
@@ -367,8 +370,8 @@ public class UStructure extends UStructMemoryMeasure{
         return uStructure;
     }
 
-    public ArrayList<TransitionSystem> getCrushUStructures() {
-        ArrayList<TransitionSystem> out = new ArrayList<TransitionSystem>();
+    public List<TransitionSystem> getCrushUStructures() {
+        List<TransitionSystem> out = new ArrayList<>();
 
         calculateCrush(true);
 
@@ -386,11 +389,11 @@ public class UStructure extends UStructMemoryMeasure{
         return out;
     }
 
-    public HashSet<IllegalConfig> getIllegalConfigOneStates(){
+    public Set<IllegalConfig> getIllegalConfigOneStates(){
         return badGoodStates;
     }
 
-    public HashSet<IllegalConfig> getIllegalConfigTwoStates(){
+    public Set<IllegalConfig> getIllegalConfigTwoStates(){
         return goodBadStates;
     }
 
@@ -408,10 +411,10 @@ public class UStructure extends UStructMemoryMeasure{
         return null;
     }
 
-    private String getState(TransitionSystem plant, ArrayList<String> eventPath) {
+    private String getState(TransitionSystem plant, List<String> eventPath) {
         String curr = plant.getStatesWithAttribute(attributeInitialRef).get(0);
         for(String s : eventPath) {
-            ArrayList<String> next = plant.getStateEventTransitionStates(curr, s);
+            List<String> next = plant.getStateEventTransitionStates(curr, s);
             if(next != null && next.size() > 0) {
                 curr = next.get(0);
             }
@@ -424,8 +427,8 @@ public class UStructure extends UStructMemoryMeasure{
 
     //-- Crush  -----------------------------------------------
 
-    private HashSet<String> getTargetStates(HashSet<String> states, String event, Agent age, int index){
-        HashSet<String> out = new HashSet<String>();
+    private Set<String> getTargetStates(Set<String> states, String event, Agent age, int index){
+        Set<String> out = new HashSet<>();
 
         for(String s : states) {
             for(String e : uStructure.getStateTransitionEvents(s)) {
@@ -438,8 +441,8 @@ public class UStructure extends UStructMemoryMeasure{
         return out;
     }
 
-    private HashSet<String> getPossibleVisibleEvents(HashSet<String> states, Agent age, int index){
-        HashSet<String> out = new HashSet<String>();
+    private Set<String> getPossibleVisibleEvents(Set<String> states, Agent age, int index){
+        Set<String> out = new HashSet<String>();
 
         for(String s : states) {
             for(String e : uStructure.getStateTransitionEvents(s)) {
@@ -452,9 +455,9 @@ public class UStructure extends UStructMemoryMeasure{
         return out;
     }
 
-    private HashSet<String> getReachableStates(String start, Agent age, int index){
-        LinkedList<String> queue = new LinkedList<String>();
-        HashSet<String> visited = new HashSet<String>();
+    private Set<String> getReachableStates(String start, Agent age, int index){
+        Queue<String> queue = new ArrayDeque<>();
+        Set<String> visited = new HashSet<String>();
         queue.add(start);
 
         while(!queue.isEmpty()) {
@@ -476,15 +479,7 @@ public class UStructure extends UStructMemoryMeasure{
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private ArrayList<String> copy(ArrayList<String> in){
-        ArrayList<String> out = new ArrayList<String>();
-        for(String s : in) {
-            out.add(s);
-        }
-        return out;
-    }
-
-    private boolean isMeaninglessTransition(String[] stateSetStates, String[] events, HashMap<String, HashSet<String>> badTransitions) {
+    private boolean isMeaninglessTransition(String[] stateSetStates, String[] events, Map<String, Set<String>> badTransitions) {
 
         //First, did we somehow get an event sequence that doesn't have any events in it? Also gets the relevant event.
         String event = null;
@@ -508,8 +503,8 @@ public class UStructure extends UStructMemoryMeasure{
         return false;
     }
 
-    private ArrayList<String> filterEventPath(ArrayList<String> events, String contr, Agent age) {
-        ArrayList<String> out = new ArrayList<String>();
+    private List<String> filterEventPath(List<String> events, String contr, Agent age) {
+        List<String> out = new ArrayList<>();
         for(String s : events) {
             if(age.contains(s) && age.getEventAttribute(s, attributeObservableRef)) {
                 out.add(s);
@@ -538,9 +533,9 @@ public class UStructure extends UStructMemoryMeasure{
         return out;
     }
 
-    private void filterGroups(HashSet<IllegalConfig> typeOne, HashSet<IllegalConfig> typeTwo){
+    private void filterGroups(Set<IllegalConfig> typeOne, Set<IllegalConfig> typeTwo){
         for(int i = 1; i < crushMap.length; i++) {
-            HashSet<Integer> typeOneGroup = new HashSet<Integer>();
+            Set<Integer> typeOneGroup = new HashSet<>();
             CrushMap crush = crushMap[i];
             for(IllegalConfig ic : typeOne) {
                 String st = ic.getStateSet().getCompositeName();
@@ -548,7 +543,7 @@ public class UStructure extends UStructMemoryMeasure{
                     typeOneGroup.add(j);
                 }
             }
-            HashSet<IllegalConfig> typeTwoRemove = new HashSet<IllegalConfig>();
+            Set<IllegalConfig> typeTwoRemove = new HashSet<>();
             for(IllegalConfig ic : typeTwo) {
                 String st = ic.getStateSet().getCompositeName();
                 boolean conflict = false;

@@ -1,21 +1,21 @@
 package model.process.coobservability.deciding;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.fsm.TransitionSystem;
 import model.process.coobservability.support.Agent;
 
 public class DecideInfCoobs extends DecideCoobs{
 
-    public DecideInfCoobs(ArrayList<TransitionSystem> inPlan, ArrayList<TransitionSystem> inSpe, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideInfCoobs(List<TransitionSystem> inPlan, List<TransitionSystem> inSpe, List<String> attrIn, List<Agent> agentsIn) {
         super(inPlan, inSpe, attrIn, agentsIn);
     }
 
-    public DecideInfCoobs(ArrayList<String> events, TransitionSystem specStart, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideInfCoobs(List<String> events, TransitionSystem specStart, List<String> attrIn, List<Agent> agentsIn) {
         super(events, specStart, attrIn, agentsIn);
     }
 
-    public DecideInfCoobs(TransitionSystem root, ArrayList<String> attr, ArrayList<Agent> in) {
+    public DecideInfCoobs(TransitionSystem root, List<String> attr, List<Agent> in) {
         super(root, attr, in);
     }
 
@@ -29,7 +29,7 @@ public class DecideInfCoobs extends DecideCoobs{
     }
 
     @Override
-    public DecideCondition constructDeciderCoobs(ArrayList<String> events, TransitionSystem specStart, ArrayList<String> attr, ArrayList<Agent> agents) {
+    public DecideCondition constructDeciderCoobs(List<String> events, TransitionSystem specStart, List<String> attr, List<Agent> agents) {
         return new DecideInfCoobs(events, specStart, attr, agents);
     }
 

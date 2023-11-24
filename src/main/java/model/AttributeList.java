@@ -38,24 +38,8 @@ public class AttributeList {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private static HashMap<String, Boolean> map;
-
-    /** Private constructor */
-    private AttributeList() {
-    }
-
-//---  Getter Methods   -----------------------------------------------------------------------
-
-    public static boolean getAON(String ref) {
-        if(map == null) {
-            setupMap();
-        }
-        return map.get(ref);
-    }
-
-//---  Support Methods   ----------------------------------------------------------------------
-
-    private static void setupMap() {
+    private static final HashMap<String, Boolean> map;
+    static {
         map = new HashMap<String, Boolean>();
         map.put(ATTRIBUTE_INITIAL, ATTRIBUTE_AON_INITIAL);
         map.put(ATTRIBUTE_MARKED, ATTRIBUTE_AON_MARKED);
@@ -65,6 +49,16 @@ public class AttributeList {
         map.put(ATTRIBUTE_BAD, ATTRIBUTE_AON_BAD);
         map.put(ATTRIBUTE_ATTACKER_OBSERVABLE, ATTRIBUTE_AON_ATTACKER_OBSERVABLE);
         map.put(ATTRIBUTE_GOOD, ATTRIBUTE_AON_GOOD);
+    }
+
+    /** Private constructor */
+    private AttributeList() {
+    }
+
+//---  Getter Methods   -----------------------------------------------------------------------
+
+    public static boolean getAON(String ref) {
+        return map.get(ref);
     }
 
 }

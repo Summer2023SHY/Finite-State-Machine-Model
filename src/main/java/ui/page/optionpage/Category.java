@@ -3,6 +3,7 @@ package ui.page.optionpage;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import ui.page.optionpage.entryset.EntrySet;
 import visual.composite.HandlePanel;
@@ -16,7 +17,7 @@ public class Category {
 //---  Instance Variables   -------------------------------------------------------------------
 
     private String name;
-    private ArrayList<EntrySet> sets;
+    private List<EntrySet> sets;
     private boolean open;
     private int catCode;
 
@@ -79,7 +80,7 @@ public class Category {
         sets.add(in);
     }
 
-    public void setEntrySetContents(int code, ArrayList<String> ref) {
+    public void setEntrySetContents(int code, List<String> ref) {
         EntrySet e = getEntrySet(code);
         if(e != null) {
             e.setContents(ref);
@@ -144,7 +145,7 @@ public class Category {
         return null;
     }
 
-    public ArrayList<String> getContents(int code){
+    public List<String> getContents(int code){
         EntrySet e = getEntrySet(code);
         if(e != null) {
             return e.getContents();

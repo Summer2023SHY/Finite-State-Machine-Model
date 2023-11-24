@@ -3,6 +3,8 @@ package model.fsm.component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is a wrapper for a HashMap allowing the user to search for an event object using the corresponding name.
@@ -18,9 +20,9 @@ public class EventMap {
 //---  Instance Variables   -------------------------------------------------------------------
 
     /** HashMap<<r>String, Entity> mapping String object names of events to their corresponding Entity objects. */
-    private HashMap<String, Entity> events;
+    private Map<String, Entity> events;
 
-    private ArrayList<String> attributes;
+    private List<String> attributes;
 
 //---  Constructors   -------------------------------------------------------------------------
 
@@ -28,7 +30,7 @@ public class EventMap {
      * Constructor for an EventMap object that initializes the events HashMap<<r>String, Entity>.
      */
 
-    public EventMap(ArrayList<String> defAttrib) {
+    public EventMap(List<String> defAttrib) {
         events = new HashMap<String, Entity>();
         attributes = defAttrib == null ? new ArrayList<String>() : defAttrib;
     }
@@ -80,8 +82,7 @@ public class EventMap {
             return;
         }
         events.put(eventName, new Entity(eventName));
-        LinkedList<String> use = new LinkedList<String>();
-        use.addAll(attributes);
+        List<String> use = new LinkedList<String>(attributes);
         events.get(eventName).setAttributes(use);
     }
 
@@ -103,24 +104,22 @@ public class EventMap {
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    public void addAttributes(ArrayList<String> attrib) {
+    public void addAttributes(List<String> attrib) {
         for(String s : attrib) {
             if(!attributes.contains(s)) {
                 attributes.add(s);
             }
         }
         for(Entity e : events.values()) {
-            LinkedList<String> use = new LinkedList<String>();
-            use.addAll(attributes);
+            List<String> use = new LinkedList<String>(attributes);
             e.addAttributes(use);
         }
     }
 
-    public void overwriteAttributes(ArrayList<String> attrib) {
+    public void overwriteAttributes(List<String> attrib) {
         attributes = attrib;
         for(Entity e : events.values()) {
-            LinkedList<String> use = new LinkedList<String>();
-            use.addAll(attributes);
+            List<String> use = new LinkedList<String>(attributes);
             e.setAttributes(use);
         }
     }
@@ -137,18 +136,16 @@ public class EventMap {
         return events.get(eventName);
     }
 
-    public ArrayList<String> getAttributes(){
+    public List<String> getAttributes(){
         return attributes;
     }
 
-    public ArrayList<String> getEventNames(){
-        ArrayList<String> out = new ArrayList<String>();
-        out.addAll(events.keySet());
-        return out;
+    public List<String> getEventNames(){
+        return new ArrayList<>(events.keySet());
     }
 
-    public ArrayList<String> getEventsWithAttribute(String attrib){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getEventsWithAttribute(String attrib){
+        List<String> out = new ArrayList<>();
         for(String s : events.keySet()) {
             if(getEventAttribute(s, attrib)) {
                 out.add(s);
@@ -176,7 +173,7 @@ public class EventMap {
         return events.containsKey(eventName);
     }
 
-    protected HashMap<String, Entity> getEvents(){
+    protected Map<String, Entity> getEvents(){
         return events;
     }
 

@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import controller.InputReceiver;
 import filemeta.FileChooser;
@@ -142,12 +142,8 @@ public class FSMUI implements InputHandler{
         return out;
     }
 
-    public String requestUserInputList(ArrayList<String> refs, boolean search) {
-        String[] use = new String[refs.size()];
-        for(int i = 0; i < use.length; i++) {
-            use[i] = refs.get(i);
-        }
-        return requestUserInputList(use, search);
+    public String requestUserInputList(List<String> refs, boolean search) {
+        return requestUserInputList(refs.toArray(new String[0]), search);
     }
 
     public String requestUserInput(String phrase) {
@@ -157,9 +153,9 @@ public class FSMUI implements InputHandler{
         return result;
     }
 
-    public ArrayList<String> requestUserInput(String phrase, int size) {
+    public List<String> requestUserInput(String phrase, int size) {
         PopoutInputRequest pIR = new PopoutInputRequest(phrase, size);
-        ArrayList<String> result = pIR.getSubmitted();
+        List<String> result = pIR.getSubmitted();
         pIR.dispose();
         return result;
     }
@@ -173,9 +169,9 @@ public class FSMUI implements InputHandler{
         }
     }
 
-    public ArrayList<String> requestAgentInput(ArrayList<String> inAgents, ArrayList<String> events, ArrayList<String> attrib){
+    public List<String> requestAgentInput(List<String> inAgents, List<String> events, List<String> attrib){
         PopoutAgentSelection pAS = new PopoutAgentSelection(inAgents, events, attrib);
-        ArrayList<String> res = pAS.getResult();
+        List<String> res = pAS.getResult();
         pAS.dispose();
         return res;
     }
@@ -187,8 +183,8 @@ public class FSMUI implements InputHandler{
         updateDisplayPanel();
     }
 
-    public void updateFSMInfo(String ref, ArrayList<String> stateAttrib, ArrayList<String> eventAttrib, ArrayList<String> tranAttrib,
-                HashMap<String, ArrayList<Boolean>> stateMap, HashMap<String, ArrayList<Boolean>> eventMap, HashMap<String, ArrayList<Boolean>> transMap) {
+    public void updateFSMInfo(String ref, List<String> stateAttrib, List<String> eventAttrib, List<String> tranAttrib,
+                Map<String, List<Boolean>> stateMap, Map<String, List<Boolean>> eventMap, Map<String, List<Boolean>> transMap) {
         displayPageManager.updateFSMInfo(ref, stateAttrib, eventAttrib, tranAttrib, stateMap, eventMap, transMap);
         updateDisplayPanel();
     }
@@ -282,7 +278,7 @@ public class FSMUI implements InputHandler{
         return optionPageManager.getCheckboxContent(code);
     }
 
-    public ArrayList<String> getContent(int code){
+    public List<String> getContent(int code){
         return optionPageManager.getContent(code);
     }
 

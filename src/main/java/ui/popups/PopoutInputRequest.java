@@ -2,6 +2,7 @@ package ui.popups;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import visual.composite.popout.PopoutWindow;
 
@@ -18,7 +19,7 @@ public class PopoutInputRequest extends PopoutWindow{
 
     private int entryNum;
     private volatile boolean ready;
-    private ArrayList<String> out;
+    private List<String> out;
 
 //---  Constructors   -------------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ public class PopoutInputRequest extends PopoutWindow{
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public ArrayList<String> getSubmitted() {
+    public List<String> getSubmitted() {
         while(!ready) {
         };
         return out;

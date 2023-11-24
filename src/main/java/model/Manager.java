@@ -3,6 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import model.convert.GenerateDot;
 import model.convert.GenerateFSM;
@@ -23,7 +26,7 @@ public class Manager implements ReceiveMemoryMeasure{
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private HashMap<String, TransitionSystem> fsms;
+    private Map<String, TransitionSystem> fsms;
 
     private MemoryMeasure lastProcessData;
 
@@ -70,11 +73,11 @@ public class Manager implements ReceiveMemoryMeasure{
         return ReadWrite.generateFile(fsms.get(ref));
     }
 
-    public ArrayList<HashMap<String, ArrayList<Boolean>>> readInAgents(String fileContents) {
+    public List<Map<String, List<Boolean>>> readInAgents(String fileContents) {
         return ReadWrite.readAgentFile(fileContents);
     }
 
-    public String exportAgents(String nom, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, ArrayList<String> attributes) {
+    public String exportAgents(String nom, List<Map<String, List<Boolean>>> agents, List<String> attributes) {
         return ReadWrite.generateAgentFile(nom, agents, attributes);
     }
 
@@ -93,10 +96,7 @@ public class Manager implements ReceiveMemoryMeasure{
     }
 
     public void flushFSMs() {
-        HashSet<String> gather = new HashSet<String>();
-        for(String s : fsms.keySet()) {
-            gather.add(s);
-        }
+        Set<String> gather = new HashSet<>(fsms.keySet());
         for(String s : gather) {
             fsms.remove(s);
         }
@@ -120,23 +120,23 @@ public class Manager implements ReceiveMemoryMeasure{
         return nom;
     }
 
-    public void assignRandomFSMStateConfiguration(ArrayList<String> stateAttr, ArrayList<Integer> stateNumb) {
+    public void assignRandomFSMStateConfiguration(List<String> stateAttr, List<Integer> stateNumb) {
         GenerateFSM.assignStateAttributes(stateAttr, stateNumb);
     }
 
-    public void assignRandomFSMDefaultStateSet(ArrayList<String> defaultState) {
+    public void assignRandomFSMDefaultStateSet(List<String> defaultState) {
         GenerateFSM.assignDefaultStateSet(defaultState);
     }
 
-    public void assignRandomFSMEventConfiguration(ArrayList<String> eventAttr, ArrayList<Integer> eventNumb) {
+    public void assignRandomFSMEventConfiguration(List<String> eventAttr, List<Integer> eventNumb) {
         GenerateFSM.assignEventAttributes(eventAttr, eventNumb);
     }
 
-    public void assignRandomFSMDefaultEventSet(ArrayList<String> defaultEvent) {
+    public void assignRandomFSMDefaultEventSet(List<String> defaultEvent) {
         GenerateFSM.assignDefaultEventSet(defaultEvent);
     }
 
-    public void assignRandomFSMTransitionConfiguration(ArrayList<String> transAttr, ArrayList<Integer> transNumb) {
+    public void assignRandomFSMTransitionConfiguration(List<String> transAttr, List<Integer> transNumb) {
         GenerateFSM.assignTransitionAttributes(transAttr, transNumb);
     }
 
@@ -155,11 +155,11 @@ public class Manager implements ReceiveMemoryMeasure{
 
     //-- Processes  -------------------------------------------
 
-    public String performProduct(ArrayList<String> ref) {
+    public String performProduct(List<String> ref) {
         if(bailMulti(ref)) {
             return null;
         }
-        ArrayList<TransitionSystem> use = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> use = new ArrayList<>();
         for(int i = 0; i < ref.size(); i++) {
             use.add(fsms.get(ref.get(i)));
         }
@@ -171,11 +171,11 @@ public class Manager implements ReceiveMemoryMeasure{
         return out.getId();
     }
 
-    public String performParallelComposition(ArrayList<String> ref) {
+    public String performParallelComposition(List<String> ref) {
         if(bailMulti(ref)) {
             return null;
         }
-        ArrayList<TransitionSystem> use = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> use = new ArrayList<>();
         for(int i = 0; i < ref.size(); i++) {
             use.add(fsms.get(ref.get(i)));
         }
@@ -281,7 +281,7 @@ public class Manager implements ReceiveMemoryMeasure{
         return ProcessDES.testOpacity(fsms.get(ref));
     }
 
-    public ArrayList<String> findPrivateStates(String ref){
+    public List<String> findPrivateStates(String ref){
         if(bail(ref)) {
             return null;
         }
@@ -290,7 +290,7 @@ public class Manager implements ReceiveMemoryMeasure{
 
     //-- CoObservability  -------------------------------------
 
-    public String buildUStructure(String ref, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public String buildUStructure(String ref, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(ref)) {
             return null;
         }
@@ -303,15 +303,15 @@ public class Manager implements ReceiveMemoryMeasure{
         return tS.getId();
     }
 
-    public String buildUStructure(ArrayList<String> plants, ArrayList<String> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public String buildUStructure(List<String> plants, List<String> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(plants) || bail(specs)) {
             return null;
         }
-        ArrayList<TransitionSystem> usePl = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> usePl = new ArrayList<>();
         for(String s : plants) {
             usePl.add(fsms.get(s));
         }
-        ArrayList<TransitionSystem> useSp = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> useSp = new ArrayList<>();
         for(String s : specs) {
             useSp.add(fsms.get(s));
         }
@@ -323,16 +323,16 @@ public class Manager implements ReceiveMemoryMeasure{
         return tS.getId();
     }
 
-    public ArrayList<String> buildUStructureCrush(String ref, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents){
+    public List<String> buildUStructureCrush(String ref, List<String> attr, List<Map<String, List<Boolean>>> agents){
         if(bail(ref)) {
             return null;
         }
         //TODO: Other failure checks to do ahead of time?
-        ArrayList<TransitionSystem> tS = ProcessDES.buildUStructureCrush(fsms.get(ref), attr, agents);
+        List<TransitionSystem> tS = ProcessDES.buildUStructureCrush(fsms.get(ref), attr, agents);
         if(tS == null) {
             return null;
         }
-        ArrayList<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<>();
         for(TransitionSystem ts : tS) {
             appendFSM(ts.getId(), ts, false);
             out.add(ts.getId());
@@ -340,56 +340,56 @@ public class Manager implements ReceiveMemoryMeasure{
         return out;
     }
 
-    public Boolean isCoobservableUStruct(String ref, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isCoobservableUStruct(String ref, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(ref)) {
             return null;
         }
         return ProcessDES.isCoobservableUStruct(fsms.get(ref), attr, agents);
     }
 
-    public Boolean isCoobservableUStruct(ArrayList<String> plants, ArrayList<String> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isCoobservableUStruct(List<String> plants, List<String> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(plants) || bail(specs)) {
             return null;
         }
-        ArrayList<TransitionSystem> usePl = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> usePl = new ArrayList<>();
         for(String s : plants) {
             usePl.add(fsms.get(s));
         }
-        ArrayList<TransitionSystem> useSp = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> useSp = new ArrayList<>();
         for(String s : specs) {
             useSp.add(fsms.get(s));
         }
         return ProcessDES.isCoobservableUStruct(usePl, useSp, attr, agents);
     }
 
-    public Boolean isInferenceCoobservableUStruct(String ref, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isInferenceCoobservableUStruct(String ref, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(ref)) {
             return null;
         }
         return ProcessDES.isInferenceCoobservableUStruct(fsms.get(ref), attr, agents);
     }
 
-    public Boolean isInferenceCoobservableUStruct(ArrayList<String> plants, ArrayList<String> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isInferenceCoobservableUStruct(List<String> plants, List<String> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(plants) || bail(specs)) {
             return null;
         }
-        ArrayList<TransitionSystem> usePl = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> usePl = new ArrayList<>();
         for(String s : plants) {
             usePl.add(fsms.get(s));
         }
-        ArrayList<TransitionSystem> useSp = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> useSp = new ArrayList<>();
         for(String s : specs) {
             useSp.add(fsms.get(s));
         }
         return ProcessDES.isInferenceCoobservableUStruct(usePl, useSp, attr, agents);
     }
 
-    public Boolean isSBCoobservableUrvashi(ArrayList<String> refPlants, ArrayList<String> refSpecs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isSBCoobservableUrvashi(List<String> refPlants, List<String> refSpecs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(refPlants) || bail(refSpecs)) {
             return null;
         }
-        ArrayList<TransitionSystem> plants = new ArrayList<TransitionSystem>();
-        ArrayList<TransitionSystem> specs = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> plants = new ArrayList<>();
+        List<TransitionSystem> specs = new ArrayList<>();
         for(String s : refPlants) {
             plants.add(fsms.get(s));
         }
@@ -399,12 +399,12 @@ public class Manager implements ReceiveMemoryMeasure{
         return ProcessDES.isSBCoobservableUrvashi(plants, specs, attr, agents);
     }
 
-    public Boolean isIncrementalCoobservable(ArrayList<String> refPlants, ArrayList<String> refSpecs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isIncrementalCoobservable(List<String> refPlants, List<String> refSpecs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(refPlants) || bail(refSpecs)) {
             return null;
         }
-        ArrayList<TransitionSystem> plants = new ArrayList<TransitionSystem>();
-        ArrayList<TransitionSystem> specs = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> plants = new ArrayList<>();
+        List<TransitionSystem> specs = new ArrayList<>();
         for(String s : refPlants) {
             plants.add(fsms.get(s));
         }
@@ -414,12 +414,12 @@ public class Manager implements ReceiveMemoryMeasure{
         return ProcessDES.isIncrementalCoobservable(plants, specs, attr, agents);
     }
 
-    public Boolean isIncrementalInferenceCoobservable(ArrayList<String> refPlants, ArrayList<String> refSpecs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isIncrementalInferenceCoobservable(List<String> refPlants, List<String> refSpecs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(refPlants) || bail(refSpecs)) {
             return null;
         }
-        ArrayList<TransitionSystem> plants = new ArrayList<TransitionSystem>();
-        ArrayList<TransitionSystem> specs = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> plants = new ArrayList<>();
+        List<TransitionSystem> specs = new ArrayList<>();
         for(String s : refPlants) {
             plants.add(fsms.get(s));
         }
@@ -429,12 +429,12 @@ public class Manager implements ReceiveMemoryMeasure{
         return ProcessDES.isIncrementalInferenceCoobservable(plants, specs, attr, agents);
     }
 
-    public Boolean isIncrementalSBCoobservable(ArrayList<String> refPlants, ArrayList<String> refSpecs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public Boolean isIncrementalSBCoobservable(List<String> refPlants, List<String> refSpecs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         if(bail(refPlants) || bail(refSpecs)) {
             return null;
         }
-        ArrayList<TransitionSystem> plants = new ArrayList<TransitionSystem>();
-        ArrayList<TransitionSystem> specs = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> plants = new ArrayList<>();
+        List<TransitionSystem> specs = new ArrayList<>();
         for(String s : refPlants) {
             plants.add(fsms.get(s));
         }
@@ -458,7 +458,7 @@ public class Manager implements ReceiveMemoryMeasure{
 
         //-- FSM  ---------------------------------------------
 
-    public void addFSM(String id, ArrayList<String> stateAttr, ArrayList<String> eventAttr, ArrayList<String> tranAttr) {
+    public void addFSM(String id, List<String> stateAttr, List<String> eventAttr, List<String> tranAttr) {
         appendFSM(id, new TransitionSystem(id, stateAttr, eventAttr, tranAttr), false);
     }
 
@@ -475,21 +475,21 @@ public class Manager implements ReceiveMemoryMeasure{
         }
     }
 
-    public void assignStateAttributes(String ref, ArrayList<String> stateAttr) {
+    public void assignStateAttributes(String ref, List<String> stateAttr) {
         if(ref == null || fsms.get(ref) == null) {
             return;
         }
         fsms.get(ref).setStateAttributes(stateAttr);
     }
 
-    public void assignEventAttributes(String ref, ArrayList<String> eventAttr) {
+    public void assignEventAttributes(String ref, List<String> eventAttr) {
         if(ref == null || fsms.get(ref) == null) {
             return;
         }
         fsms.get(ref).addEventAttributes(eventAttr);
     }
 
-    public void assignTransitionAttributes(String ref, ArrayList<String> tranAttr) {
+    public void assignTransitionAttributes(String ref, List<String> tranAttr) {
         if(ref == null || fsms.get(ref) == null) {
             return;
         }
@@ -629,21 +629,21 @@ public class Manager implements ReceiveMemoryMeasure{
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    public void setFSMStateAttributes(String ref, ArrayList<String> attri) {
+    public void setFSMStateAttributes(String ref, List<String> attri) {
         if(ref == null || fsms.get(ref) == null) {
             return;
         }
         fsms.get(ref).setStateAttributes(attri);
     }
 
-    public void setFSMEventAttributes(String ref, ArrayList<String> attri) {
+    public void setFSMEventAttributes(String ref, List<String> attri) {
         if(ref == null || fsms.get(ref) == null) {
             return;
         }
         fsms.get(ref).overwriteEventAttributes(attri);
     }
 
-    public void setFSMTransitionAttributes(String ref, ArrayList<String> attri) {
+    public void setFSMTransitionAttributes(String ref, List<String> attri) {
         if(ref == null || fsms.get(ref) == null) {
             return;
         }
@@ -662,21 +662,21 @@ public class Manager implements ReceiveMemoryMeasure{
 
     //-- States  ----------------------------------------------
 
-    public ArrayList<String> getFSMStateList(String ref){
+    public List<String> getFSMStateList(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
         return fsms.get(ref).getStateNames();
     }
 
-    public ArrayList<String> getFSMStateAttributes(String ref){
+    public List<String> getFSMStateAttributes(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
         return fsms.get(ref).getStateAttributes();
     }
 
-    public HashMap<String, ArrayList<Boolean>> getFSMStateAttributeMap(String ref){
+    public Map<String, List<Boolean>> getFSMStateAttributeMap(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
@@ -685,21 +685,21 @@ public class Manager implements ReceiveMemoryMeasure{
 
     //-- Events  ----------------------------------------------
 
-    public ArrayList<String> getFSMEventList(String ref){
+    public List<String> getFSMEventList(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
         return fsms.get(ref).getEventNames();
     }
 
-    public ArrayList<String> getFSMEventAttributes(String ref){
+    public List<String> getFSMEventAttributes(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
         return fsms.get(ref).getEventAttributes();
     }
 
-    public HashMap<String, ArrayList<Boolean>> getFSMEventAttributeMap(String ref){
+    public Map<String, List<Boolean>> getFSMEventAttributeMap(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
@@ -708,21 +708,21 @@ public class Manager implements ReceiveMemoryMeasure{
 
     //-- Transitions  -----------------------------------------
 
-    public ArrayList<String> getFSMTransitionList(String ref){
+    public List<String> getFSMTransitionList(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
         return fsms.get(ref).getTransitionLabels();
     }
 
-    public ArrayList<String> getFSMTransitionAttributes(String ref){
+    public List<String> getFSMTransitionAttributes(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
         return fsms.get(ref).getTransitionAttributes();
     }
 
-    public HashMap<String, ArrayList<Boolean>> getFSMTransitionAttributeMap(String ref){
+    public Map<String, List<Boolean>> getFSMTransitionAttributeMap(String ref){
         if(ref == null || fsms.get(ref) == null) {
             return null;
         }
@@ -745,8 +745,8 @@ public class Manager implements ReceiveMemoryMeasure{
         return AttributeList.TRANSITION_ATTRIBUTES;
     }
 
-    public ArrayList<String> getReferences(){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getReferences(){
+        List<String> out = new ArrayList<>();
         out.addAll(fsms.keySet());
         return out;
     }
@@ -778,7 +778,7 @@ public class Manager implements ReceiveMemoryMeasure{
         return ref == null || fsms.get(ref) == null;
     }
 
-    private boolean bail(ArrayList<String> ref) {
+    private boolean bail(List<String> ref) {
         if(ref != null) {
             for(String s : ref) {
                 if(bail(s)) {
@@ -792,7 +792,7 @@ public class Manager implements ReceiveMemoryMeasure{
         return false;
     }
 
-    private boolean bailMulti(ArrayList<String> ref) {
+    private boolean bailMulti(List<String> ref) {
         return bail(ref) || ref.size() < 2;
     }
 

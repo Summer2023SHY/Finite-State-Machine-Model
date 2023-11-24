@@ -2,6 +2,8 @@ package model.process.coobservability.deciding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 import model.process.ProcessDES;
@@ -10,7 +12,7 @@ import model.process.coobservability.support.Agent;
 import model.process.coobservability.support.AgentStates;
 import model.process.coobservability.support.IllegalConfig;
 import model.process.coobservability.support.StateSet;
-import model.process.coobservability.support.StateSetPath;
+// import model.process.coobservability.support.StateSetPath;
 import model.process.memory.MemoryMeasure;
 
 public class DecideSBCoobs implements DecideCondition{
@@ -19,15 +21,15 @@ public class DecideSBCoobs implements DecideCondition{
 
     private static String attributeObservableRef;
 
-    private ArrayList<TransitionSystem> plants;
+    private List<TransitionSystem> plants;
 
-    private ArrayList<TransitionSystem> specs;
+    private List<TransitionSystem> specs;
 
-    private ArrayList<String> attributes;
+    private List<String> attributes;
 
-    private ArrayList<Agent> agents;
+    private List<Agent> agents;
 
-    private HashSet<String> events;
+    private Set<String> events;
 
     private StateBased sbStructure;
 
@@ -39,7 +41,7 @@ public class DecideSBCoobs implements DecideCondition{
         assignPathKnowledge(pathIn);
     }
 
-    public DecideSBCoobs(ArrayList<String> eventsIn, TransitionSystem specStart, ArrayList<String> attr, ArrayList<Agent> agentsIn) {
+    public DecideSBCoobs(List<String> eventsIn, TransitionSystem specStart, List<String> attr, List<Agent> agentsIn) {
         events = new HashSet<String>();
         events.addAll(eventsIn);
         plants = new ArrayList<TransitionSystem>();
@@ -50,7 +52,7 @@ public class DecideSBCoobs implements DecideCondition{
         agents = agentsIn;
     }
 
-    public DecideSBCoobs(ArrayList<TransitionSystem> inPlants, ArrayList<TransitionSystem> inSpecs, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideSBCoobs(List<TransitionSystem> inPlants, List<TransitionSystem> inSpecs, List<String> attrIn, List<Agent> agentsIn) {
         plants = inPlants;
         specs = inSpecs;
         attributes = attrIn;
@@ -74,7 +76,7 @@ public class DecideSBCoobs implements DecideCondition{
     }
 
     @Override
-    public DecideCondition constructDeciderCoobs(ArrayList<String> events, TransitionSystem specStart, ArrayList<String> attr, ArrayList<Agent> agentsIn) {
+    public DecideCondition constructDeciderCoobs(List<String> events, TransitionSystem specStart, List<String> attr, List<Agent> agentsIn) {
         DecideSBCoobs out = new DecideSBCoobs(events, specStart, attr, agentsIn);
         out.assignPathKnowledge(getPathKnowledge());
         return out;
@@ -124,18 +126,18 @@ public class DecideSBCoobs implements DecideCondition{
     }
 
     @Override
-    public HashSet<IllegalConfig> getCounterExamples() {
+    public Set<IllegalConfig> getCounterExamples() {
 
         return null;
         /*
-        HashSet<IllegalConfig> out = new HashSet<IllegalConfig>();
+        Set<IllegalConfig> out = new HashSet<>();
         if(sbStructure == null) {
             return out;
         }
         for(StateSet s : sbStructure.getRemainingDisableStates()) {
             AgentStates aS = new AgentStates(s.getStates(), sbStructure.getStateSetPath(s));
             for(String t : sbStructure.getStateSetPathEvents(s)) {
-                getSequences(0, aS, sbStructure.getEquivalentPaths(s), new ArrayList<ArrayList<String>>(), t, out);
+                getSequences(0, aS, sbStructure.getEquivalentPaths(s), new ArrayList<List<String>>(), t, out);
             }
         }
         System.out.println("~~~\n~~~\n" + out);
@@ -145,7 +147,7 @@ public class DecideSBCoobs implements DecideCondition{
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private void getSequences(int index, AgentStates aS, ArrayList<ArrayList<StateSet>> paths, ArrayList<ArrayList<String>> use, String s, HashSet<IllegalConfig> out){
+    private void getSequences(int index, AgentStates aS, List<List<StateSet>> paths, List<List<String>> use, String s, Set<IllegalConfig> out){
         if(index >= paths.size()) {
             out.add(new IllegalConfig(aS, copy(use), s));
         }
@@ -158,14 +160,10 @@ public class DecideSBCoobs implements DecideCondition{
         }
     }
 
-    private ArrayList<ArrayList<String>> copy(ArrayList<ArrayList<String>> in){
-        ArrayList<ArrayList<String>> out = new ArrayList<ArrayList<String>>();
-        for(ArrayList<String> t : in) {
-            ArrayList<String> use = new ArrayList<String>();
-            for(String s : t) {
-                use.add(s);
-            }
-            out.add(use);
+    private List<List<String>> copy(List<List<String>> in){
+        List<List<String>> out = new ArrayList<>();
+        for(List<String> t : in) {
+            out.add(new ArrayList<>(t));
         }
         return out;
     }

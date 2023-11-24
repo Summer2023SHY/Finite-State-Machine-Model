@@ -9,7 +9,10 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import controller.convert.FormatConversion;
 import filemeta.FileChooser;
@@ -206,7 +209,7 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_EDIT_STATE_ATTRIBUTE:
-                ArrayList<String> grab = view.getContent(code);
+                List<String> grab = view.getContent(code);
                 for(String s : model.getFSMStateAttributes(currFSM)) {
                     model.setStateAttribute(currFSM, view.getTextContent(CodeReference.CODE_ACCESS_EDIT_STATE), s, grab.contains(s));
                 }
@@ -244,7 +247,7 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_EDIT_EVENT_ATTRIBUTE:
-                ArrayList<String> grab2 = view.getContent(code);
+                List<String> grab2 = view.getContent(code);
                 for(String s : model.getFSMEventAttributes(currFSM)) {
                     model.setEventAttribute(currFSM, view.getTextContent(CodeReference.CODE_ACCESS_EDIT_EVENT), s, grab2.contains(s));
                 }
@@ -266,7 +269,7 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_EDIT_TRANS_ATTRIBUTE:
-                ArrayList<String> grab3 = view.getContent(code);
+                List<String> grab3 = view.getContent(code);
                 for(String s : model.getFSMTransitionAttributes(currFSM)) {
                     model.setEventAttribute(currFSM, view.getTextContent(CodeReference.CODE_ACCESS_EDIT_TRANS), s, grab3.contains(s));
                 }
@@ -355,7 +358,7 @@ public class FiniteStateMachine implements InputReceiver{
                 }
                 break;
             case CodeReference.CODE_PRODUCT:
-                ArrayList<String> noms = view.getContent(code);
+                List<String> noms = view.getContent(code);
                 ret = model.performProduct(noms);
                 if(ret == null) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: An FSM given to make Product did not possess attributes: State - Initial");
@@ -369,7 +372,7 @@ public class FiniteStateMachine implements InputReceiver{
                 requestFSMChoice(code);
                 break;
             case CodeReference.CODE_PARALLEL_COMPOSITION:
-                ArrayList<String> noms2 = view.getContent(code);
+                List<String> noms2 = view.getContent(code);
                 ret = model.performParallelComposition(noms2);
                 if(ret == null) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: An FSM given to make Parallel Composition did not possess attributes: State - Initial");
@@ -414,18 +417,18 @@ public class FiniteStateMachine implements InputReceiver{
                 requestFSMChoice(code);
                 break;
             case CodeReference.CODE_DISPLAY_BAD_TRANS_START:
-                ArrayList<String> res = view.requestUserInput("Please provide the bad transition in format (state 1), (event), (state 2)", 3);
+                List<String> res = view.requestUserInput("Please provide the bad transition in format (state 1), (event), (state 2)", 3);
                 view.setTextContent(CodeReference.CODE_DISPLAY_BAD_TRANS_START, view.getContent(CodeReference.CODE_DISPLAY_BAD_TRANS_START).size(), res.get(0) + SEPARATOR + res.get(1) + SEPARATOR + res.get(2));
                 break;
             case CodeReference.CODE_BUILD_AGENTS:
-                ArrayList<String> attrib = new ArrayList<String>();
+                List<String> attrib = new ArrayList<>();
                 attrib.add(AttributeList.ATTRIBUTE_OBSERVABLE);
                 attrib.add(AttributeList.ATTRIBUTE_CONTROLLABLE);
-                ArrayList<String> content = view.getContent(CodeReference.CODE_BUILD_AGENTS);
+                List<String> content = view.getContent(CodeReference.CODE_BUILD_AGENTS);
                 for(int i = 0; i < content.size(); i++) {
                     content.set(i, content.get(i).replaceAll(REGEX_NEWLINE_REPLACE, "\n"));
                 }
-                ArrayList<String> agents = view.requestAgentInput(content, model.getFSMEventList(view.getCurrentFSM()), attrib);
+                List<String> agents = view.requestAgentInput(content, model.getFSMEventList(view.getCurrentFSM()), attrib);
                 view.clearTextContents(CodeReference.CODE_BUILD_AGENTS);
                 for(int i = 0; i < agents.size(); i++) {
                     view.setTextContent(CodeReference.CODE_BUILD_AGENTS, i, agents.get(i).replaceAll("\n", REGEX_NEWLINE_REPLACE));
@@ -433,10 +436,10 @@ public class FiniteStateMachine implements InputReceiver{
                 break;
             case CodeReference.CODE_BUILD_USTRUCT:
                 String plant = view.getTextContent(CodeReference.CODE_SELECT_PLANT);
-                ArrayList<String> badTrans = view.getContent(CodeReference.CODE_ADD_BAD_TRANS);
-                ArrayList<String> agentInfo = view.getContent(CodeReference.CODE_BUILD_AGENTS);
+                List<String> badTrans = view.getContent(CodeReference.CODE_ADD_BAD_TRANS);
+                List<String> agentInfo = view.getContent(CodeReference.CODE_BUILD_AGENTS);
 
-                HashMap<String, HashSet<String>> badMap = new HashMap<String, HashSet<String>>();
+                Map<String, Set<String>> badMap = new HashMap<>();
 
                 for(String s : badTrans) {
                     String[] line = s.split(SEPARATOR);
@@ -462,7 +465,7 @@ public class FiniteStateMachine implements InputReceiver{
                 }
 
                 //TODO: Make this dynamically defined, not manually here and in Agent popout screen
-                ArrayList<String> attr = new ArrayList<String>();
+                List<String> attr = new ArrayList<String>();
                 attr.add(AttributeList.ATTRIBUTE_OBSERVABLE);
                 attr.add(AttributeList.ATTRIBUTE_CONTROLLABLE);
                 //TODO: Reintegrate this after getting UI stuff figured out
@@ -526,21 +529,21 @@ public class FiniteStateMachine implements InputReceiver{
             String nom = view.getTextContent(CodeReference.CODE_ACCESS_FSM_NAME);
             boolean det = view.getCheckboxContent(CodeReference.CODE_ACCESS_NON_DETERMINISTIC);
 
-            ArrayList<Integer> numbers = new ArrayList<Integer>();
+            List<Integer> numbers = new ArrayList<>();
 
-            ArrayList<String> stateAttr = new ArrayList<String>();
+            List<String> stateAttr = new ArrayList<>();
             for(String s : view.getContent(CodeReference.CODE_ACCESS_STATE_ATTRIBUTES)) {
                 String[] two = s.split((" - "));
                 stateAttr.add(two[0]);
                 numbers.add(Integer.parseInt(two[1]));
             }
-            ArrayList<String> eventAttr = new ArrayList<String>();
+            List<String> eventAttr = new ArrayList<>();
             for(String s : view.getContent(CodeReference.CODE_ACCESS_EVENT_ATTRIBUTES)) {
                 String[] two = s.split((" - "));
                 eventAttr.add(two[0]);
                 numbers.add(Integer.parseInt(two[1]));
             }
-            ArrayList<String> transAttr = new ArrayList<String>();
+            List<String> transAttr = new ArrayList<>();
             for(String s : view.getContent(CodeReference.CODE_ACCESS_TRANS_ATTRIBUTES)) {
                 String[] two = s.split((" - "));
                 transAttr.add(two[0]);
@@ -573,8 +576,8 @@ public class FiniteStateMachine implements InputReceiver{
         view.clearTextContents(code);
     }
 
-    private ArrayList<String> addAttributeLists(ArrayList<String> newStuff, ArrayList<String> oldStuff){
-        ArrayList<String> use = new ArrayList<String>();
+    private List<String> addAttributeLists(List<String> newStuff, List<String> oldStuff){
+        List<String> use = new ArrayList<>();
         use.addAll(oldStuff);
         for(String s : newStuff) {
             if(!use.contains(s)) {
@@ -584,8 +587,8 @@ public class FiniteStateMachine implements InputReceiver{
         return use;
     }
 
-    private ArrayList<String> subtractAttributeLists(ArrayList<String> remv, ArrayList<String> oldStuff){
-        ArrayList<String> use = new ArrayList<String>();
+    private List<String> subtractAttributeLists(List<String> remv, List<String> oldStuff){
+        List<String> use = new ArrayList<>();
         for(String s : oldStuff) {
             if(!remv.contains(s)) {
                 use.add(s);
@@ -600,24 +603,24 @@ public class FiniteStateMachine implements InputReceiver{
         view.endLoading();
         String select = view.requestUserInputList(in, true);
         view.startLoading();
-        ArrayList<String> use = view.getContent(code);
+        List<String> use = view.getContent(code);
         if(!use.contains(select)) {
             view.setTextContent(code, use.size(), select);
         }
     }
 
-    private void appendSingleChosenAttribute(ArrayList<String> in, int code) {
+    private void appendSingleChosenAttribute(List<String> in, int code) {
         view.endLoading();
         String select = view.requestUserInputList(in, true);
         view.startLoading();
-        ArrayList<String> use = view.getContent(code);
+        List<String> use = view.getContent(code);
         if(!use.contains(select)) {
             view.setTextContent(code, use.size(), select);
         }
     }
 
     private void requestAttributeChoice(int code, String[] attributes, String phrase) {
-        ArrayList<String> statAttr = view.getContent(code);    //remove existing Attributes from current list
+        List<String> statAttr = view.getContent(code);    //remove existing Attributes from current list
         view.endLoading();
         String use = view.requestUserInputList(attributes, true);
         int num = view.requestUserIntegerInput(phrase);
@@ -633,12 +636,9 @@ public class FiniteStateMachine implements InputReceiver{
     }
 
     private void requestFSMChoice(int code) {
-        ArrayList<String> content = view.getContent(code);
-        ArrayList<String> start = model.getReferences();
-        String[] use = new String[start.size()];
-        for(int i = 0; i < use.length; i++) {
-            use[i] = start.get(i);
-        }
+        List<String> content = view.getContent(code);
+        List<String> start = model.getReferences();
+        String[] use = start.toArray(new String[0]);
         view.endLoading();
         String choice = view.requestUserInputList(use, true);
         view.startLoading();

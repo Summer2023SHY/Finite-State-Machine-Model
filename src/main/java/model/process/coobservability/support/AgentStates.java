@@ -2,6 +2,7 @@ package model.process.coobservability.support;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AgentStates implements Comparable<AgentStates>{
 
@@ -9,27 +10,24 @@ public class AgentStates implements Comparable<AgentStates>{
 
     private String[] currentStates;
 
-    private ArrayList<ArrayList<String>> eventPath;
+    private List<List<String>> eventPath;
 
 //---  Constructors   -------------------------------------------------------------------------
 
-    public AgentStates(String[] states, ArrayList<String> inPath) {
+    public AgentStates(String[] states, List<String> inPath) {
         currentStates = states;
-        eventPath = new ArrayList<ArrayList<String>>();
+        eventPath = new ArrayList<List<String>>();
         for(int i = 0; i < states.length; i++) {
-            ArrayList<String> use = new ArrayList<String>();
-            for(String s : inPath) {
-                use.add(s);
-            }
+            List<String> use = new ArrayList<>(inPath);
             eventPath.add(use);
         }
     }
 
     public AgentStates(String[] states) {
         currentStates = states;
-        eventPath = new ArrayList<ArrayList<String>>();
+        eventPath = new ArrayList<List<String>>();
         for(int i = 0; i < states.length; i++) {
-            ArrayList<String> use = new ArrayList<String>();
+            List<String> use = new ArrayList<>();
             eventPath.add(use);
         }
     }
@@ -51,7 +49,7 @@ public class AgentStates implements Comparable<AgentStates>{
     public AgentStates deriveChild(String[] newStates, boolean[] canAct, String s) {
         AgentStates out = new AgentStates(newStates);
         for(int i = 0; i < newStates.length; i++) {
-            ArrayList<String> use = new ArrayList<String>();
+            List<String> use = new ArrayList<String>();
             for(String t : eventPath.get(i)) {
                 use.add(t);
             }
@@ -66,7 +64,7 @@ public class AgentStates implements Comparable<AgentStates>{
     public AgentStates deriveChild(String[] newStates, int index, String s) {
         AgentStates out = new AgentStates(newStates);
         for(int i = 0; i < newStates.length; i++) {
-            ArrayList<String> use = new ArrayList<String>();
+            List<String> use = new ArrayList<String>();
             for(String t : eventPath.get(i)) {
                 use.add(t);
             }
@@ -84,10 +82,8 @@ public class AgentStates implements Comparable<AgentStates>{
         return currentStates;
     }
 
-    public ArrayList<String> getEventPath() {
-        ArrayList<String> out = new ArrayList<String>();
-        out.addAll(eventPath.get(0));
-        return out;
+    public List<String> getEventPath() {
+        return new ArrayList<String>(eventPath.get(0));
     }
 
     /**
@@ -98,7 +94,7 @@ public class AgentStates implements Comparable<AgentStates>{
      * @return
      */
 
-    public ArrayList<String> getObservedPath(int index){
+    public List<String> getObservedPath(int index){
         return eventPath.get(index);
     }
 
@@ -113,7 +109,7 @@ public class AgentStates implements Comparable<AgentStates>{
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    protected void setObservedPath(int index, ArrayList<String> inPath) {
+    protected void setObservedPath(int index, List<String> inPath) {
         eventPath.set(index, inPath);
     }
 
@@ -133,7 +129,12 @@ public class AgentStates implements Comparable<AgentStates>{
 
     @Override
     public boolean equals(Object o1) {
-        return this.getCompositeName().equals(((AgentStates)o1).getCompositeName());
+        if (this == o1)
+            return true;
+        else if (o1 instanceof AgentStates)
+            return this.getCompositeName().equals(((AgentStates)o1).getCompositeName());
+        else
+            return false;
     }
 
     @Override

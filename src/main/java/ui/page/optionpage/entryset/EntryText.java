@@ -14,7 +14,7 @@ public class EntryText extends EntrySet{
         super(pref, ref, button, buttCode);
         size = len;
         expand = fill;
-        ArrayList<String> use = new ArrayList<String>();
+        ArrayList<String> use = new ArrayList<>();
         for(int i = 0; i < len; i++) {
             use.add("");
         }

@@ -2,7 +2,7 @@ package ui.headers;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
+import java.util.List;
 
 import input.CustomEventReceiver;
 import ui.InputHandler;
@@ -50,11 +50,11 @@ public class HeaderSelect extends HandlePanel{
         resize(wid, hei);
     }
 
-    public void update(ArrayList<String> header, int select) {
+    public void update(List<String> header, int select) {
         removeElementPrefixed("header");
         int wid = getWidth();
         int hei = getHeight();
-        if(header.size() == 0) {
+        if(header.isEmpty()) {
             int posX = wid/ 2;
             int posY = hei / 2;
             int widUse = wid / 3;

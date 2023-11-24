@@ -1,6 +1,7 @@
 package model.fsm.component;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Attribute {
 
@@ -33,9 +34,9 @@ public class Attribute {
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    public void setAttributes(LinkedList<String> in) {
-        if(in != null && in.size() != 0) {
-            wrap = new Attribute(in.poll());
+    public void setAttributes(List<String> in) {
+        if(in != null && !in.isEmpty()) {
+            wrap = new Attribute(in.remove(0));
             wrap.setAttributes(in);
         }
     }
@@ -64,8 +65,8 @@ public class Attribute {
         return null;
     }
 
-    public LinkedList<String> getAttributes(){
-        LinkedList<String> out = new LinkedList<String>();
+    public List<String> getAttributes(){
+        List<String> out = new LinkedList<String>();
         out.add(id);
         if(wrap != null) {
             out.addAll(wrap.getAttributes());

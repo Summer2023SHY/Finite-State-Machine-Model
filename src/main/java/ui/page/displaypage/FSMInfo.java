@@ -1,7 +1,8 @@
 package ui.page.displaypage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FSMInfo {
 
@@ -11,17 +12,17 @@ public class FSMInfo {
 
     private String image;
 
-    private ArrayList<String> fsmStateAttributes;
+    private List<String> fsmStateAttributes;
 
-    private HashMap<String, ArrayList<Boolean>> fsmStateDetails;
+    private Map<String, List<Boolean>> fsmStateDetails;
 
-    private ArrayList<String> fsmEventAttributes;
+    private List<String> fsmEventAttributes;
 
-    private HashMap<String, ArrayList<Boolean>> fsmEventDetails;
+    private Map<String, List<Boolean>> fsmEventDetails;
 
-    private ArrayList<String> fsmTransitionAttributes;
+    private List<String> fsmTransitionAttributes;
 
-    private HashMap<String, ArrayList<Boolean>> fsmTransitionDetails;
+    private Map<String, List<Boolean>> fsmTransitionDetails;
 
 //---  Constructors   -------------------------------------------------------------------------
 
@@ -31,27 +32,27 @@ public class FSMInfo {
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    public void updateStateAttributes(ArrayList<String> statAttr) {
+    public void updateStateAttributes(List<String> statAttr) {
         fsmStateAttributes = statAttr;
     }
 
-    public void updateStateDetails(HashMap<String, ArrayList<Boolean>> statDeta){
+    public void updateStateDetails(Map<String, List<Boolean>> statDeta){
         fsmStateDetails = statDeta;
     }
 
-    public void updateEventAttributes(ArrayList<String> evenAttr) {
+    public void updateEventAttributes(List<String> evenAttr) {
         fsmEventAttributes = evenAttr;
     }
 
-    public void updateEventDetails(HashMap<String, ArrayList<Boolean>> evenDeta){
+    public void updateEventDetails(Map<String, List<Boolean>> evenDeta){
         fsmEventDetails = evenDeta;
     }
 
-    public void updateTransitionAttributes(ArrayList<String> transAttr) {
+    public void updateTransitionAttributes(List<String> transAttr) {
         fsmTransitionAttributes = transAttr;
     }
 
-    public void updateTransitionDetails(HashMap<String, ArrayList<Boolean>> transDeta){
+    public void updateTransitionDetails(Map<String, List<Boolean>> transDeta){
         fsmTransitionDetails = transDeta;
     }
 
@@ -61,39 +62,39 @@ public class FSMInfo {
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public ArrayList<String> getStates(){
+    public List<String> getStates(){
         return new ArrayList<String>(fsmStateDetails.keySet());
     }
 
-    public ArrayList<String> getEvents(){
+    public List<String> getEvents(){
         return new ArrayList<String>(fsmEventDetails.keySet());
     }
 
-    public ArrayList<String> getTransitions(){
+    public List<String> getTransitions(){
         return new ArrayList<String>(fsmTransitionDetails.keySet());
     }
 
-    public ArrayList<String> getStateAttributes(){
+    public List<String> getStateAttributes(){
         return fsmStateAttributes;
     }
 
-    public ArrayList<String> getEventAttributes(){
+    public List<String> getEventAttributes(){
         return fsmEventAttributes;
     }
 
-    public ArrayList<String> getTransitionAttributes(){
+    public List<String> getTransitionAttributes(){
         return fsmTransitionAttributes;
     }
 
-    public HashMap<String, ArrayList<Boolean>> getStateDetails(){
+    public Map<String, List<Boolean>> getStateDetails(){
         return fsmStateDetails;
     }
 
-    public HashMap<String, ArrayList<Boolean>> getEventDetails(){
+    public Map<String, List<Boolean>> getEventDetails(){
         return fsmEventDetails;
     }
 
-    public HashMap<String, ArrayList<Boolean>> getTransitionDetails(){
+    public Map<String, List<Boolean>> getTransitionDetails(){
         return fsmTransitionDetails;
     }
 

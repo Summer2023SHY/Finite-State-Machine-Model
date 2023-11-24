@@ -2,6 +2,8 @@ package model.convert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import model.fsm.TransitionSystem;
 
@@ -33,9 +35,9 @@ public class ReadWrite {
         out.append(in.getId() + "\n");
         out.append(REGION_SEPARATOR + "\n");
 
-        ArrayList<String> stateAttr = in.getStateAttributes();
-        ArrayList<String> eventAttr = in.getEventAttributes();
-        ArrayList<String> tranAttr = in.getTransitionAttributes();
+        List<String> stateAttr = in.getStateAttributes();
+        List<String> eventAttr = in.getEventAttributes();
+        List<String> tranAttr = in.getTransitionAttributes();
 
         attribute(stateAttr, out);
         attribute(eventAttr, out);
@@ -77,17 +79,17 @@ public class ReadWrite {
     public static TransitionSystem readFile(String in) {
         String[] lines = in.split("\n");
 
-        ArrayList<String> stateAttr = new ArrayList<String>();
+        List<String> stateAttr = new ArrayList<>();
         for(String s : lines[2].split(SEPARATOR)) {
             if(!s.isEmpty())
                 stateAttr.add(s);
         }
-        ArrayList<String> eventAttr = new ArrayList<String>();
+        List<String> eventAttr = new ArrayList<>();
         for(String s : lines[3].split(SEPARATOR)) {
             if(!s.isEmpty())
                 eventAttr.add(s);
         }
-        ArrayList<String> tranAttr = new ArrayList<String>();
+        List<String> tranAttr = new ArrayList<>();
         for(String s : lines[4].split(SEPARATOR)) {
             if(!s.isEmpty())
                 tranAttr.add(s);
@@ -139,7 +141,7 @@ public class ReadWrite {
         return out;
     }
 
-    public static String generateAgentFile(String nom, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, ArrayList<String> attributes) {
+    public static String generateAgentFile(String nom, List<Map<String, List<Boolean>>> agents, List<String> attributes) {
         StringBuilder sb = new StringBuilder();
         sb.append(nom + "\n");
         sb.append(REGION_SEPARATOR + "\n");
@@ -148,7 +150,7 @@ public class ReadWrite {
         sb.append(agents.get(0).keySet().size() + "\n");
         sb.append(REGION_SEPARATOR + "\n");
 
-        for(HashMap<String, ArrayList<Boolean>> s : agents) {
+        for(Map<String, List<Boolean>> s : agents) {
             for(String t : s.keySet()) {
                 sb.append(t);
                 for(Boolean u : s.get(t)) {
@@ -161,17 +163,17 @@ public class ReadWrite {
         return sb.toString();
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> readAgentFile(String in) {
-        ArrayList<HashMap<String, ArrayList<Boolean>>> out = new ArrayList<HashMap<String, ArrayList<Boolean>>>();
+    public static List<Map<String, List<Boolean>>> readAgentFile(String in) {
+        List<Map<String, List<Boolean>>> out = new ArrayList<Map<String, List<Boolean>>>();
         String[] lines = in.split("\n");
         int index = 4;
         int size = Integer.parseInt(lines[index]);
         index += 2;
         while(index < lines.length) {
-            HashMap<String, ArrayList<Boolean>> use = new HashMap<String, ArrayList<Boolean>>();
+            Map<String, List<Boolean>> use = new HashMap<String, List<Boolean>>();
             for(int i = 0; i < size; i++) {
                 String[] data = lines[index + i].split(SEPARATOR);
-                ArrayList<Boolean> need = new ArrayList<Boolean>();
+                List<Boolean> need = new ArrayList<Boolean>();
                 for(int j = 1; j < data.length; j++) {
                     need.add(data[j].equals(TRUE_SYMBOL));
                 }
@@ -185,7 +187,7 @@ public class ReadWrite {
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private static StringBuilder attribute(ArrayList<String> use, StringBuilder out) {
+    private static StringBuilder attribute(List<String> use, StringBuilder out) {
         for(int i = 0; i < use.size(); i++) {
             out.append(use.get(i) + (i + 1 < use.size() ? SEPARATOR : ""));
         }

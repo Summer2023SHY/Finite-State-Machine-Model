@@ -3,7 +3,10 @@ package model.convert;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class is used to generate files readable as Finite State Machines to the constructors
@@ -45,15 +48,15 @@ public class GenerateFSM {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private static ArrayList<String> stateAttributes;
-    private static ArrayList<Integer> stateNumbers;
-    private static ArrayList<String> eventAttributes;
-    private static ArrayList<Integer> eventNumbers;
-    private static ArrayList<String> transitionAttributes;
-    private static ArrayList<Integer> transitionNumbers;
+    private static List<String> stateAttributes;
+    private static List<Integer> stateNumbers;
+    private static List<String> eventAttributes;
+    private static List<Integer> eventNumbers;
+    private static List<String> transitionAttributes;
+    private static List<Integer> transitionNumbers;
 
-    private static ArrayList<String> defaultStateSet;
-    private static ArrayList<String> defaultEventSet;
+    private static List<String> defaultStateSet;
+    private static List<String> defaultEventSet;
 
     /** Private constructor */
     private GenerateFSM() {
@@ -61,22 +64,22 @@ public class GenerateFSM {
 
 //---  Static Assignment   --------------------------------------------------------------------
 
-    public static void assignStateAttributes(ArrayList<String> in, ArrayList<Integer> amounts) {
+    public static void assignStateAttributes(List<String> in, List<Integer> amounts) {
         stateAttributes = in;
         stateNumbers = amounts;
     }
 
-    public static void assignEventAttributes(ArrayList<String> in, ArrayList<Integer> amounts) {
+    public static void assignEventAttributes(List<String> in, List<Integer> amounts) {
         eventAttributes = in;
         eventNumbers = amounts;
     }
 
-    public static void assignTransitionAttributes(ArrayList<String> in, ArrayList<Integer> amounts) {
+    public static void assignTransitionAttributes(List<String> in, List<Integer> amounts) {
         transitionAttributes = in;
         transitionNumbers = amounts;
     }
 
-    public static void assignDefaultStateSet(ArrayList<String> in) {
+    public static void assignDefaultStateSet(List<String> in) {
         defaultStateSet = in;
     }
 
@@ -84,7 +87,7 @@ public class GenerateFSM {
         defaultStateSet = null;
     }
 
-    public static void assignDefaultEventSet(ArrayList<String> in) {
+    public static void assignDefaultEventSet(List<String> in) {
         defaultEventSet = in;
     }
 
@@ -121,20 +124,20 @@ public class GenerateFSM {
 
         Random rand = new Random();
 
-        HashMap<Integer, String> stateNames = defaultStateSet == null ? writeComponentGenerative(out, rand, sizeStates, stateAttributes, stateNumbers, true) : writeComponentDefaultSet(out, rand, defaultStateSet, stateAttributes, stateNumbers);
+        Map<Integer, String> stateNames = defaultStateSet == null ? writeComponentGenerative(out, rand, sizeStates, stateAttributes, stateNumbers, true) : writeComponentDefaultSet(out, rand, defaultStateSet, stateAttributes, stateNumbers);
 
-        HashMap<Integer, String> eventNames = defaultEventSet == null ? writeComponentGenerative(out, rand, sizeEvents, eventAttributes, eventNumbers, false) : writeComponentDefaultSet(out, rand, defaultEventSet, eventAttributes, eventNumbers);
+        Map<Integer, String> eventNames = defaultEventSet == null ? writeComponentGenerative(out, rand, sizeEvents, eventAttributes, eventNumbers, false) : writeComponentDefaultSet(out, rand, defaultEventSet, eventAttributes, eventNumbers);
 
         writeTransitions(out, rand, stateNames, eventNames, sizeTrans, det);
         return out.toString();
     }
 
-    private static HashMap<Integer, String> writeComponentGenerative(StringBuilder out, Random rand, int sizeComponent, ArrayList<String> attributes, ArrayList<Integer> numbers, boolean stateNames) {
-        ArrayList<Integer> track = new ArrayList<Integer>();
+    private static Map<Integer, String> writeComponentGenerative(StringBuilder out, Random rand, int sizeComponent, List<String> attributes, List<Integer> numbers, boolean stateNames) {
+        List<Integer> track = new ArrayList<>();
         for(Integer i : numbers) {
             track.add(0);
         }
-        HashMap<Integer, String> nameMapping = new HashMap<Integer, String>();
+        Map<Integer, String> nameMapping = new HashMap<>();
         for(int i = 0; i < sizeComponent; i++) {
             String name = generateName(i, stateNames);
             nameMapping.put(i, name);
@@ -145,12 +148,12 @@ public class GenerateFSM {
         return nameMapping;
     }
 
-    private static HashMap<Integer, String> writeComponentDefaultSet(StringBuilder out, Random rand, ArrayList<String> components, ArrayList<String> attributes, ArrayList<Integer> numbers){
-        ArrayList<Integer> track = new ArrayList<Integer>();
+    private static Map<Integer, String> writeComponentDefaultSet(StringBuilder out, Random rand, List<String> components, List<String> attributes, List<Integer> numbers){
+        List<Integer> track = new ArrayList<Integer>();
         for(Integer i : numbers) {
             track.add(0);
         }
-        HashMap<Integer, String> nameMapping = new HashMap<Integer, String>();
+        Map<Integer, String> nameMapping = new HashMap<Integer, String>();
         for(int i = 0; i < components.size(); i++) {
             String name = components.get(i);
             nameMapping.put(i, name);
@@ -161,19 +164,19 @@ public class GenerateFSM {
         return nameMapping;
     }
 
-    private static StringBuilder writeTransitions(StringBuilder out, Random rand, HashMap<Integer, String> stateNames, HashMap<Integer, String> eventNames, int sizeTrans, boolean isDet) {
-        ArrayList<Integer> track = new ArrayList<Integer>();
+    private static StringBuilder writeTransitions(StringBuilder out, Random rand, Map<Integer, String> stateNames, Map<Integer, String> eventNames, int sizeTrans, boolean isDet) {
+        List<Integer> track = new ArrayList<>();
         for(Integer i : transitionNumbers) {
             track.add(0);
         }
         int sizeStates = stateNames.keySet().size();
         int sizeEvents = eventNames.keySet().size();
-        ArrayList<Integer> numTransPerState = new ArrayList<Integer>();
+        List<Integer> numTransPerState = new ArrayList<>();
         for(int i = 0; i < sizeStates; i++) {
             numTransPerState.add(rand.nextInt(sizeTrans) + 1);
         }
-        HashSet<Integer> usedEvents = new HashSet<Integer>();
-        HashMap<Integer, HashSet<Integer>> detMap = new HashMap<Integer, HashSet<Integer>>();
+        Set<Integer> usedEvents = new HashSet<>();
+        Map<Integer, Set<Integer>> detMap = new HashMap<>();
         for(int i = 0; i < sizeStates; i++) {
             detMap.put(i, new HashSet<Integer>());
         }
@@ -184,7 +187,7 @@ public class GenerateFSM {
                 int state2 = rand.nextInt(sizeStates);
                 int event = rand.nextInt(sizeEvents);
                 int count = 0;
-                boolean order = rand.nextDouble() < .5;
+                boolean order = rand.nextBoolean();
                 while(isDet && detMap.get(order ? state1 : state2).contains(event) && detMap.get(order ? state1 : state2).size() < sizeEvents && count < (10 * sizeEvents)) {
                     event = rand.nextInt(sizeEvents);
                     count++;
@@ -243,7 +246,7 @@ public class GenerateFSM {
         return rand.nextInt(MAX_PERCENTAGE_VALUE);
     }
 
-    private static String writeAttributes(int rand, int size, int index, ArrayList<String> attri, ArrayList<Integer> numbers, ArrayList<Integer> track) {
+    private static String writeAttributes(int rand, int size, int index, List<String> attri, List<Integer> numbers, List<Integer> track) {
         String line = "";
         for(int j = 0; j < attri.size(); j++) {
             int prop = MAX_PERCENTAGE_VALUE * numbers.get(j) / size;
@@ -254,7 +257,7 @@ public class GenerateFSM {
         return line;
     }
 
-    private static void writeAttribute(StringBuilder out, ArrayList<String> attri) {
+    private static void writeAttribute(StringBuilder out, List<String> attri) {
         for(int i = 0; i < attri.size(); i++) {
             out.append(attri.get(i) + (i + 1 < attri.size() ? SEPARATOR : ""));
         }

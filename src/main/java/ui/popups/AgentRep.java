@@ -1,13 +1,14 @@
 package ui.popups;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AgentRep {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
     private String nom;
-    private ArrayList<EventRep> events;
+    private List<EventRep> events;
 
     private static String SEPARATOR;
     private static String SYMBOL_TRUE;
@@ -15,7 +16,7 @@ public class AgentRep {
 
 //---  Constructors   -------------------------------------------------------------------------
 
-    public AgentRep(String inNom, ArrayList<String> eves, int attr) {
+    public AgentRep(String inNom, List<String> eves, int attr) {
         nom = inNom;
         events = new ArrayList<EventRep>();
         for(String s : eves) {
@@ -61,7 +62,7 @@ public class AgentRep {
         return events.get(i);
     }
 
-    public ArrayList<EventRep> getEvents(){
+    public List<EventRep> getEvents(){
         return events;
     }
 

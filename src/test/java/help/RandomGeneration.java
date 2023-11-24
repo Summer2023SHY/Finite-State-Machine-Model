@@ -3,6 +3,8 @@ package help;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import model.AttributeList;
@@ -18,9 +20,9 @@ public class RandomGeneration {
 //---  Static Preparation   -------------------------------------------------------------------
 
     public static void setupRandomFSMConditions(Manager model, int numObsEve, int numContrEve, int badTran) {
-        ArrayList<String> stateAtt = new ArrayList<String>();
-        ArrayList<String> eventAtt = new ArrayList<String>();
-        ArrayList<String> transAtt = new ArrayList<String>();
+        List<String> stateAtt = new ArrayList<>();
+        List<String> eventAtt = new ArrayList<>();
+        List<String> transAtt = new ArrayList<>();
 
         stateAtt.add(AttributeList.ATTRIBUTE_INITIAL);
         for(String s : EventSets.EVENT_ATTR_LIST) {
@@ -28,27 +30,27 @@ public class RandomGeneration {
         }
         transAtt.add(AttributeList.ATTRIBUTE_BAD);
 
-        ArrayList<Integer> stat = new ArrayList<Integer>();
+        List<Integer> stat = new ArrayList<>();
 
         stat.add(1);
 
         model.assignRandomFSMStateConfiguration(stateAtt, stat);
 
-        ArrayList<Integer> even = new ArrayList<Integer>();
+        List<Integer> even = new ArrayList<>();
 
         even.add(numObsEve);
         even.add(numContrEve);
 
         model.assignRandomFSMEventConfiguration(eventAtt, even);
 
-        ArrayList<Integer> tran = new ArrayList<Integer>();
+        List<Integer> tran = new ArrayList<>();
 
         tran.add(badTran);
 
         model.assignRandomFSMTransitionConfiguration(transAtt, tran);
     }
 
-    public static void setupRandomFSMDefaultEvents(Manager model, ArrayList<String> defaultEvents) {
+    public static void setupRandomFSMDefaultEvents(Manager model, List<String> defaultEvents) {
         model.assignRandomFSMDefaultEventSet(defaultEvents);
     }
 
@@ -103,13 +105,13 @@ public class RandomGeneration {
      * @param eventVariance
      * @param eventShareRate
      */
-    public static ArrayList<String> generateRandomSystemSet(String prefixNom, Manager model, RandomGenStats info)  {
+    public static List<String> generateRandomSystemSet(String prefixNom, Manager model, RandomGenStats info)  {
         Random rand = new Random();
-        HashMap<String, ArrayList<String>> plantEvents = new HashMap<String, ArrayList<String>>();
+        Map<String, List<String>> plantEvents = new HashMap<>();
 
         setupRandomFSMConditions(model, 0, 0, 0);
 
-        ArrayList<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<String>();
 
         int numPlants = info.getNumPlants();
         int stateSizeAverage = info.getNumStates();
@@ -126,18 +128,18 @@ public class RandomGeneration {
 
             int numBorrowed = 0;
             for(int j = 0; j < numEvents - 1; j++) {
-                if(plantEvents.keySet().size() != 0 && rand.nextDouble() < eventShareRate)
+                if(!plantEvents.keySet().isEmpty() && rand.nextDouble() < eventShareRate)
                     numBorrowed++;
             }
             numBorrowed = numBorrowed > out.size() ? out.size() : numBorrowed;
 
-            ArrayList<String> events = getPlantEvents(numEvents - numBorrowed, ALPHABET.charAt(i)+"", configureName(prefixNom, i, true));
-            plantEvents.put(configureName(prefixNom, i, true), copyArrayList(events));
+            List<String> events = getPlantEvents(numEvents - numBorrowed, ALPHABET.charAt(i)+"", configureName(prefixNom, i, true));
+            plantEvents.put(configureName(prefixNom, i, true), (List<String>) new ArrayList<>(events));
             out.addAll(events);
 
             for(int j = 0; j < numBorrowed; j++) {
                 int select = rand.nextInt(i);
-                ArrayList<String> choices = plantEvents.get(configureName(prefixNom, select, true));
+                List<String> choices = plantEvents.get(configureName(prefixNom, select, true));
                 String choice = choices.get(rand.nextInt(choices.size()));
                 if(!events.contains(choice)) {
                     events.add(choice);
@@ -157,9 +159,9 @@ public class RandomGeneration {
             int numEvents = eventSizeAverage + (rand.nextInt(eventVariance * 2 + 1) - (eventVariance));
             int numTransitions = TRANSITION_NUMBER_DEFAULT;
 
-            ArrayList<String> events = new ArrayList<String>();
+            List<String> events = new ArrayList<String>();
             while(events.size() < numEvents && events.size() != out.size()) {
-                ArrayList<String> pull = plantEvents.get(configureName(prefixNom, rand.nextInt(numPlants), true));
+                List<String> pull = plantEvents.get(configureName(prefixNom, rand.nextInt(numPlants), true));
                 String even = pull.get(rand.nextInt(pull.size()));
                 if(!events.contains(even))
                     events.add(even);
@@ -173,7 +175,7 @@ public class RandomGeneration {
         return out;
     }
 
-    public static ArrayList<HashMap<String, ArrayList<Boolean>>> generateRandomAgents(ArrayList<String> events, RandomGenStats info){
+    public static List<Map<String, List<Boolean>>> generateRandomAgents(List<String> events, RandomGenStats info){
         Random rand = new Random();
         int agentSizeVariance = info.getNumControllersVar();
         int numAgents = info.getNumControllers() + (agentSizeVariance == 0 ? 0 : (rand.nextInt(agentSizeVariance * 2 + 1) - (agentSizeVariance)));
@@ -191,32 +193,29 @@ public class RandomGeneration {
                 agentInfo[i][rand.nextInt(events.size())][1] = true;
             }
         }
-        String[] evens = new String[events.size()];
-        for(int i = 0; i < evens.length; i++) {
-            evens[i] = events.get(i);
-        }
+        String[] evens = events.toArray(new String[0]);
         return AgentChicanery.generateAgentSet(agentInfo, evens);
     }
 
 //---  Getter Functions   ---------------------------------------------------------------------
 
-    public static ArrayList<String> getComponentNames(String prefixNom, int numPlants, int numSpecs){
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> getComponentNames(String prefixNom, int numPlants, int numSpecs){
+        List<String> out = new ArrayList<>();
         out.addAll(getPlantNames(prefixNom, numPlants));
         out.addAll(getSpecNames(prefixNom, numSpecs));
         return out;
     }
 
-    public static ArrayList<String> getPlantNames(String prefixNom, int numPlants){
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> getPlantNames(String prefixNom, int numPlants){
+        List<String> out = new ArrayList<>();
         for(int i = 0; i < numPlants; i++) {
             out.add(configureName(prefixNom, i, true));
         }
         return out;
     }
 
-    public static ArrayList<String> getSpecNames(String prefixNom, int numSpecs){
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> getSpecNames(String prefixNom, int numSpecs){
+        List<String> out = new ArrayList<>();
         for(int i = 0; i < numSpecs; i++) {
             out.add(configureName(prefixNom, i, false));
         }
@@ -225,16 +224,8 @@ public class RandomGeneration {
 
 //---  Helper Functions   ---------------------------------------------------------------------
 
-    private static ArrayList<String> copyArrayList(ArrayList<String> in){
-        ArrayList<String> out = new ArrayList<String>();
-        for(String s : in) {
-            out.add(s);
-        }
-        return out;
-    }
-
-    private static ArrayList<String> getPlantEvents(int numEvents, String eventChar, String plantName){
-        ArrayList<String> events = new ArrayList<String>();
+    private static List<String> getPlantEvents(int numEvents, String eventChar, String plantName){
+        List<String> events = new ArrayList<>();
         for(int j = 0; j < numEvents; j++) {
             events.add(eventChar + "_{" + j + "}");
         }

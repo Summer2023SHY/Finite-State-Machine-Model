@@ -3,6 +3,8 @@ package model.fsm.component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is a wrapper for a HashMap, allowing the user to search for a Entity object using its corresponding name.
@@ -18,11 +20,11 @@ public class StateMap {
 //--- Instance Variables   --------------------------------------------------------------------
 
     /** HashMap<<r>String, <<r>S extends Entity>> object that maps the String object names of States to their Entity objects.*/
-    private HashMap<String, Entity> states;
+    private Map<String, Entity> states;
     /** HashMap<<r>S, ArrayList<<r>S>> object that maps a Entity extending object to a list of Entity extending objects which compose it.*/
-    private HashMap<String, ArrayList<String>> composition;
+    private Map<String, List<String>> composition;
 
-    private ArrayList<String> attributes;
+    private List<String> attributes;
 
 //---  Constructors   -------------------------------------------------------------------------
 
@@ -32,9 +34,9 @@ public class StateMap {
      * @param inClass - The class of Entity the map will hold, used for instantiation.
      */
 
-    public StateMap(ArrayList<String> defAttrib) {
+    public StateMap(List<String> defAttrib) {
         states = new HashMap<String, Entity>();
-        composition = new HashMap<String, ArrayList<String>>();
+        composition = new HashMap<String, List<String>>();
         attributes = defAttrib == null ? new ArrayList<String>() : defAttrib;
     }
 
@@ -47,8 +49,7 @@ public class StateMap {
 
     public void mergeStateCompositions(StateMap in) {
         for(String s : in.getStateCompositions().keySet()) {
-            ArrayList<String> use = new ArrayList<String>();
-            use.addAll(in.getStateCompositions().get(s));
+            List<String> use = new ArrayList<String>(in.getStateCompositions().get(s));
             addStateComposition(s, use);
         }
     }
@@ -83,8 +84,7 @@ public class StateMap {
      */
 
     public void renameStates() {
-        Entity[] stateArr = new Entity[states.size()];
-        states.values().toArray(stateArr);
+        Entity[] stateArr = states.values().toArray(new Entity[states.size()]);
         for(int i = 0; i < states.size(); i++)
             renameState(stateArr[i].getName(), i + "");
         composition = null;
@@ -103,7 +103,7 @@ public class StateMap {
 
     public void addState(String stateName) {
         states.put(stateName, new Entity(stateName));
-        LinkedList<String> use = new LinkedList<String>();
+        List<String> use = new LinkedList<String>();
         use.addAll(attributes);
         states.get(stateName).setAttributes(use);
     }
@@ -121,7 +121,7 @@ public class StateMap {
      * @param composition - ArrayList<<r>Entity> object containing the Entity extending objects which compose the designated Entity extending object.
      */
 
-    public void addStateComposition(String keyState, ArrayList<String> composedStates) {
+    public void addStateComposition(String keyState, List<String> composedStates) {
         composition.put(keyState, composedStates);
     }
 
@@ -147,11 +147,10 @@ public class StateMap {
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    public void setAttributes(ArrayList<String> attrib) {
+    public void setAttributes(List<String> attrib) {
         attributes = attrib;
         for(Entity e : states.values()) {
-            LinkedList<String> use = new LinkedList<String>();
-            use.addAll(attributes);
+            List<String> use = new LinkedList<String>(attributes);
             e.setAttributes(use);
         }
     }
@@ -170,7 +169,7 @@ public class StateMap {
         states = in.getStates();
     }
 
-    public void setStateComposition(String state, ArrayList<String> comp) {
+    public void setStateComposition(String state, List<String> comp) {
         composition.put(state, comp);
     }
 
@@ -191,8 +190,8 @@ public class StateMap {
         return states.get(stateName).copy();
     }
 
-    public ArrayList<String> getStatesWithAttribute(String attrib){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getStatesWithAttribute(String attrib){
+        List<String> out = new ArrayList<>();
         for(String s : states.keySet()) {
             if(getStateAttribute(s, attrib)) {
                 out.add(s);
@@ -201,14 +200,12 @@ public class StateMap {
         return out;
     }
 
-    public ArrayList<String> getAttributes(){
+    public List<String> getAttributes(){
         return attributes;
     }
 
-    public ArrayList<String> getNames(){
-        ArrayList<String> out = new ArrayList<String>();
-        out.addAll(states.keySet());
-        return out;
+    public List<String> getNames(){
+        return new ArrayList<>(states.keySet());
     }
 
     /**
@@ -221,8 +218,8 @@ public class StateMap {
      * @return - Returns an ArrayList<<r>Entity> representing all the States that are designated as composing the provided Entity.
      */
 
-    public ArrayList<String> getStateComposition(String provided){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getStateComposition(String provided){
+        List<String> out = new ArrayList<String>();
         if(composition == null || composition.get(provided) == null) {
             out.add(provided);
             return out;
@@ -252,7 +249,7 @@ public class StateMap {
 
     //-- Internal  --------------------------------------------
 
-    protected HashMap<String, Entity> getStates(){
+    protected Map<String, Entity> getStates(){
         return states;
     }
 
@@ -263,7 +260,7 @@ public class StateMap {
      * @return - Returns a HashMap<<r>Entity, ArrayList<<r>Entity>> object holding paired States and lists of composing States.
      */
 
-    protected HashMap<String, ArrayList<String>> getStateCompositions(){
+    protected Map<String, List<String>> getStateCompositions(){
         return composition;
     }
 

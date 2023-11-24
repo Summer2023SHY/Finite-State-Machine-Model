@@ -1,8 +1,10 @@
 package model.process;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 import model.process.coobservability.Incremental;
@@ -45,30 +47,30 @@ public class ProcessCoobservability {
 
     //-- Coobservable  ----------------------------------------
 
-    public static boolean isCoobservableUStruct(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static boolean isCoobservableUStruct(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         DecideCoobs dC = new DecideCoobs(plant, attr, constructAgents(plant.getEventNames(), attr, agents));
         boolean out = dC.decideCondition();
         memoryRecipient.assignMemoryMeasure(dC.produceMemoryMeasure());
         return out;
     }
 
-    public static boolean isCoobservableUStruct(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static boolean isCoobservableUStruct(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         DecideCoobs dC = new DecideCoobs(plants, specs, attr, age);
         boolean out = dC.decideCondition();
         memoryRecipient.assignMemoryMeasure(dC.produceMemoryMeasure());
         return out;
     }
 
-    public static boolean isInferenceCoobservableUStruct(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static boolean isInferenceCoobservableUStruct(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         DecideInfCoobs dC = new DecideInfCoobs(plant, attr, constructAgents(plant.getEventNames(), attr, agents));
         boolean out = dC.decideCondition();
         memoryRecipient.assignMemoryMeasure(dC.produceMemoryMeasure());
         return out;
     }
 
-    public static boolean isInferenceCoobservableUStruct(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static boolean isInferenceCoobservableUStruct(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         DecideInfCoobs dC = new DecideInfCoobs(plants, specs, attr, age);
         boolean out = dC.decideCondition();
         memoryRecipient.assignMemoryMeasure(dC.produceMemoryMeasure());
@@ -77,8 +79,8 @@ public class ProcessCoobservability {
 
     //-- SB Coobservable  -------------------------------------
 
-    public static boolean isSBCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static boolean isSBCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         DecideSBCoobs dC = new DecideSBCoobs(plants, specs, attr, age);
         boolean out = dC.decideCondition();
         memoryRecipient.assignMemoryMeasure(dC.produceMemoryMeasure());
@@ -98,22 +100,22 @@ public class ProcessCoobservability {
      * @return
      */
 
-    public static boolean isIncrementalCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static boolean isIncrementalCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         Incremental inc = new Incremental(new DecideCoobs());
         memoryRecipient.assignMemoryMeasure(inc);
         return inc.decideIncrementalCondition(plants, specs, attr, age);
     }
 
-    public static boolean isIncrementalInferenceCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static boolean isIncrementalInferenceCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         Incremental inc = new Incremental(new DecideInfCoobs());
         memoryRecipient.assignMemoryMeasure(inc);
         return inc.decideIncrementalCondition(plants, specs, attr, age);
     }
 
-    public static boolean isIncrementalSBCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static boolean isIncrementalSBCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         Incremental inc = new Incremental(new DecideSBCoobs(true));
         memoryRecipient.assignMemoryMeasure(inc);
         return inc.decideIncrementalCondition(plants, specs, attr, age);
@@ -136,21 +138,21 @@ public class ProcessCoobservability {
         return out;
     }
 
-    public static UStructure constructUStruct(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static UStructure constructUStruct(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         UStructure u = new UStructure(plant, attr, constructAgents(plant.getEventNames(), attr, agents));
         memoryRecipient.assignMemoryMeasure(u);
         return u;
     }
 
-    public static UStructure constructUStruct(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
-        ArrayList<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
+    public static UStructure constructUStruct(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
+        List<Agent> age = constructAgents(getAllEvents(plants, specs), attr, agents);
         DecideCoobs dC = new DecideCoobs(plants, specs, attr, age);
         dC.decideCondition();
         memoryRecipient.assignMemoryMeasure(dC.produceMemoryMeasure());
         return dC.getUStructure();
     }
 
-    public static UStructure constructUStructRaw(TransitionSystem plant, ArrayList<String> attr, ArrayList<Agent> agents) {
+    public static UStructure constructUStructRaw(TransitionSystem plant, List<String> attr, List<Agent> agents) {
         UStructure u = new UStructure(plant, attr, agents);
         memoryRecipient.assignMemoryMeasure(u);
         return u;
@@ -158,9 +160,9 @@ public class ProcessCoobservability {
 
     //-- Helper  ----------------------------------------------
 
-    private static ArrayList<String> getAllEvents(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs){
-        ArrayList<String> out = new ArrayList<String>();
-        HashSet<String> hold = new HashSet<String>();
+    private static List<String> getAllEvents(List<TransitionSystem> plants, List<TransitionSystem> specs){
+        List<String> out = new ArrayList<String>();
+        Set<String> hold = new HashSet<String>();
         for(TransitionSystem aT : plants) {
             hold.addAll(aT.getEventNames());
         }
@@ -173,10 +175,10 @@ public class ProcessCoobservability {
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private static ArrayList<Agent> constructAgents(ArrayList<String> event, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents){
-        ArrayList<Agent> agen = new ArrayList<Agent>();
+    private static List<Agent> constructAgents(List<String> event, List<String> attr, List<Map<String, List<Boolean>>> agents){
+        List<Agent> agen = new ArrayList<Agent>();
 
-        for(HashMap<String, ArrayList<Boolean>> h : agents) {
+        for(Map<String, List<Boolean>> h : agents) {
             Agent a = new Agent(attr, event);
             for(String s : event) {
                 if(h.get(s) == null) {

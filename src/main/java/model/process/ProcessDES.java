@@ -1,7 +1,7 @@
 package model.process;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import model.fsm.TransitionSystem;
 import model.process.memory.ReceiveMemoryMeasure;
@@ -29,15 +29,15 @@ public class ProcessDES {
         return ProcessOperation.buildObserver(in);
     }
 
-    public static TransitionSystem product(ArrayList<TransitionSystem> fsms) {
+    public static TransitionSystem product(List<TransitionSystem> fsms) {
         return ProcessOperation.product(fsms);
     }
 
-    public static TransitionSystem parallelComposition(ArrayList<TransitionSystem> fsms) {
+    public static TransitionSystem parallelComposition(List<TransitionSystem> fsms) {
         return ProcessOperation.parallelComposition(fsms);
     }
 
-    public static TransitionSystem permissiveUnion(ArrayList<TransitionSystem> fsms) {
+    public static TransitionSystem permissiveUnion(List<TransitionSystem> fsms) {
         return ProcessOperation.permissiveUnion(fsms);
     }
 
@@ -69,7 +69,7 @@ public class ProcessDES {
         return ProcessAnalysis.isAccessible(in);
     }
 
-    public static ArrayList<String> findPrivateStates(TransitionSystem in){
+    public static List<String> findPrivateStates(TransitionSystem in){
         return ProcessAnalysis.findPrivateStates(in);
     }
 
@@ -77,53 +77,53 @@ public class ProcessDES {
         return ProcessAnalysis.testOpacity(in);
     }
 
-    public static Boolean isCoobservableUStruct(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isCoobservableUStruct(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isCoobservableUStruct(plant, attr, agents);
     }
 
-    public static Boolean isInferenceCoobservableUStruct(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isInferenceCoobservableUStruct(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isInferenceCoobservableUStruct(plant, attr, agents);
     }
 
-    public static Boolean isCoobservableUStruct(ArrayList<TransitionSystem> plant, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isCoobservableUStruct(List<TransitionSystem> plant, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isCoobservableUStruct(plant, specs, attr, agents);
     }
 
-    public static Boolean isInferenceCoobservableUStruct(ArrayList<TransitionSystem> plant, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isInferenceCoobservableUStruct(List<TransitionSystem> plant, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isInferenceCoobservableUStruct(plant, specs, attr, agents);
     }
 
-    public static Boolean isSBCoobservableUrvashi(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isSBCoobservableUrvashi(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isSBCoobservable(plants, specs, attr, agents);
     }
 
-    public static Boolean isIncrementalCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isIncrementalCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isIncrementalCoobservable(plants, specs, attr, agents);
     }
 
-    public static Boolean isIncrementalInferenceCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isIncrementalInferenceCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isIncrementalInferenceCoobservable(plants, specs, attr, agents);
     }
 
-    public static Boolean isIncrementalSBCoobservable(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static Boolean isIncrementalSBCoobservable(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.isIncrementalSBCoobservable(plants, specs, attr, agents);
     }
 
     //-- UStructure  ------------------------------------------
 
-    public static TransitionSystem buildUStructure(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static TransitionSystem buildUStructure(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.constructUStruct(plant, attr, agents).getUStructure();
     }
 
-    public static TransitionSystem buildUStructure(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static TransitionSystem buildUStructure(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.constructUStruct(plants, specs, attr, agents).getUStructure();
     }
 
-    public static ArrayList<TransitionSystem> buildUStructureCrush(TransitionSystem plant, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static List<TransitionSystem> buildUStructureCrush(TransitionSystem plant, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.constructUStruct(plant, attr, agents).getCrushUStructures();
     }
 
-    public static ArrayList<TransitionSystem> buildUStructureCrush(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    public static List<TransitionSystem> buildUStructureCrush(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Map<String, List<Boolean>>> agents) {
         return ProcessCoobservability.constructUStruct(plants, specs, attr, agents).getCrushUStructures();
     }
 

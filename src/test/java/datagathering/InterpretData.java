@@ -218,7 +218,7 @@ public class InterpretData {
             }
         }
         Collections.sort(out);
-        if(out.size() == 0) {
+        if(out.isEmpty()) {
             out.add(-1.0);
         }
         return out;

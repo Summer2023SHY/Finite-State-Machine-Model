@@ -1,8 +1,12 @@
 package model.process.coobservability.deciding;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 import model.process.ProcessDES;
@@ -36,12 +40,12 @@ public class DecideCoobs implements DecideCondition{
     private static String badTransRef;
     private static String observableRef;
 
-    private ArrayList<TransitionSystem> plants;
-    private ArrayList<TransitionSystem> specs;
-    private ArrayList<String> attr;
-    private ArrayList<Agent> agents;
+    private List<TransitionSystem> plants;
+    private List<TransitionSystem> specs;
+    private List<String> attr;
+    private List<Agent> agents;
 
-    private HashSet<String> events;
+    private Set<String> events;
 
     protected UStructure ustruct;
 
@@ -55,7 +59,7 @@ public class DecideCoobs implements DecideCondition{
         enableDisableMode = DECISION_MODE_ENABLE;
     }
 
-    public DecideCoobs(ArrayList<TransitionSystem> inPlan, ArrayList<TransitionSystem> inSpe, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideCoobs(List<TransitionSystem> inPlan, List<TransitionSystem> inSpe, List<String> attrIn, List<Agent> agentsIn) {
         plants = inPlan;
         specs = inSpe;
         attr = attrIn;
@@ -63,7 +67,7 @@ public class DecideCoobs implements DecideCondition{
         enableDisableMode = DECISION_MODE_ENABLE;
     }
 
-    public DecideCoobs(ArrayList<String> eventsIn, TransitionSystem specStart, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideCoobs(List<String> eventsIn, TransitionSystem specStart, List<String> attrIn, List<Agent> agentsIn) {
         specs = new ArrayList<TransitionSystem>();
         specs.add(specStart);
         attr = attrIn;
@@ -73,7 +77,7 @@ public class DecideCoobs implements DecideCondition{
         enableDisableMode = DECISION_MODE_ENABLE;
     }
 
-    public DecideCoobs(TransitionSystem root, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideCoobs(TransitionSystem root, List<String> attrIn, List<Agent> agentsIn) {
         plants = new ArrayList<TransitionSystem>();
         plants.add(root);
         attr = attrIn;
@@ -131,23 +135,23 @@ public class DecideCoobs implements DecideCondition{
     }
 
     @Override
-    public DecideCondition constructDeciderCoobs(ArrayList<String> eventsIn, TransitionSystem specStart, ArrayList<String> attrIn, ArrayList<Agent> agentsIn) {
+    public DecideCondition constructDeciderCoobs(List<String> eventsIn, TransitionSystem specStart, List<String> attrIn, List<Agent> agentsIn) {
         return new DecideCoobs(eventsIn, specStart, attrIn, agentsIn);
     }
 
     @Override
-    public HashSet<IllegalConfig> getCounterExamples() {
+    public Set<IllegalConfig> getCounterExamples() {
         return getEnableDisableModeCounterExamples();
     }
 
-    private HashSet<IllegalConfig> getEnableDisableModeCounterExamples(){
+    private Set<IllegalConfig> getEnableDisableModeCounterExamples(){
         switch(enableDisableMode) {
         case 0:
             return ustruct.getIllegalConfigOneStates();
         case 1:
             return ustruct.getIllegalConfigTwoStates();
         default:
-            HashSet<IllegalConfig> out = new HashSet<IllegalConfig>();
+            Set<IllegalConfig> out = new HashSet<IllegalConfig>();
             out.addAll(ustruct.getIllegalConfigOneStates());
             out.addAll(ustruct.getIllegalConfigTwoStates());
             return out;
@@ -245,8 +249,8 @@ public class DecideCoobs implements DecideCondition{
 
         //hold = ultPlant.copy();
 
-        LinkedList<StateSet> queue = new LinkedList<StateSet>();
-        HashSet<StateSet> visited = new HashSet<StateSet>();
+        Queue<StateSet> queue = new ArrayDeque<>();
+        Set<StateSet> visited = new HashSet<>();
 
         StateSet.assignSizes(1, 1);
         String[] use = new String[] {ultPlant.getStatesWithAttribute(initialRef).get(0), ultSpec.getStatesWithAttribute(initialRef).get(0)};
@@ -305,7 +309,7 @@ public class DecideCoobs implements DecideCondition{
     private TransitionSystem makeSpecPrime(TransitionSystem in) {
         TransitionSystem out = in.copy();
 
-        ArrayList<String> contr = new ArrayList<String>();
+        List<String> contr = new ArrayList<>();
 
         for(String e : getRelevantEvents()) {
             for(Agent a : agents) {
@@ -328,11 +332,11 @@ public class DecideCoobs implements DecideCondition{
     }
 
     private boolean cantPerform(TransitionSystem ultSpec, String specState, String e) {
-        return ultSpec.getStateEventTransitionStates(specState, e) == null || ultSpec.getStateEventTransitionStates(specState, e).size() == 0;
+        return ultSpec.getStateEventTransitionStates(specState, e) == null || ultSpec.getStateEventTransitionStates(specState, e).isEmpty();
     }
 
-    private HashSet<String> getRelevantEvents(){
-        HashSet<String> out = new HashSet<String>();
+    private Set<String> getRelevantEvents(){
+        Set<String> out = new HashSet<>();
 
         if(plants != null)
             for(TransitionSystem t : plants) {
@@ -355,7 +359,7 @@ public class DecideCoobs implements DecideCondition{
      */
 
     private boolean isSpecEventNoPlant() {
-        HashSet<String> use = new HashSet<String>();
+        Set<String> use = new HashSet<>();
 
         if(plants != null)
             for(TransitionSystem t : plants) {
@@ -392,14 +396,14 @@ public class DecideCoobs implements DecideCondition{
     }
 
     private TransitionSystem parallelCompAutomata(TransitionSystem p1, TransitionSystem p2) {
-        ArrayList<TransitionSystem> use = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> use = new ArrayList<TransitionSystem>();
         use.add(p1);
         use.add(p2);
         return ProcessDES.parallelComposition(use);
     }
 
     private TransitionSystem performPermissiveUnion(TransitionSystem pl, TransitionSystem sp) {
-        ArrayList<TransitionSystem> use = new ArrayList<TransitionSystem>();
+        List<TransitionSystem> use = new ArrayList<TransitionSystem>();
         use.add(pl);
         use.add(sp);
         return ProcessDES.permissiveUnion(use);

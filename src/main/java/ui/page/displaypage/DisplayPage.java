@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import controller.CodeReference;
@@ -15,7 +17,7 @@ import visual.composite.HandlePanel;
 /**
  * TODO: Search Entries
  * TODO: Wire up Scrollwheel properly - backend is having issues with the click regions; multiple threads may be causing race conditions
- * (adding an element to an arraylist shouldn't be done at the wrong index)
+ * (adding an element to an List shouldn't be done at the wrong index)
  * 
  * @author Borinor
  *
@@ -90,7 +92,7 @@ public class DisplayPage {
         //TODO: Set up buttons for adding/removing/renaming events/states/transitions and toggling qualities thereof
     }
 
-    private void drawDisplayThing(int x, int y, int wid, int hei, String title, ArrayList<String> attributes, ArrayList<String> entries, HashMap<String, ArrayList<Boolean>> factors) {
+    private void drawDisplayThing(int x, int y, int wid, int hei, String title, List<String> attributes, List<String> entries, Map<String, List<Boolean>> factors) {
         int sideBuffer = getSideBuffer(p);
         int vertBuffer = getVertBuffer(p);
 
@@ -139,7 +141,7 @@ public class DisplayPage {
             p.handleThickRectangle(title + "_list_entry_" + i + "_rect", title, 15, x + sideBuffer, desY, x + wid - sideBuffer, desY + entryHei, Color.BLACK, 1);
             p.handleText(title + "_list_entry_" + i + "_text", title, 15, x + sideBuffer * 2, desY + entryHei / 2, wid / 4, entryHei, TEXT_FONT, entries.get(i));
 
-            ArrayList<Boolean> att = factors.get(entries.get(i));
+            List<Boolean> att = factors.get(entries.get(i));
 
             for(int j = 0; j < att.size(); j++) {
                 int desX = runX + (j * blockWid);
@@ -176,18 +178,18 @@ public class DisplayPage {
 
         p.handleLine("horizline", "move", 35, 0, vertP, p.getWidth(), vertP, 3, Color.black);
 
-        ArrayList<String> attr = new ArrayList<String>();
+        List<String> attr = new ArrayList<>();
         for(int i = 0; i < 3; i++) {
             attr.add("Attr" + i);
         }
-        HashMap<String, ArrayList<Boolean>> fact = new HashMap<String, ArrayList<Boolean>>();
+        Map<String, List<Boolean>> fact = new HashMap<>();
 
-        ArrayList<String> stat = new ArrayList<String>();
+        List<String> stat = new ArrayList<>();
         Random rand = new Random();
         for(int i = 0; i < DEFAULT_ENTRY_SIZE; i++) {
             String nom = "Entry " + i;
             stat.add(nom);
-            ArrayList<Boolean> bol = new ArrayList<Boolean>();
+            List<Boolean> bol = new ArrayList<>();
             for(int j = 0; j < 3; j++) {
                 bol.add(rand.nextInt(2) == 0 ? true : false);
             }

@@ -11,18 +11,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
-import model.Manager;
-import model.process.coobservability.Incremental;
 import help.AgentChicanery;
 import help.EventSets;
 import help.RandomGenStats;
 import help.RandomGeneration;
 import help.SystemGeneration;
+import model.Manager;
+import model.process.coobservability.Incremental;
 
 /**
  *
@@ -39,7 +40,7 @@ import help.SystemGeneration;
  *
  * Heuristics incremental tests should also compare against 100 true-random heuristic examples averaged
 
- * MemoryMeasure should probably be a HashMap instead of synchronized lists; when writing to file map each key to an index to associate value properly; use dummy value to denote it's missing
+ * MemoryMeasure should probably be a Map instead of synchronized lists; when writing to file map each key to an index to associate value properly; use dummy value to denote it's missing
 
  * Heuristic: Alternate choosing Plants or Specs
 
@@ -142,7 +143,7 @@ public class DataGathering {
 
     private Manager model;
 
-    private ArrayList<String> eventAtt;
+    private List<String> eventAtt;
 
     private String defaultWritePath;
 
@@ -483,7 +484,7 @@ public class DataGathering {
                             String next = raf.readLine();
                             values = next == null ? null : next.split(", ");
                         }
-                        ArrayList<Double> aver = hold.calculateAverages();
+                        List<Double> aver = hold.calculateAverages();
                         //System.out.println(hold.calculateInterquartileRange() + " " + hold.calculateFirstQuartile() + " " + hold.calculateThirdQuartile());
                         for(int i = 0; i < aver.size(); i++) {
                             rag.writeBytes((threeSig(aver.get(i))+"") + (i + 1 == aver.size() ? "" : ", "));
@@ -663,8 +664,8 @@ public class DataGathering {
                             String next = raf.readLine();
                             values = next == null ? null : next.split(", ");
                         }
-                        ArrayList<Double> averOverall = holdOverall.calculateAverages();
-                        ArrayList<Double> averSub = holdSub.calculateAverages();
+                        List<Double> averOverall = holdOverall.calculateAverages();
+                        List<Double> averSub = holdSub.calculateAverages();
                         //System.out.println(hold.calculateInterquartileRange() + " " + hold.calculateFirstQuartile() + " " + hold.calculateThirdQuartile());
                         for(int i = 0; i < averOverall.size(); i++) {
                             rag.writeBytes((threeSig(averOverall.get(i))+"") + (i + 1 == averOverall.size() ? "" : ", "));
@@ -873,10 +874,10 @@ public class DataGathering {
 
     private void testBasicConfigDTP()  {
 
-        ArrayList<String> names = SystemGeneration.generateSystemSetDTP();
+        List<String> names = SystemGeneration.generateSystemSetDTP();
 
-        ArrayList<String> plant = new ArrayList<String>(names.subList(0, 3));
-        ArrayList<String> spec = new ArrayList<String>(names.subList(3, 6));
+        List<String> plant = new ArrayList<String>(names.subList(0, 3));
+        List<String> spec = new ArrayList<String>(names.subList(3, 6));
 
         testExistingSystem("Test Basic Config DTP", plant, spec, AgentChicanery.generateAgentsDTP(), new BatchSetup(){
             public void setUpSystem() {
@@ -888,7 +889,7 @@ public class DataGathering {
 
     private void testBasicConfigHISCHigh()  {
 
-        ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCHighLevel();
+        List<List<String>> names = SystemGeneration.generateSystemSetHISCHighLevel();
 
         testExistingSystem("Test Basic Config HISC High Level", names.get(0), names.get(1), AgentChicanery.generateAgentsHISC(0), new BatchSetup() {
 
@@ -902,7 +903,7 @@ public class DataGathering {
 
     private void testBasicConfigHISCLow()  {
 
-        ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCLowLevel();
+        List<List<String>> names = SystemGeneration.generateSystemSetHISCLowLevel();
 
         testExistingSystem("Test Basic Config HISC Low Level", names.get(0), names.get(1), AgentChicanery.generateAgentsHISC(1), new BatchSetup() {
 
@@ -916,10 +917,10 @@ public class DataGathering {
 
     private void testIncrementalConfigDTP()  {
 
-        ArrayList<String> names = SystemGeneration.generateSystemSetDTP();
+        List<String> names = SystemGeneration.generateSystemSetDTP();
 
-        ArrayList<String> plant = new ArrayList<String>(names.subList(0, 3));
-        ArrayList<String> spec = new ArrayList<String>(names.subList(3, 6));
+        List<String> plant = new ArrayList<String>(names.subList(0, 3));
+        List<String> spec = new ArrayList<String>(names.subList(3, 6));
 
         testExistingSystem("Test Incremental Config DTP", plant, spec, AgentChicanery.generateAgentsDTP(), new BatchSetup(){
             public void setUpSystem() {
@@ -932,7 +933,7 @@ public class DataGathering {
 
     private void testIncrementalConfigHISC()  {
 
-        ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISC();
+        List<List<String>> names = SystemGeneration.generateSystemSetHISC();
 
         testExistingSystem("Test Incremental Config HISC", names.get(0), names.get(1), AgentChicanery.generateAgentsHISC(3), new BatchSetup() {
 
@@ -946,7 +947,7 @@ public class DataGathering {
 
     private void testIncrementalConfigHISCHigh()  {
 
-        ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCHighLevel();
+        List<List<String>> names = SystemGeneration.generateSystemSetHISCHighLevel();
 
         testExistingSystem("Test Incremental Config HISC High Level", names.get(0), names.get(1), AgentChicanery.generateAgentsHISC(0), new BatchSetup() {
 
@@ -960,7 +961,7 @@ public class DataGathering {
 
     private void testIncrementalConfigHISCLow()  {
 
-        ArrayList<ArrayList<String>> names = SystemGeneration.generateSystemSetHISCLowLevel();
+        List<List<String>> names = SystemGeneration.generateSystemSetHISCLowLevel();
 
         testExistingSystem("Test Incremental Config HISC Low Level", names.get(0), names.get(1), AgentChicanery.generateAgentsHISC(1), new BatchSetup() {
 
@@ -972,7 +973,7 @@ public class DataGathering {
 
     }
 
-    private void testExistingSystem(String testBatch, ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, BatchSetup systemStart, int testChoice)  {
+    private void testExistingSystem(String testBatch, List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, BatchSetup systemStart, int testChoice)  {
         int counter = 0;
 
         while(counter <= NUMBER_EXISTING_TEST_RUNS) {
@@ -991,8 +992,8 @@ public class DataGathering {
             while(finished < NUMBER_REPEAT_TEST) {
                 systemStart.setUpSystem();
 
-                ArrayList<String> completeTests = checkTestsCompleted(writePath);
-                ArrayList<String> memoryError = checkTestTypesVerifiedMemoryError(writePath);
+                List<String> completeTests = checkTestsCompleted(writePath);
+                List<String> memoryError = checkTestTypesVerifiedMemoryError(writePath);
 
 
                 switch(testChoice) {
@@ -1327,15 +1328,15 @@ public class DataGathering {
 
         while(finished < (heuristics ? 1 : NUMBER_REPEAT_TEST)) {
 
-            ArrayList<String> completeTests = checkTestsCompleted(writePath);
-            ArrayList<String> memoryError = checkTestTypesVerifiedMemoryError(writePath);
+            List<String> completeTests = checkTestsCompleted(writePath);
+            List<String> memoryError = checkTestTypesVerifiedMemoryError(writePath);
 
             if(!inMem)
                 readInOldSystem(testName);
 
-            ArrayList<String> plants = getPlants(testName);
-            ArrayList<String> specs = getSpecs(testName);
-            ArrayList<HashMap<String, ArrayList<Boolean>>> agents = getAgents(testName);
+            List<String> plants = getPlants(testName);
+            List<String> specs = getSpecs(testName);
+            List<Map<String, List<Boolean>>> agents = getAgents(testName);
 
 
             switch(testChoice) {
@@ -1366,7 +1367,7 @@ public class DataGathering {
 
     private void readInOldSystem(String prefixNom) throws FileNotFoundException {
         String path = writePath;
-        ArrayList<String> plants = new ArrayList<String>();
+        List<String> plants = new ArrayList<String>();
         int counter = 0;
         String hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
         while(hold != null) {
@@ -1374,7 +1375,7 @@ public class DataGathering {
             hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
         }
 
-        ArrayList<String> specs = new ArrayList<String>();
+        List<String> specs = new ArrayList<String>();
         counter = 0;
         hold = pullSourceData(path + "/" + prefixNom + "_s_" + counter++ + ".txt");
         while(hold != null) {
@@ -1402,10 +1403,10 @@ public class DataGathering {
         printOut(" " + info.shortToString() + "\n");
         printOut("---------------------------------------------\n");
 
-        ArrayList<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
-        ArrayList<String> names = RandomGeneration.getComponentNames(testName, info.getNumPlants(), info.getNumSpecs());
+        List<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
+        List<String> names = RandomGeneration.getComponentNames(testName, info.getNumPlants(), info.getNumSpecs());
 
-        ArrayList<HashMap<String, ArrayList<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
+        List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
         f = new File(writePath + "/" + (testName + "_agents.txt"));
         try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
@@ -1425,7 +1426,7 @@ public class DataGathering {
         }
     }
 
-    private boolean autoTestSystemFull(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private boolean autoTestSystemFull(String prefixNom, List<String> plantNames, List<String> specNames, List<Map<String, List<Boolean>>> agents) {
         printCoobsLabel(prefixNom, false);
         boolean coobs = checkCoobservable(plantNames, specNames, agents, false);
 
@@ -1464,7 +1465,7 @@ public class DataGathering {
         return coobs;
     }
 
-    private Boolean autoTestSystemCoobsSB(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) {
+    private Boolean autoTestSystemCoobsSB(String prefixNom, List<String> plantNames, List<String> specNames, List<Map<String, List<Boolean>>> agents, int finishCount, List<String> completedTests, List<String> memoryError) {
         Boolean coobs = null;
         if(contains(completedTests, ANALYSIS_COOBS) == finishCount && !memoryError.contains(ANALYSIS_COOBS)) {
             printCoobsLabel(prefixNom, false);
@@ -1494,7 +1495,7 @@ public class DataGathering {
         return coobs;
     }
 
-    private boolean autoTestSystemIncr(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) {
+    private boolean autoTestSystemIncr(String prefixNom, List<String> plantNames, List<String> specNames, List<Map<String, List<Boolean>>> agents, int finishCount, List<String> completedTests, List<String> memoryError) {
         Boolean icCoobs = null;
         if(contains(completedTests, ANALYSIS_INC_COOBS) == finishCount && !memoryError.contains(ANALYSIS_INC_COOBS)) {
             printIncrementalLabel(prefixNom, false);
@@ -1525,7 +1526,7 @@ public class DataGathering {
         return icCoobs == null ? (icSbCoobs == null ? false : icSbCoobs) : icCoobs;
     }
 
-    private boolean autoTestSystemSBIncr(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, int finishCount, ArrayList<String> completedTests, ArrayList<String> memoryError) {
+    private boolean autoTestSystemSBIncr(String prefixNom, List<String> plantNames, List<String> specNames, List<Map<String, List<Boolean>>> agents, int finishCount, List<String> completedTests, List<String> memoryError) {
         Boolean icCoobs = null;
         if(contains(completedTests, ANALYSIS_INC_COOBS) == finishCount && !memoryError.contains(ANALYSIS_INC_COOBS)) {
             printIncrementalLabel(prefixNom, false);
@@ -1565,7 +1566,7 @@ public class DataGathering {
         return icCoobs == null ? (sbCoobs == null ? (icSbCoobs == null ? false : icSbCoobs) : sbCoobs) : icCoobs;
     }
 
-    private Boolean autoTestHeuristics(String prefixNom, ArrayList<String> plantNames, ArrayList<String> specNames, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, ArrayList<String> completedTests, ArrayList<String> memoryError) {
+    private Boolean autoTestHeuristics(String prefixNom, List<String> plantNames, List<String> specNames, List<Map<String, List<Boolean>>> agents, List<String> completedTests, List<String> memoryError) {
         Boolean expectedCoob = null;
         Boolean expectedSB = null;
 
@@ -1612,7 +1613,7 @@ public class DataGathering {
 
     //-- Coobservability Testing  -----------------------------
 
-    private boolean checkCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
+    private boolean checkCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_COOBS);
@@ -1629,7 +1630,7 @@ public class DataGathering {
 
     //-- SB Coobservability Testing  --------------------------
 
-    private boolean checkSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private boolean checkSBCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_SB);
@@ -1646,7 +1647,7 @@ public class DataGathering {
 
     //-- Incremental Testing  ---------------------------------
 
-    private boolean checkIncrementalCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents, boolean inf) {
+    private boolean checkIncrementalCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, boolean inf) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_INC_COOBS);
@@ -1657,7 +1658,7 @@ public class DataGathering {
         return result;
     }
 
-    private boolean checkIncrementalSBCoobservable(ArrayList<String> plants, ArrayList<String> specs, ArrayList<HashMap<String, ArrayList<Boolean>>> agents) {
+    private boolean checkIncrementalSBCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents) {
         long t = System.currentTimeMillis();
         long hold = getCurrentMemoryUsage();
         assignAnalysisSubtype(TYPE_INC_SB);
@@ -1693,7 +1694,7 @@ public class DataGathering {
         return -1;
     }
 
-    private int contains(ArrayList<String> list, String find) {
+    private int contains(List<String> list, String find) {
         int out = 0;
         for(String s : list) {
             out += (s.equals(find) ? 1 : 0);
@@ -1739,8 +1740,8 @@ public class DataGathering {
         return checkForTerm(path + "/" + RESULTS_FILE, DECLARE_MEMORY_ERROR + analysisSubtype);
     }
 
-    private ArrayList<String> checkTestTypesVerifiedMemoryError(String path){
-        ArrayList<String> out = new ArrayList<String>();
+    private List<String> checkTestTypesVerifiedMemoryError(String path){
+        List<String> out = new ArrayList<String>();
         if(!heuristics) {
             for(String s : ANALYSIS_TYPES) {
                 if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_MEMORY_ERROR + s)) {
@@ -1766,8 +1767,8 @@ public class DataGathering {
         return out;
     }
 
-    private ArrayList<String> checkTestsCompleted(String path){
-        ArrayList<String> out = new ArrayList<String>();
+    private List<String> checkTestsCompleted(String path){
+        List<String> out = new ArrayList<String>();
         if(!heuristics) {
             for(String s : ANALYSIS_TYPES) {
                 if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + s)) {
@@ -1848,8 +1849,8 @@ public class DataGathering {
         double val = inMB(getCurrentMemoryUsage() - hold);
         val = val < 0 ? 0 : val;
         printMemoryUsage(val);
-        ArrayList<Double> data = model.getLastProcessData().getStoredData();
-        ArrayList<String> use = model.getLastProcessData().getOutputGuide();
+        List<Double> data = model.getLastProcessData().getStoredData();
+        List<String> use = model.getLastProcessData().getOutputGuide();
 
         use.add(0, "Total Time (ms)");
         use.add(1, "Overall Memory Usage (Mb)");
@@ -1908,7 +1909,7 @@ public class DataGathering {
         }
     }
 
-    private void printEquivalentResults(ArrayList<String> guide, long time, double overallMem, ArrayList<Double> vals) {
+    private void printEquivalentResults(List<String> guide, long time, double overallMem, List<Double> vals) {
         if(writePath != null) {
             File f = new File(writePath + "/" + ANALYSIS_FILE + analysisSubtype + TEXT_EXTENSION);
             try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
@@ -1970,8 +1971,8 @@ public class DataGathering {
         return false;
     }
 
-    private ArrayList<Integer> checkForTermLinePositions(String path, String phrase){
-        ArrayList<Integer> out = new ArrayList<Integer>();
+    private List<Integer> checkForTermLinePositions(String path, String phrase){
+        List<Integer> out = new ArrayList<Integer>();
         File g = new File(path);
         if(!g.exists()) {
             return out;
@@ -1995,8 +1996,8 @@ public class DataGathering {
         return new ArrayList<Integer>();
     }
 
-    private ArrayList<String> getPlants(String prefix) throws IOException {
-        ArrayList<String> plants = new ArrayList<String>();
+    private List<String> getPlants(String prefix) throws IOException {
+        List<String> plants = new ArrayList<String>();
         int counter = 0;
         String hold = pullSourceData(writePath + "/" + prefix + "_p_" + counter++ + ".txt");
         while(hold != null) {
@@ -2006,8 +2007,8 @@ public class DataGathering {
         return plants;
     }
 
-    private ArrayList<String> getSpecs(String prefix) throws IOException {
-        ArrayList<String> plants = new ArrayList<String>();
+    private List<String> getSpecs(String prefix) throws IOException {
+        List<String> plants = new ArrayList<String>();
         int counter = 0;
         String hold = pullSourceData(writePath + "/" + prefix + "_s_" + counter++ + ".txt");
         while(hold != null) {
@@ -2017,7 +2018,7 @@ public class DataGathering {
         return plants;
     }
 
-    private ArrayList<HashMap<String, ArrayList<Boolean>>> getAgents(String prefix) throws IOException {
+    private List<Map<String, List<Boolean>>> getAgents(String prefix) throws IOException {
         String hold = pullSourceData(writePath + "/" + prefix + "_agents.txt");
         return model.readInAgents(hold);
     }

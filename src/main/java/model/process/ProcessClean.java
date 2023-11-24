@@ -1,8 +1,11 @@
 package model.process;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 
@@ -65,14 +68,14 @@ public class ProcessClean {
         TransitionSystem out = new TransitionSystem(in.getId() + "_accessible");
         out.copyAttributes(in);
         out.mergeEvents(in);
-        LinkedList<String> queue = new LinkedList<String>();
+        Queue<String> queue = new ArrayDeque<>();
 
         // Initialize a new TransitionSystem with initial states.
         for(String initial : in.getStatesWithAttribute(attributeInitialRef)) {
             queue.add(initial);
         } // for initial state
 
-        HashSet<String> visited = new HashSet<String>();
+        Set<String> visited = new HashSet<>();
 
         while(!queue.isEmpty()) {
             String curr = queue.poll();
@@ -113,7 +116,7 @@ public class ProcessClean {
         out.copyAttributes(in);
         out.mergeEvents(in);
         // First, find what states we need to add.
-        ArrayList<String> processedStrings = getCoAccessibleMap(in);    //Use helper method to generate list of legal/illegal Strings
+        List<String> processedStrings = getCoAccessibleMap(in);    //Use helper method to generate list of legal/illegal Strings
 
         System.out.println(processedStrings);        // [2, 3, 7, 8, 9]
 
@@ -147,17 +150,17 @@ public class ProcessClean {
      * @return - Returns a HashMap<<r>String, Boolean> object mapping String state names to true if the state is coaccessible, and false if it is not.
      */
 
-    private static ArrayList<String> getCoAccessibleMap(TransitionSystem in) {
+    private static List<String> getCoAccessibleMap(TransitionSystem in) {
         // When a state is processed, add it to the map and state if it reached a marked state.
-        HashSet<String> positive = new HashSet<String>();
-        HashSet<String> negative = new HashSet<String>();
-        HashSet<String> visited = new HashSet<String>();
+        Set<String> positive = new HashSet<>();
+        Set<String> negative = new HashSet<>();
+        Set<String> visited = new HashSet<>();
 
         for(String curr : in.getStateNames()) {
             if(!positive.contains(curr))
                 recursivelyFindMarked(curr, positive, negative, visited, in);
         }
-        ArrayList<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<>();
         out.addAll(positive);
         return out;
     } // getCoAccessibleMap(State, HashMap<String, Boolean>)
@@ -176,11 +179,11 @@ public class ProcessClean {
      * 
      * @param curr - State object that represents the current 'State' to process recursively.
      * @param results - HashMap<<r>String, Boolean> object that records the status of each State as CoAccessible or not.
-     * @param visited - HashSet<<r>String> object that keeps track of which States have been already visited.
+     * @param visited - Set<<r>String> object that keeps track of which States have been already visited.
      * @return - Returns a boolean value: true if the State object curr is coaccessible, false otherwise.
      */
 
-    private static boolean recursivelyFindMarked(String curr, HashSet<String> positive, HashSet<String> negative, HashSet<String> visited, TransitionSystem in) {
+    private static boolean recursivelyFindMarked(String curr, Set<String> positive, Set<String> negative, Set<String> visited, TransitionSystem in) {
         if(positive.contains(curr) || (in.getStateAttribute(curr, attributeMarkedRef) != null && in.getStateAttribute(curr, attributeMarkedRef))) {
             positive.add(curr);
             return true;
@@ -202,7 +205,7 @@ public class ProcessClean {
         }
         negative.add(curr);
         return false;
-    } // recursivelyFindMarked(State, HashMap<String, Boolean>, HashSet<String>)
+    } // recursivelyFindMarked(State, HashMap<String, Boolean>, Set<String>)
 
 
     //-- Weird, do it later vvvv
@@ -226,7 +229,7 @@ public class ProcessClean {
 
      public static TransitionSystem newPrune(TransitionSystem modal1, TransitionSystem modal2, TransitionSystem composedModal) {
         boolean mustIterate = true;
-        HashSet<String> badStrings = new HashSet<String>();
+        Set<String> badStrings = new HashSet<String>();
 
         while(mustIterate) {                //Iterate through all Strings until a pass through does not change anything
             mustIterate = false;            //In each iteration, check if the String is bad via stateIsBad() method.
@@ -251,8 +254,8 @@ public class ProcessClean {
         }
         composedModal.getTransitions().removeStrings(badStrings);
         for(String s : composedModal.getStrings()) {                //Some retention of bad Transitions; we know the String is good, just remove the Transition.
-            ArrayList<Transition> mustTrans = composedModal.getMustTransitions().getTransitions(s);
-            ArrayList<Transition> mayTrans = composedModal.getTransitions().getTransitions(s);
+            List<Transition> mustTrans = composedModal.getMustTransitions().getTransitions(s);
+            List<Transition> mayTrans = composedModal.getTransitions().getTransitions(s);
             for(int i = 0; i < mustTrans.size(); i++) {
                 Transition t = mustTrans.get(i);
                 if(!mayTrans.contains(t)) {
@@ -279,7 +282,7 @@ public class ProcessClean {
 
     public static TransitionSystem prune(TransitionSystem in) {
         // First, get all the inconsistent states
-        HashSet<String> badStrings = transitions.getInconsistentStrings(mustTransitions);
+        Set<String> badStrings = transitions.getInconsistentStrings(mustTransitions);
         // Now, go through all the states and see if there are must transitions to these inconsistent
         // states. If there are, those states must be removed (iteratively).
         while(getBadMustTransitionStrings(badStrings));

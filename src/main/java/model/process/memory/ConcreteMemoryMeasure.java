@@ -1,6 +1,7 @@
 package model.process.memory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import model.fsm.TransitionSystem;
 
@@ -15,7 +16,7 @@ public class ConcreteMemoryMeasure implements MemoryMeasure {
 
     private long startingMemory;
 
-    private ArrayList<Long> spaceUsage;
+    private List<Long> spaceUsage;
 
     private TransitionSystem hold;
 
@@ -72,7 +73,7 @@ public class ConcreteMemoryMeasure implements MemoryMeasure {
         for(Long l : spaceUsage) {
             add += l - startingMemory;
         }
-        if(spaceUsage.size() == 0) {
+        if(spaceUsage.isEmpty()) {
             spaceUsage.add(0L);
         }
         return threeSig(inMB((add /spaceUsage.size())));
@@ -110,8 +111,8 @@ public class ConcreteMemoryMeasure implements MemoryMeasure {
     }
 
     @Override
-    public ArrayList<String> getOutputGuide() {
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getOutputGuide() {
+        List<String> out = new ArrayList<>();
 
         out.add("Test Outcome");
         out.add("Average Memory Consumption (Mb)");
@@ -121,8 +122,8 @@ public class ConcreteMemoryMeasure implements MemoryMeasure {
     }
 
     @Override
-    public ArrayList<Double> getStoredData() {
-        ArrayList<Double> out = new ArrayList<Double>();
+    public List<Double> getStoredData() {
+        List<Double> out = new ArrayList<>();
 
         out.add(getTestResult() ? TEST_RESULT_TRUE : TEST_RESULT_FALSE);
         out.add(getAverageMemoryUsage());

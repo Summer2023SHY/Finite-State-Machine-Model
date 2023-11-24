@@ -1,6 +1,7 @@
 package model.fsm.component;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class models an Event in an FSM, storing information about the Event's name and
@@ -67,8 +68,8 @@ public class Entity {
         }
     }
 
-    public void addAttributes(LinkedList<String> refs) {
-        if(refs != null && refs.size() != 0) {
+    public void addAttributes(List<String> refs) {
+        if(refs != null && !refs.isEmpty()) {
             for(String s : refs) {
                 addAttribute(s, false);
             }
@@ -94,7 +95,7 @@ public class Entity {
         wrap.setValue(ref, val);
     }
 
-    public void setAttributes(LinkedList<String> refs) {
+    public void setAttributes(List<String> refs) {
         Attribute hold = wrap;
         wipeAttributes();
         for(String s : refs) {
@@ -121,7 +122,7 @@ public class Entity {
         return wrap.getValue(ref);
     }
 
-    public LinkedList<String> getAttributes(){
+    public List<String> getAttributes(){
         return wrap == null ? new LinkedList<String>() : wrap.getAttributes();
     }
 

@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 /**
- * This class serves to provide its user with the ability to convert a .svg
+ * Provides the ability to convert a .svg
  * describing
  * a directed graph (as provided by the GraphViz software explicitly) into the
  * .tikz

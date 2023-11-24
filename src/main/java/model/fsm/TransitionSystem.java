@@ -2,6 +2,8 @@ package model.fsm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import model.AttributeList;
 import model.fsm.component.EventMap;
@@ -34,7 +36,7 @@ public class TransitionSystem {
 
 //---  Constructors   -------------------------------------------------------------------------
 
-    public TransitionSystem(String inId, ArrayList<String> attribState, ArrayList<String> attribEvent, ArrayList<String> attribTransition) {
+    public TransitionSystem(String inId, List<String> attribState, List<String> attribEvent, List<String> attribTransition) {
         states = new StateMap(attribState);
         events = new EventMap(attribEvent);
         transitions = new TransitionFunction(attribTransition);
@@ -68,7 +70,7 @@ public class TransitionSystem {
         transitions.renameEvent(old, newName);
     }
 
-    public String compileStateName(ArrayList<String> in) {
+    public String compileStateName(List<String> in) {
         String out = "(";
         for(int i = 0; i < in.size(); i++) {
             out += in.get(i) + (i + 1 < in.size() ? "," : "");
@@ -76,7 +78,7 @@ public class TransitionSystem {
         return out + ")";
     }
 
-    public void compileStateAttributes(ArrayList<String> in, TransitionSystem context) {
+    public void compileStateAttributes(List<String> in, TransitionSystem context) {
         String nom = compileStateName(in);
         if(!states.stateExists(nom)) {
             states.addState(nom);
@@ -91,7 +93,7 @@ public class TransitionSystem {
         }
     }
 
-    public void compileStateAttributes(String source, ArrayList<String> in, ArrayList<TransitionSystem> context) {
+    public void compileStateAttributes(String source, List<String> in, List<TransitionSystem> context) {
         String nom = source;
         if(!states.stateExists(nom)) {
             states.addState(nom);
@@ -108,7 +110,7 @@ public class TransitionSystem {
         }
     }
 
-    public void compileEventAttributes(String eventName, ArrayList<TransitionSystem> context) {
+    public void compileEventAttributes(String eventName, List<TransitionSystem> context) {
         if(!events.contains(eventName)) {
             events.addEvent(eventName);
         }
@@ -206,7 +208,7 @@ public class TransitionSystem {
      * which is to be added to the state composition of the transition system.
      */
 
-    public void addStateComposition(String main, ArrayList<String> pieces) {
+    public void addStateComposition(String main, List<String> pieces) {
         states.addStateComposition(main, pieces);
     }
 
@@ -326,7 +328,7 @@ public class TransitionSystem {
 
     //-- State  -----------------------------------------------
 
-    public void setStateAttributes(ArrayList<String> attrib) {
+    public void setStateAttributes(List<String> attrib) {
         states.setAttributes(attrib);
     }
 
@@ -342,7 +344,7 @@ public class TransitionSystem {
      * @param pieces - State ... varargs object that represents the set of States which compose the State aggregate.
      */
 
-    public void setStateComposition(String aggregate, ArrayList<String> pieces) {
+    public void setStateComposition(String aggregate, List<String> pieces) {
         states.setStateComposition(aggregate, pieces);
     }
 
@@ -360,11 +362,11 @@ public class TransitionSystem {
 
     //-- Event  -----------------------------------------------
 
-    public void addEventAttributes(ArrayList<String> attrib) {
+    public void addEventAttributes(List<String> attrib) {
         events.addAttributes(attrib);
     }
 
-    public void overwriteEventAttributes(ArrayList<String> attrib) {
+    public void overwriteEventAttributes(List<String> attrib) {
         events.overwriteAttributes(attrib);
     }
 
@@ -374,7 +376,7 @@ public class TransitionSystem {
 
     //-- Transition  ------------------------------------------
 
-    public void setTransitionAttributes(ArrayList<String> attrib) {
+    public void setTransitionAttributes(List<String> attrib) {
         transitions.setAttributes(attrib);
     }
 
@@ -425,12 +427,12 @@ public class TransitionSystem {
         return states.getAttributes().contains(ref);
     }
 
-    public HashMap<String, ArrayList<Boolean>> getStateAttributeMap(){
-        HashMap<String, ArrayList<Boolean>> out = new HashMap<String, ArrayList<Boolean>>();
-        ArrayList<String> attrib = getStateAttributes();
+    public Map<String, List<Boolean>> getStateAttributeMap(){
+        Map<String, List<Boolean>> out = new HashMap<>();
+        List<String> attrib = getStateAttributes();
 
         for(String s : getStateNames()) {
-            ArrayList<Boolean> details = new ArrayList<Boolean>();
+            List<Boolean> details = new ArrayList<>();
             for(String t : attrib) {
                 details.add(getStateAttribute(s, t));
             }
@@ -440,15 +442,15 @@ public class TransitionSystem {
         return out;
     }
 
-    public ArrayList<String> getStatesWithAttribute(String attrib){
+    public List<String> getStatesWithAttribute(String attrib){
         return states.getStatesWithAttribute(attrib);
     }
 
-    public ArrayList<String> getStateAttributes(){
-        return copy(states.getAttributes());
+    public List<String> getStateAttributes(){
+        return new ArrayList<>(states.getAttributes());
     }
 
-    public ArrayList<String> getStateNames(){
+    public List<String> getStateNames(){
         return states.getNames();
     }
 
@@ -461,7 +463,7 @@ public class TransitionSystem {
      * @return - Returns an ArrayList<<r>State> object representing the States that compose the provided State object.
      */
 
-    public ArrayList<String> getStateComposition(String state){
+    public List<String> getStateComposition(String state){
         return states.getStateComposition(state);
     }
 
@@ -487,12 +489,12 @@ public class TransitionSystem {
         return events.getAttributes().contains(ref);
     }
 
-    public HashMap<String, ArrayList<Boolean>> getEventAttributeMap(){
-        HashMap<String, ArrayList<Boolean>> out = new HashMap<String, ArrayList<Boolean>>();
-        ArrayList<String> attrib = getEventAttributes();
+    public Map<String, List<Boolean>> getEventAttributeMap(){
+        Map<String, List<Boolean>> out = new HashMap<>();
+        List<String> attrib = getEventAttributes();
 
         for(String e : getEventNames()) {
-            ArrayList<Boolean> details = new ArrayList<Boolean>();
+            List<Boolean> details = new ArrayList<>();
             for(String t : attrib) {
                 details.add(getEventAttribute(e, t));
             }
@@ -502,15 +504,15 @@ public class TransitionSystem {
         return out;
     }
 
-    public ArrayList<String> getEventsWithAttribute(String attrib){
+    public List<String> getEventsWithAttribute(String attrib){
         return events.getEventsWithAttribute(attrib);
     }
 
-    public ArrayList<String> getEventAttributes(){
-        return copy(events.getAttributes());
+    public List<String> getEventAttributes(){
+        return new ArrayList<>(events.getAttributes());
     }
 
-    public ArrayList<String> getEventNames(){
+    public List<String> getEventNames(){
         return events.getEventNames();
     }
 
@@ -532,15 +534,15 @@ public class TransitionSystem {
         return transitions.getAttributes().contains(ref);
     }
 
-    public ArrayList<String> getTransitionsWithAttribute(String attrib){
+    public List<String> getTransitionsWithAttribute(String attrib){
         return transitions.getTransitionsWithAttribute(attrib);
     }
 
-    public ArrayList<String> getTransitionAttributes(){
-        return copy(transitions.getAttributes());
+    public List<String> getTransitionAttributes(){
+        return new ArrayList<>(transitions.getAttributes());
     }
 
-    public ArrayList<String> getStateTransitionEvents(String state){
+    public List<String> getStateTransitionEvents(String state){
         return transitions.getStateEvents(state);
     }
 
@@ -548,7 +550,7 @@ public class TransitionSystem {
         int out = 0;
         for(String s : getStateNames()) {
             for(String e : getStateTransitionEvents(s)) {
-                ArrayList<String> tra = getStateEventTransitionStates(s, e);
+                List<String> tra = getStateEventTransitionStates(s, e);
                 out += tra == null ? 0 : tra.size();
             }
         }
@@ -564,12 +566,12 @@ public class TransitionSystem {
      * @return
      */
 
-    public ArrayList<String> getStateEventTransitionStates(String state, String event){
+    public List<String> getStateEventTransitionStates(String state, String event){
         return transitions.getTransitionStates(state, event);
     }
 
-    public ArrayList<String> getTransitionLabels(){
-        ArrayList<String> out = new ArrayList<String>();
+    public List<String> getTransitionLabels(){
+        List<String> out = new ArrayList<String>();
 
         for(String s : getStateNames()) {
             for(String e : getStateTransitionEvents(s)) {
@@ -582,13 +584,13 @@ public class TransitionSystem {
         return out;
     }
 
-    public HashMap<String, ArrayList<Boolean>> getTransitionLabelAttributeMap(){
-        HashMap<String, ArrayList<Boolean>> out = new HashMap<String, ArrayList<Boolean>>();
-        ArrayList<String> attrib = getTransitionAttributes();
+    public Map<String, List<Boolean>> getTransitionLabelAttributeMap(){
+        Map<String, List<Boolean>> out = new HashMap<>();
+        List<String> attrib = getTransitionAttributes();
 
         for(String s : getStateNames()) {
             for(String e : getStateTransitionEvents(s)) {
-                ArrayList<Boolean> details = new ArrayList<Boolean>();
+                List<Boolean> details = new ArrayList<>();
                 for(String a : attrib) {
                     details.add(getTransitionAttribute(s, e, a));
                 }
@@ -610,14 +612,6 @@ public class TransitionSystem {
     }
 
 //---  Mechanics   ----------------------------------------------------------------------------
-
-    private ArrayList<String> copy(ArrayList<String> in){
-        ArrayList<String> out = new ArrayList<String>();
-        for(String s : in) {
-            out.add(s);
-        }
-        return out;
-    }
 
     public TransitionSystem copy() {
         TransitionSystem out = new TransitionSystem(getId(), getStateAttributes(), getEventAttributes(), getTransitionAttributes());

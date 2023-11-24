@@ -3,6 +3,7 @@ package ui.page.optionpage.entryset;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 import visual.composite.HandlePanel;
@@ -25,7 +26,7 @@ public abstract class EntrySet {
 
     protected static int subSystemCode = SUBSYSTEM_CODE_DEFAULT;
 
-    private ArrayList<String> contents;
+    private List<String> contents;
     private HashMap<Integer, String> codes;
 
     private String prefix;
@@ -101,7 +102,7 @@ public abstract class EntrySet {
 
 //---  Setter Methods   -----------------------------------------------------------------------
 
-    public void setContents(ArrayList<String> in) {
+    public void setContents(List<String> in) {
         contents = in;
     }
 
@@ -159,7 +160,7 @@ public abstract class EntrySet {
         return contents.get(i);
     }
 
-    public ArrayList<String> getContents(){
+    public List<String> getContents(){
         return contents;
     }
 

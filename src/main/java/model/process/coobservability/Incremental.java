@@ -3,7 +3,9 @@ package model.process.coobservability;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 import model.process.coobservability.deciding.DecideCondition;
@@ -97,17 +99,15 @@ public class Incremental extends IncrementalMemoryMeasure {
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public boolean decideIncrementalCondition(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<Agent> agents) {
-        ArrayList<TransitionSystem> copyPlants = new ArrayList<TransitionSystem>();
-        ArrayList<TransitionSystem> copySpecs = new ArrayList<TransitionSystem>();
-        copyPlants.addAll(plants);
-        copySpecs.addAll(specs);
+    public boolean decideIncrementalCondition(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Agent> agents) {
+        List<TransitionSystem> copyPlants = new ArrayList<>(plants);
+        List<TransitionSystem> copySpecs = new ArrayList<>(specs);
 
         logHeuristics(retrieveIncrementalOptions());
 
         while(!copySpecs.isEmpty()) {
             TransitionSystem pick = pickComponent(null, copySpecs, null);                                //Get initial spec to use (heuristics choose here)
-            ArrayList<TransitionSystem> hold = new ArrayList<TransitionSystem>();        //List to hold all the plants/specs used in the current iteration
+            List<TransitionSystem> hold = new ArrayList<>();        //List to hold all the plants/specs used in the current iteration
             copySpecs.remove(pick);
             hold.add(pick);
             decider = decider.constructDeciderCoobs(getAllEvents(plants), pick, attr, agents);
@@ -151,7 +151,7 @@ public class Incremental extends IncrementalMemoryMeasure {
         return true;
     }
 
-    private void logData(DecideCondition dec, ArrayList<TransitionSystem> hold) {
+    private void logData(DecideCondition dec, List<TransitionSystem> hold) {
         logFinishedProcess(decider.produceMemoryMeasure());
         logFinishedComponents(hold.size());
         logComponentNames(getComponentNames(hold));
@@ -168,7 +168,7 @@ public class Incremental extends IncrementalMemoryMeasure {
      * @return
      */
 
-    private IllegalConfig pickCounterExample(HashSet<IllegalConfig> counters) {
+    private IllegalConfig pickCounterExample(Set<IllegalConfig> counters) {
         if(counters == null) {
             return null;
         }
@@ -240,20 +240,20 @@ public class Incremental extends IncrementalMemoryMeasure {
      * @return
      */
 
-    private TransitionSystem pickComponent(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, IllegalConfig counterexample) {
-        ArrayList<TransitionSystem> selectionPool = new ArrayList<TransitionSystem>();
+    private TransitionSystem pickComponent(List<TransitionSystem> plants, List<TransitionSystem> specs, IllegalConfig counterexample) {
+        List<TransitionSystem> selectionPool = new ArrayList<>();
 
         int use = plants == null ? INCREMENTAL_A_SPECS : incrementalOptionA;
 
         switch(use) {
             case INCREMENTAL_A_PLANTS:
-                if(plants.size() != 0)
+                if(!plants.isEmpty())
                     selectionPool.addAll(plants);
                 else
                     selectionPool.addAll(specs);
                 break;
             case INCREMENTAL_A_SPECS:
-                if(specs.size() != 0)
+                if(!specs.isEmpty())
                     selectionPool.addAll(specs);
                 else
                     selectionPool.addAll(plants);
@@ -266,7 +266,7 @@ public class Incremental extends IncrementalMemoryMeasure {
                 break;
         }
 
-        if(selectionPool.size() == 0) {
+        if(selectionPool.isEmpty()) {
             return null;
         }
 
@@ -366,14 +366,14 @@ public class Incremental extends IncrementalMemoryMeasure {
                 }
                 break;
             case INCREMENTAL_B_RANDOM:
-                ArrayList<TransitionSystem> pool = new ArrayList<TransitionSystem>();
+                List<TransitionSystem> pool = new ArrayList<TransitionSystem>();
                 for(TransitionSystem ts : selectionPool) {
                     if(canReject(ts, specs.contains(ts), counterexample)) {
                         pool.add(ts);
                     }
                 }
                 Random rand = new Random();
-                if(pool.size() != 0) {
+                if(!pool.isEmpty()) {
                     out = pool.get(rand.nextInt(pool.size()));
                 }
                 break;
@@ -391,7 +391,7 @@ public class Incremental extends IncrementalMemoryMeasure {
     }
 
     private int pickComponentHeuristicNoReject(int in) {
-        HashSet<Integer> check = new HashSet<Integer>();
+        Set<Integer> check = new HashSet<>();
         for (int i : INCREMENTAL_B_NO_REJECT)
             check.add(i);
         return check.contains(in) ? in : INCREMENTAL_B_RANDOM;
@@ -407,24 +407,22 @@ public class Incremental extends IncrementalMemoryMeasure {
         return out;
     }
 
-    private ArrayList<String> getComponentNames(ArrayList<TransitionSystem> components){
-        ArrayList<String> out = new ArrayList<String>();
+    private List<String> getComponentNames(List<TransitionSystem> components){
+        List<String> out = new ArrayList<>();
         for(TransitionSystem t : components) {
             out.add(t.getId());
         }
         return out;
     }
 
-    private ArrayList<String> getAllEvents(ArrayList<TransitionSystem> plants){
-        HashSet<String> hold = new HashSet<String>();
+    private List<String> getAllEvents(List<TransitionSystem> plants){
+        Set<String> hold = new HashSet<String>();
 
         for(TransitionSystem t : plants) {
             hold.addAll(t.getEventNames());
         }
 
-        ArrayList<String> out = new ArrayList<String>();
-        out.addAll(hold);
-        return out;
+        return new ArrayList<String>(hold);
     }
 
     private int countTransitions(TransitionSystem plant) {
@@ -437,11 +435,8 @@ public class Incremental extends IncrementalMemoryMeasure {
         return out;
     }
 
-    private int sharedEvents(TransitionSystem plant, ArrayList<String> eventPath) {
-        HashSet<String> events = new HashSet<String>();
-        for(String s : eventPath) {
-            events.add(s);
-        }
+    private int sharedEvents(TransitionSystem plant, List<String> eventPath) {
+        Set<String> events = new HashSet<>(eventPath);
         int out = 0;
         for(String s : events) {
             if(plant.getEventNames().contains(s)) {
@@ -455,7 +450,7 @@ public class Incremental extends IncrementalMemoryMeasure {
         if(ic == null) {
             return true;
         }
-        ArrayList<String> use = ic.getEventPath();
+        List<String> use = ic.getEventPath();
         if(!spec) {
             use.add(ic.getEvent());
         }
@@ -463,7 +458,7 @@ public class Incremental extends IncrementalMemoryMeasure {
         //System.out.println("States: " + ic.getStateSet());
         //System.out.println("For: " + ic.getEventPath() + " " +  ic.getEvent() + ", " + plant.getId() + " reached: " + reachedState + " from start: " + plant.getStatesWithAttribute(initialRef).get(0) + ", knowing: " + plant.getEventNames());
         if(reachedState != null) {
-            for(ArrayList<String> s : ic.getObservedPaths()) {
+            for(List<String> s : ic.getObservedPaths()) {
                 use = s;
                 use.add(ic.getEvent());
                 //System.out.println("Agent View: " + use);
@@ -496,13 +491,13 @@ public class Incremental extends IncrementalMemoryMeasure {
      * @return
      */
 
-    private String navigateTransitionSystem(TransitionSystem plant, ArrayList<String> eventPath) {
+    private String navigateTransitionSystem(TransitionSystem plant, List<String> eventPath) {
         String curr = plant.getStatesWithAttribute(initialRef).get(0);
         //System.out.println("Path: " + eventPath);
         for(String s : eventPath) {
             //System.out.println("Knows event " + s + "? " + plant.getEventNames().contains(s) + ", Sees it: " + plant.getEventsWithAttribute(observableRef).contains(s));
             if(plant.getEventNames().contains(s)) {
-                ArrayList<String> next = plant.getStateEventTransitionStates(curr, s);
+                List<String> next = plant.getStateEventTransitionStates(curr, s);
                 //System.out.println("H: " + curr + ", " + s + ", " + next);
                 if(next != null && next.size() > 0) {
                     curr = next.get(0);
@@ -524,8 +519,8 @@ public class Incremental extends IncrementalMemoryMeasure {
      * @return
      */
 
-    private ArrayList<String> observablePath(TransitionSystem plant, ArrayList<String> eventPath) {
-        ArrayList<String> out = new ArrayList<String>();
+    private List<String> observablePath(TransitionSystem plant, List<String> eventPath) {
+        List<String> out = new ArrayList<>();
         for(String s : eventPath) {
             if(plant.getEventNames().contains(s) && plant.getEventAttribute(s, observableRef)) {
                 out.add(s);

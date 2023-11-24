@@ -1,9 +1,13 @@
 package model.process.coobservability;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 import model.fsm.TransitionSystem;
 import model.process.coobservability.support.Agent;
@@ -18,19 +22,19 @@ public class StateBased extends ConcreteMemoryMeasure {
     private static String attributeObservableRef;
     private static String attributeControllableRef;
 
-    private HashMap<String, HashSet<StateSet>> disable;
-    private HashMap<String, HashSet<StateSet>> enable;
+    private Map<String, Set<StateSet>> disable;
+    private Map<String, Set<StateSet>> enable;
 
-    private HashMap<StateSet, ArrayList<ArrayList<StateSet>>> pathTracing;
+    private Map<StateSet, List<List<StateSet>>> pathTracing;
 
 //---  Constructors   -------------------------------------------------------------------------
 
-    public StateBased(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<Agent> agents, boolean pathTrack) {
+    public StateBased(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Agent> agents, boolean pathTrack) {
         super();
-        disable = new HashMap<String, HashSet<StateSet>>();
-        enable = new HashMap<String, HashSet<StateSet>>();
+        disable = new HashMap<String, Set<StateSet>>();
+        enable = new HashMap<String, Set<StateSet>>();
         if(pathTrack) {
-            pathTracing = new HashMap<StateSet, ArrayList<ArrayList<StateSet>>>();
+            pathTracing = new HashMap<StateSet, List<List<StateSet>>>();
         }
         operate(plants, specs, attr, agents);
     }
@@ -53,9 +57,9 @@ public class StateBased extends ConcreteMemoryMeasure {
         return true;
     }
 
-    private void operate(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, ArrayList<String> attr, ArrayList<Agent> agen) {
-        HashSet<String> eventNamesHold = new HashSet<String>();
-        HashSet<String> controllable = new HashSet<String>();
+    private void operate(List<TransitionSystem> plants, List<TransitionSystem> specs, List<String> attr, List<Agent> agen) {
+        Set<String> eventNamesHold = new HashSet<String>();
+        Set<String> controllable = new HashSet<String>();
 
         for(Agent a : agen) {
             controllable.addAll(a.getEventsAttributeSet(attributeControllableRef, true));
@@ -65,7 +69,7 @@ public class StateBased extends ConcreteMemoryMeasure {
             eventNamesHold.addAll(t.getEventNames());
         }
 
-        ArrayList<String> eventNames = new ArrayList<String>();
+        List<String> eventNames = new ArrayList<>();
         eventNames.addAll(eventNamesHold);
 
         initializeEnableDisable(disable, enable, plants, specs, controllable);
@@ -112,7 +116,7 @@ public class StateBased extends ConcreteMemoryMeasure {
                 continue;
             }
 
-            HashMap<String, HashSet<StateSet>> tempDisable = observerConstructHiding(plants, specs, enable, disable, a.getEventsAttributeSet(attributeObservableRef, true), a.getEventsAttributeSet(attributeControllableRef, true), controllable);
+            Map<String, Set<StateSet>> tempDisable = observerConstructHiding(plants, specs, enable, disable, a.getEventsAttributeSet(attributeObservableRef, true), a.getEventsAttributeSet(attributeControllableRef, true), controllable);
 
             logMemoryUsage();
 
@@ -131,15 +135,15 @@ public class StateBased extends ConcreteMemoryMeasure {
         }
     }
 
-    private void initializeEnableDisable(HashMap<String, HashSet<StateSet>> disable, HashMap<String, HashSet<StateSet>> enable, ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, HashSet<String> controllable) {
+    private void initializeEnableDisable(Map<String, Set<StateSet>> disable, Map<String, Set<StateSet>> enable, List<TransitionSystem> plants, List<TransitionSystem> specs, Set<String> controllable) {
         for(String c : controllable) {
             disable.put(c, new HashSet<StateSet>());
             enable.put(c, new HashSet<StateSet>());
         }
         StateSet.assignSizes(plants.size(), specs.size());
 
-        LinkedList<StateSet> queue = new LinkedList<StateSet>();
-        HashSet<StateSet> visited = new HashSet<StateSet>();
+        Queue<StateSet> queue = new ArrayDeque<>();
+        Set<StateSet> visited = new HashSet<>();
         StateSet first = initialStateSetPath(plants, specs);
 
         queue.add(first);
@@ -196,29 +200,29 @@ public class StateBased extends ConcreteMemoryMeasure {
      * 
      */
 
-    private HashMap<String, HashSet<StateSet>> observerConstructHiding(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, HashMap<String, HashSet<StateSet>> enable, HashMap<String, HashSet<StateSet>> disable, ArrayList<String> agentObs, ArrayList<String> agentCont, HashSet<String> controllable) {
-        HashMap<String, HashSet<StateSet>> out = new HashMap<String, HashSet<StateSet>>();
+    private Map<String, Set<StateSet>> observerConstructHiding(List<TransitionSystem> plants, List<TransitionSystem> specs, Map<String, Set<StateSet>> enable, Map<String, Set<StateSet>> disable, List<String> agentObs, List<String> agentCont, Set<String> controllable) {
+        Map<String, Set<StateSet>> out = new HashMap<String, Set<StateSet>>();
 
         for(String c : controllable) {
             out.put(c, agentCont.contains(c) ? new HashSet<StateSet>() : disable.get(c));
         }
 
-        LinkedList<HashSet<StateSet>> queue = new LinkedList<HashSet<StateSet>>();
-        HashSet<HashSet<StateSet>> visited = new HashSet<HashSet<StateSet>>();
+        Queue<Set<StateSet>> queue = new ArrayDeque<>();
+        Set<Set<StateSet>> visited = new HashSet<>();
 
-        HashSet<StateSet> initial = new HashSet<StateSet>();
+        Set<StateSet> initial = new HashSet<StateSet>();
         initial.add(initialStateSetPath(plants, specs));
 
         queue.add(reachableStateSetPaths(plants, specs, initial, agentObs));
         while(!queue.isEmpty()) {
-            HashSet<StateSet> curr = queue.poll();
+            Set<StateSet> curr = queue.poll();
             if(visited.contains(curr)) {
                 continue;
             }
             visited.add(curr);
 
             for(String e : agentObs) {
-                HashSet<StateSet> reachable = new HashSet<StateSet>();
+                Set<StateSet> reachable = new HashSet<StateSet>();
                 for(StateSet s : curr) {
                     if(canProceed(plants, specs, s, e)) {
                         reachable.add(stateSetStep(plants, specs, s, e));
@@ -230,11 +234,11 @@ public class StateBased extends ConcreteMemoryMeasure {
         }
 
         logMemoryUsage();
-        for(HashSet<StateSet> group : visited) {
+        for(Set<StateSet> group : visited) {
             for(String e : agentCont) {
-                HashSet<StateSet> holdEna = intersection(group, enable.get(e));
+                Set<StateSet> holdEna = intersection(group, enable.get(e));
                 if(!holdEna.isEmpty()) {
-                    HashSet<StateSet> holdDis = intersection(group, disable.get(e));
+                    Set<StateSet> holdDis = intersection(group, disable.get(e));
                     out.get(e).addAll(holdDis);
                 }
             }
@@ -245,7 +249,7 @@ public class StateBased extends ConcreteMemoryMeasure {
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public ArrayList<ArrayList<StateSet>> getEquivalentPaths(StateSet in){
+    public List<List<StateSet>> getEquivalentPaths(StateSet in){
         return pathTracing == null ? null : pathTracing.get(in);
     }
 
@@ -253,21 +257,21 @@ public class StateBased extends ConcreteMemoryMeasure {
         return t.getStatesWithAttribute(attributeInitialRef).get(0);
     }
 
-    private ArrayList<String> getAllEvents(ArrayList<TransitionSystem> plants){
-        HashSet<String> hold = new HashSet<String>();
+    private List<String> getAllEvents(List<TransitionSystem> plants){
+        Set<String> hold = new HashSet<String>();
 
         for(TransitionSystem t : plants) {
             hold.addAll(t.getEventNames());
         }
 
-        ArrayList<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<String>();
         out.addAll(hold);
         return out;
     }
 
-    public ArrayList<StateSet> getRemainingDisableStates(){
-        ArrayList<StateSet> out = new ArrayList<StateSet>();
-        HashSet<StateSet> use = new HashSet<StateSet>();
+    public List<StateSet> getRemainingDisableStates(){
+        List<StateSet> out = new ArrayList<StateSet>();
+        Set<StateSet> use = new HashSet<StateSet>();
         for(String c : disable.keySet()) {
             use.addAll(disable.get(c));
         }
@@ -275,9 +279,9 @@ public class StateBased extends ConcreteMemoryMeasure {
         return out;
     }
 
-    public ArrayList<StateSet> getRemainingEnableStates(){
-        ArrayList<StateSet> out = new ArrayList<StateSet>();
-        HashSet<StateSet> use = new HashSet<StateSet>();
+    public List<StateSet> getRemainingEnableStates(){
+        List<StateSet> out = new ArrayList<>();
+        Set<StateSet> use = new HashSet<>();
         for(String c : enable.keySet()) {
             use.addAll(enable.get(c));
         }
@@ -287,7 +291,7 @@ public class StateBased extends ConcreteMemoryMeasure {
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private StateSet initialStateSetPath(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs) {
+    private StateSet initialStateSetPath(List<TransitionSystem> plants, List<TransitionSystem> specs) {
         String[] use = new String[plants.size() + specs.size()];
         for(int i = 0; i < plants.size(); i++) {
             use[i] = getInitialState(plants.get(i));
@@ -298,7 +302,7 @@ public class StateBased extends ConcreteMemoryMeasure {
         return new StateSet(use);
     }
 
-    private StateSet stateSetStep(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, StateSet curr, String event) {
+    private StateSet stateSetStep(List<TransitionSystem> plants, List<TransitionSystem> specs, StateSet curr, String event) {
         String[] out = new String[plants.size() + specs.size()];
 
         for(int i = 0; i < plants.size(); i++) {
@@ -315,20 +319,17 @@ public class StateBased extends ConcreteMemoryMeasure {
         return use;
     }
 
-    private HashSet<StateSet> reachableStateSetPaths(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, HashSet<StateSet> initial, ArrayList<String> agentObs){
-        HashSet<StateSet> out = new HashSet<StateSet>();
-        for(StateSet i : initial) {
-            out.add(i);
-        }
-        ArrayList<String> unobs = new ArrayList<String>();
+    private Set<StateSet> reachableStateSetPaths(List<TransitionSystem> plants, List<TransitionSystem> specs, Set<StateSet> initial, List<String> agentObs){
+        Set<StateSet> out = new HashSet<>(initial);
+        List<String> unobs = new ArrayList<>();
         for(String s : getAllEvents(plants)) {
             if(!agentObs.contains(s)) {
                 unobs.add(s);
             }
         }
 
-        LinkedList<StateSet> queue = new LinkedList<StateSet>();
-        HashSet<StateSet> visited = new HashSet<StateSet>();
+        Queue<StateSet> queue = new ArrayDeque<>();
+        Set<StateSet> visited = new HashSet<>();
         queue.addAll(initial);
 
         while(!queue.isEmpty()) {
@@ -357,7 +358,7 @@ public class StateBased extends ConcreteMemoryMeasure {
         return knowsEvent(system, event) && system.getStateTransitionEvents(state).contains(event);
     }
 
-    private boolean canProceed(ArrayList<TransitionSystem> plants, ArrayList<TransitionSystem> specs, StateSet curr, String event) {
+    private boolean canProceed(List<TransitionSystem> plants, List<TransitionSystem> specs, StateSet curr, String event) {
         if(plants != null) {
             for(int i = 0; i < plants.size(); i++) {
                 TransitionSystem t = plants.get(i);
@@ -383,8 +384,8 @@ public class StateBased extends ConcreteMemoryMeasure {
 
     //-- SubsetConstructHiding  ---------------------------------------------------------------
 
-    private HashSet<StateSet> intersection(HashSet<StateSet> conglom, HashSet<StateSet> check){
-        HashSet<StateSet> out = new HashSet<StateSet>();
+    private Set<StateSet> intersection(Set<StateSet> conglom, Set<StateSet> check){
+        Set<StateSet> out = new HashSet<>();
         for(StateSet s : check) {
             if(conglom.contains(s)) {
                 out.add(s);

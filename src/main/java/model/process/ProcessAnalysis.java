@@ -1,6 +1,6 @@
 package model.process;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.fsm.TransitionSystem;
 
@@ -43,7 +43,7 @@ public class ProcessAnalysis {
         return in.getStateNames().size() == access.getStateNames().size();
     }
 
-    public static ArrayList<String> findPrivateStates(TransitionSystem in){
+    public static List<String> findPrivateStates(TransitionSystem in){
         if(!in.hasStateAttribute(attributePrivateRef)) {
             return null;
         }
@@ -54,7 +54,7 @@ public class ProcessAnalysis {
         if(!in.hasStateAttribute(attributePrivateRef)) {
             return null;
         }
-        return findPrivateStates(in).size() == 0;
+        return findPrivateStates(in).isEmpty();
     }
 
 
@@ -170,8 +170,8 @@ public class ProcessAnalysis {
 
         for(String fromState : mustTransitionFunction.transitions.keySet()) {
             // Get the corresponding sorted transitions from each
-            ArrayList<Transition> mustTransitions = mustTransitionFunction.getSortedTransitions(fromState);
-            ArrayList<Transition> mayTransitions = this.getSortedTransitions(fromState);
+            List<Transition> mustTransitions = mustTransitionFunction.getSortedTransitions(fromState);
+            List<Transition> mayTransitions = this.getSortedTransitions(fromState);
             int mustIndex = 0, mayIndex = 0;
             while(mustIndex < mustTransitions.size() && mayIndex < mayTransitions.size()) {
                 // Find the matching may transition
@@ -206,14 +206,14 @@ public class ProcessAnalysis {
 
         // Otherwise, go through the neighbours and identify which events we need to disable.
         DisabledEvents currDE = new DisabledEvents(false);
-        ArrayList<Transition> thisTransitions = transitions.getTransitions(curr);
+        List<Transition> thisTransitions = transitions.getTransitions(curr);
         if(thisTransitions != null)
         for(Transition t : thisTransitions) {
             DisabledEvents tempDE = new DisabledEvents(false);
             boolean transitionEventDisabled = false;
 
             loopThroughTransitionStates:
-            for(State s : (ArrayList<State>)(t.getTransitionStates())) {
+            for(State s : (List<State>)(t.getTransitionStates())) {
                 DisabledEvents nextDE = getDisabledEvents(s, otherFSM, visitedStates, disabledMap);
                 Entity e = t.getTransitionEvent();
 
@@ -298,9 +298,9 @@ public class ProcessAnalysis {
      * @return - Returns a boolean value describing whether or not a State is good or bad.
 
     public boolean stateIsBad(ModalSpecification modal1, ModalSpecification modal2, ModalSpecification composedModal, State s) {
-        ArrayList<Transition> mustTrans = composedModal.getMustTransitions().getTransitions(s);
-        ArrayList<Transition> mayTrans = composedModal.getTransitions().getTransitions(s);
-        ArrayList<State> compos = composedModal.getStateComposition(s);
+        List<Transition> mustTrans = composedModal.getMustTransitions().getTransitions(s);
+        List<Transition> mayTrans = composedModal.getTransitions().getTransitions(s);
+        List<State> compos = composedModal.getStateComposition(s);
 
         State modalState1 = compos.get(0);  //Get Transitions of the composed Modal Spec. and a State from one of its forebears
                                             //Need to get info on event privacy and a reference into one of the composing Modal Spec.

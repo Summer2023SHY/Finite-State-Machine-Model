@@ -1,13 +1,14 @@
 package ui.popups;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventRep {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
     private String event;
-    private ArrayList<Boolean> setVals;
+    private List<Boolean> setVals;
 
 //---  Constructors   -------------------------------------------------------------------------
 
@@ -27,7 +28,7 @@ public class EventRep {
 
 //---  Getter Methods   -----------------------------------------------------------------------
 
-    public ArrayList<Boolean> getValues(){
+    public List<Boolean> getValues(){
         return setVals;
     }
 

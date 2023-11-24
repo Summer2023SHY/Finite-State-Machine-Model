@@ -3,6 +3,7 @@ package ui.page.optionpage;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import ui.InputHandler;
 import ui.page.optionpage.entryset.EntrySetFactory;
@@ -27,7 +28,7 @@ public abstract class OptionPage {
 
     private String header;
     private String help;
-    private ArrayList<Category> categories;
+    private List<Category> categories;
 
     private static HandlePanel p;
     private boolean showHelp;        //TODO actually implement help pages
@@ -261,7 +262,7 @@ public abstract class OptionPage {
         return getTextFromCode(code, 0).contentEquals(EntrySetFactory.SIGNIFIER_TRUE);
     }
 
-    public ArrayList<String> getContentFromCode(int code) {
+    public List<String> getContentFromCode(int code) {
         return getCategoryFromCode(code).getContents(code);
     }
 

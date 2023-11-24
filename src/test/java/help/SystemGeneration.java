@@ -1,6 +1,7 @@
 package help;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import model.AttributeList;
 import model.Manager;
@@ -308,17 +309,14 @@ public class SystemGeneration {
         setBadTransitions(name, "8", "s", "10", "s","12", "s","14", "s","16", "s","17", "s");
     }
 
-    public static void generateSystemSigmaStarion(String name, ArrayList<String> events) {
+    public static void generateSystemSigmaStarion(String name, List<String> events) {
         generateSystemDefault(name);
 
         model.addStates(name, 1);
 
         initialState(name, "0");
 
-        String[] use = new String[events.size()];
-        for(int i = 0; i < events.size(); i++) {
-            use[i] = events.get(i);
-        }
+        String[] use = events.toArray(new String[0]);
 
         initiateEvents(name, use);
 
@@ -357,12 +355,12 @@ public class SystemGeneration {
 
     //-- Poly System  -----------------------------------------
 
-    public static void generateSystemSetA(ArrayList<String> name) {
+    public static void generateSystemSetA(List<String> name) {
         generateLiuG1(name.get(0));
         generateLiuH1(name.get(1));
     }
 
-    public static void generateSystemSetB(ArrayList<String> name) {
+    public static void generateSystemSetB(List<String> name) {
         generateLiuG3(name.get(0));
         generateLiuG4(name.get(1));
         generateLiuH1(name.get(2));
@@ -485,8 +483,8 @@ public class SystemGeneration {
         addTransitions(name, "c", "4", "6");
     }
 
-    public static ArrayList<String> generateSystemSetDTP() {
-        ArrayList<String> use = new ArrayList<String>();
+    public static List<String> generateSystemSetDTP() {
+        List<String> use = new ArrayList<String>();
         use.add("Sender");
         use.add("Receiver");
         use.add("Channel");
@@ -625,10 +623,10 @@ public class SystemGeneration {
         addTransitions(name, "sendAck_1", "6", "1");
     }
 
-    public static ArrayList<ArrayList<String>> generateSystemSetHISC(){
-        ArrayList<ArrayList<String>> out = new ArrayList<ArrayList<String>>();
+    public static List<List<String>> generateSystemSetHISC(){
+        List<List<String>> out = new ArrayList<List<String>>();
 
-        ArrayList<String> plant = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
         plant.add("Packaging");
         plant.add("Source");
         plant.add("Sink");
@@ -646,7 +644,7 @@ public class SystemGeneration {
         plant.addAll(generateHISCAttachPart("Attach Part", 3));
 
 
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         spec.add("In Buffer");
         spec.add("Out Buffer");
         spec.add("Package");
@@ -669,10 +667,10 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<ArrayList<String>> generateSystemSetHISCHighLevel(){
-        ArrayList<ArrayList<String>> out = new ArrayList<ArrayList<String>>();
+    public static List<List<String>> generateSystemSetHISCHighLevel(){
+        List<List<String>> out = new ArrayList<List<String>>();
 
-        ArrayList<String> plant = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
         plant.add("Packaging");
         plant.add("Source");
         plant.add("Sink");
@@ -683,7 +681,7 @@ public class SystemGeneration {
         generateHISCSink(plant.get(2));
         generateHISCTest(plant.get(3));
 
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
         spec.add("In Buffer");
         spec.add("Out Buffer");
         spec.add("Package");
@@ -700,10 +698,10 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<ArrayList<String>> generateSystemSetHISCLowLevel(){
-        ArrayList<ArrayList<String>> out = new ArrayList<ArrayList<String>>();
+    public static List<List<String>> generateSystemSetHISCLowLevel(){
+        List<List<String>> out = new ArrayList<List<String>>();
 
-        ArrayList<String> plant = new ArrayList<String>();
+        List<String> plant = new ArrayList<String>();
 
         plant.addAll(generateHISCPath("Path", 1));
         plant.addAll(generateHISCDefine("Define", 1));
@@ -712,7 +710,7 @@ public class SystemGeneration {
         plant.addAll(generateHISCAttachPart("Attach Part", 1));
 
 
-        ArrayList<String> spec = new ArrayList<String>();
+        List<String> spec = new ArrayList<String>();
 
         //spec.addAll(generateHISCMoves("Moves", 1));
         spec.addAll(generateHISCPolishSequence("Polish Sequence", 1));
@@ -801,8 +799,8 @@ public class SystemGeneration {
 
         //-- J Parts  -----------------------------------------
 
-    public static ArrayList<String> generateHISCPath(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCPath(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -832,8 +830,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCDefine(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCDefine(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -854,8 +852,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCPolishPart(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCPolishPart(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -877,8 +875,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCAttachCase(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCAttachCase(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -898,8 +896,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCAttachPart(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCAttachPart(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -992,8 +990,8 @@ public class SystemGeneration {
 
     //-- J Parts  -----------------------------------------
 
-    public static ArrayList<String> generateHISCMoves(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCMoves(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
 
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
@@ -1014,8 +1012,8 @@ public class SystemGeneration {
 
     }
 
-    public static ArrayList<String> generateHISCPolishSequence(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCPolishSequence(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -1036,8 +1034,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCAffix(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCAffix(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -1064,8 +1062,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCG(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCG(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -1090,8 +1088,8 @@ public class SystemGeneration {
         return out;
     }
 
-    public static ArrayList<String> generateHISCSequence(String nameIn, int num) {
-        ArrayList<String> out = new ArrayList<String>();
+    public static List<String> generateHISCSequence(String nameIn, int num) {
+        List<String> out = new ArrayList<String>();
         for(int i = 1; i < num + 1; i++) {
             String name = nameIn + "_" + i;
             out.add(name);
@@ -1138,9 +1136,9 @@ public class SystemGeneration {
     private static void generateSystemDefault(String name) {
         model.generateEmptyFSM(name);
 
-        ArrayList<String> stateAtt = new ArrayList<String>();
-        ArrayList<String> eventAtt = new ArrayList<String>();
-        ArrayList<String> transAtt = new ArrayList<String>();
+        List<String> stateAtt = new ArrayList<>();
+        List<String> eventAtt = new ArrayList<>();
+        List<String> transAtt = new ArrayList<>();
 
         stateAtt.add(AttributeList.ATTRIBUTE_INITIAL);
         for(String s : EventSets.EVENT_ATTR_LIST) {
