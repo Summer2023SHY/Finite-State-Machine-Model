@@ -471,14 +471,14 @@ public class DataGathering {
                     if(!skip) {
                         String line = raf.readLine();
                         String[] values = line.split(", ");
-                        if(values[values.length - 1].equals("")) {
+                        if(values[values.length - 1].isEmpty()) {
                             values = Arrays.copyOf(values, values.length - 2);
                         }
                         while(values != null) {
                             for(int i = 0; i < values.length; i++) {
                                 values[i] = values[i].trim();
                             }
-                            if(!values[0].equals(""))
+                            if(!values[0].isEmpty())
                                 hold.addDataRow(values);
                             String next = raf.readLine();
                             values = next == null ? null : next.split(", ");
@@ -540,7 +540,7 @@ public class DataGathering {
     }
 
     private void outputInterpretDataSimple(InterpretData hold, String path, String type, String suffix) {
-        File f = new File(path + "/" + PROCESS_FILE + type + (suffix.equals("") ? "" : "_") + suffix + ".txt");
+        File f = new File(path + "/" + PROCESS_FILE + type + (suffix.isEmpty() ? "" : "_") + suffix + ".txt");
         f.delete();
         try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
             fileWriteInterpretDataGeneral(hold, raf);
@@ -646,14 +646,14 @@ public class DataGathering {
                     if(!skip) {
                         String line = raf.readLine();
                         String[] values = line.split(", ");
-                        if(values[values.length - 1].equals("")) {
+                        if(values[values.length - 1].isEmpty()) {
                             values = Arrays.copyOf(values, values.length - 2);
                         }
                         while(values != null) {
                             for(int i = 0; i < values.length; i++) {
                                 values[i] = values[i].trim();
                             }
-                            if(!values[0].equals("")) {
+                            if(!values[0].isEmpty()) {
                                 holdOverall.addDataRow(values);
                             }
                             else {
@@ -710,7 +710,7 @@ public class DataGathering {
                     for(int i = 0; i < values.length; i++) {
                         values[i] = values[i].trim();
                     }
-                    if(!values[0].equals("")) {
+                    if(!values[0].isEmpty()) {
                         hold.addDataRow(values);
                     }
                     else {

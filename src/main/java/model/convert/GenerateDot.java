@@ -161,7 +161,7 @@ public class GenerateDot {
      */
 
     private static String processObjectNameScripts(String in) {
-        String out = new String(in.toCharArray());
+        String out = new String(in);
         out = out.replace("<", "&lt;");
         out = out.replace(">", "&gt;");
         while(out.contains(SUB_START)) {

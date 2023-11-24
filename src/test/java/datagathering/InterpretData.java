@@ -87,7 +87,7 @@ public class InterpretData {
     public void addDataRow(String[] inData) {
         ArrayList<Double> hold = new ArrayList<Double>();
         for(String s : inData) {
-            if(!s.equals(""))
+            if(!s.isEmpty())
                 hold.add(Double.parseDouble(s));
             else {
                 hold.add(null);

@@ -75,17 +75,17 @@ public class ReadWrite {
 
         ArrayList<String> stateAttr = new ArrayList<String>();
         for(String s : lines[2].split(SEPARATOR)) {
-            if(!s.equals(""))
+            if(!s.isEmpty())
                 stateAttr.add(s);
         }
         ArrayList<String> eventAttr = new ArrayList<String>();
         for(String s : lines[3].split(SEPARATOR)) {
-            if(!s.equals(""))
+            if(!s.isEmpty())
                 eventAttr.add(s);
         }
         ArrayList<String> tranAttr = new ArrayList<String>();
         for(String s : lines[4].split(SEPARATOR)) {
-            if(!s.equals(""))
+            if(!s.isEmpty())
                 tranAttr.add(s);
         }
 
@@ -125,8 +125,8 @@ public class ReadWrite {
         while(!use[curr].contains("Header name")) {
             curr++;
         }
-        String line = use[curr].substring(use[curr].indexOf("\""));
-        line = line.substring(0, line.indexOf("\""));
+        String line = use[curr].substring(use[curr].indexOf('\"'));
+        line = line.substring(0, line.indexOf('\"'));
         TransitionSystem out = new TransitionSystem(line);
 
         //TODO: Finish this converter

@@ -37,7 +37,7 @@ public class PopoutAgentSelection extends PopoutWindow{
         refEvents = inEven;
         agents = new ArrayList<AgentRep>();
         for(String s : inAge) {
-            if(!s.equals(""))
+            if(!s.isEmpty())
                 agents.add(new AgentRep(s));
         }
         attributes = inAttrib;

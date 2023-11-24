@@ -14,7 +14,7 @@ public class EntryTextDisplay extends EntrySet{
         int posX = p.getWidth() * 5 / 8;
         for(int i = 0; i < getContents().size(); i++) {
             String starr = getContentAt(i);
-            if(starr == null || starr.contentEquals("")) {
+            if(starr == null || starr.isEmpty()) {
                 break;
             }
             p.handleTextButton(formTextButtonName(i), "move", posX, 15, y, p.getWidth() / 2, lineHei * 5 / 8, DEFAULT_FONT, starr, subSystemCode, Color.white, Color.gray);

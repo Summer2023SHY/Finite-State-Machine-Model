@@ -26,7 +26,7 @@ public class EntryCheckbox extends EntrySet{
 
     @Override
     public boolean handleInput(int code, HandlePanel p) {
-        if(getCodeMapping(code).equals("")) {
+        if(getCodeMapping(code).isEmpty()) {
             return true;
         }
         else {

@@ -48,7 +48,7 @@ public class EntryText extends EntrySet{
         catch(RuntimeException e) {
 
         }
-        return getCodeMapping(code).equals("");
+        return getCodeMapping(code).isEmpty();
     }
 
     @Override

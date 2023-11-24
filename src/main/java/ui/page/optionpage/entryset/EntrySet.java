@@ -66,7 +66,7 @@ public abstract class EntrySet {
     protected abstract int draw(int y, int lineHei, HandlePanel p);
 
     public boolean handleInput(int code, HandlePanel p) {
-        return getCodeMapping(code).equals("");
+        return getCodeMapping(code).isEmpty();
     }
 
     public String resetContent() {
@@ -116,7 +116,7 @@ public abstract class EntrySet {
 
     public void addContent(String in) {
         for(int i = 0; i < contents.size(); i++) {
-            if(contents.get(i).equals("")) {
+            if(contents.get(i).isEmpty()) {
                 contents.set(i, in);
                 return;
             }

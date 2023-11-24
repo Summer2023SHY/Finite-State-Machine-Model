@@ -176,7 +176,7 @@ public class SVGtoTikZ {
                 ? "\\filldraw [" + color + ", very thick, fill=white] (" + x + "," + y + ") circle [radius="
                         + (rad * 1.2) + "] node {" + name + "};\n"
                 : "")
-                + "\\filldraw [" + color + ", very thick, fill=" + (name.equals("") ? "black" : "white") + "] (" + x
+                + "\\filldraw [" + color + ", very thick, fill=" + (name.isEmpty() ? "black" : "white") + "] (" + x
                 + "," + y + ") circle [radius=" + rad + "] node {" + name + "};\n";
     }
 
