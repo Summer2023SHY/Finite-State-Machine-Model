@@ -3,16 +3,20 @@ package controller;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.RandomAccessFileMode;
 
 import controller.convert.FormatConversion;
 import model.AttributeList;
@@ -297,7 +301,7 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_DELETE_SOURCE:
-                File remv = new File(ADDRESS_SOURCES + "/" + currFSM + ".fsm");
+                File remv = new File(ADDRESS_SOURCES + File.separator + currFSM + ".fsm");
                 remv.delete();
                 updateViewFSM(view.getCurrentFSM());
                 break;
@@ -498,12 +502,9 @@ public class FiniteStateMachine implements InputReceiver{
         String path = view.requestFilePath(ADDRESS_SOURCES, "");
         view.startLoading();
         File f = new File(path);
-        StringBuilder use = new StringBuilder();
-        try (Scanner sc = new Scanner(f)) {
-            while(sc.hasNextLine()) {
-                use.append(sc.nextLine() + "\n");
-            }
-            allotFSMToView(model.readInFSM(use.toString()));
+        try (Reader reader = IOUtils.buffer(new FileReader(f))) {
+            List<String> lines = IOUtils.readLines(reader);
+            allotFSMToView(model.readInFSM(lines));
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -512,8 +513,8 @@ public class FiniteStateMachine implements InputReceiver{
 
     private void saveFSM(String currFSM) {
         String src = model.exportFSM(currFSM);
-        File f = new File(ADDRESS_SOURCES + "/" + currFSM + ".fsm");
-        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+        File f = new File(ADDRESS_SOURCES + File.separator + currFSM + ".fsm");
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             raf.writeBytes(src);
         }
         catch(IOException e) {

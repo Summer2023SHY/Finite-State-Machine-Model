@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
+
 import controller.InputReceiver;
 import filemeta.FileChooser;
 import ui.page.displaypage.DisplayPageManager;
@@ -285,17 +287,12 @@ public class FSMUI implements InputHandler{
 //---  Mechanical   ---------------------------------------------------------------------------
 
     public BufferedReader retrieveFileReader(String pathIn) throws IOException {
-        String path = pathIn.replace("\\", "/");
+        String path = FilenameUtils.separatorsToUnix(pathIn);
         InputStream is = FSMUI.class.getResourceAsStream(path);
         if(is == null) {
             is = new FileInputStream(new File(path));
         }
         return new BufferedReader(new InputStreamReader(is));
-    }
-
-    public static String stripPath(String in) {
-        String out = in.substring(in.lastIndexOf("/") + 1);
-        return out.substring(in.lastIndexOf("\\") + 1);
     }
 
 }

@@ -66,6 +66,12 @@ public class Manager implements ReceiveMemoryMeasure{
         return in.getId();
     }
 
+    public String readInFSM(List<String> fileLines) {
+        TransitionSystem in = ReadWrite.readFile(fileLines);
+        appendFSM(in.getId(), in, false);
+        return in.getId();
+    }
+
     public String exportFSM(String ref) {
         if(ref == null || fsms.get(ref) == null) {
             return null;
@@ -75,6 +81,10 @@ public class Manager implements ReceiveMemoryMeasure{
 
     public List<Map<String, List<Boolean>>> readInAgents(String fileContents) {
         return ReadWrite.readAgentFile(fileContents);
+    }
+
+    public List<Map<String, List<Boolean>>> readInAgents(List<String> fileLines) {
+        return ReadWrite.readAgentFile(fileLines);
     }
 
     public String exportAgents(String nom, List<Map<String, List<Boolean>>> agents, List<String> attributes) {

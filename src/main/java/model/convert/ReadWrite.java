@@ -77,7 +77,10 @@ public class ReadWrite {
     }
 
     public static TransitionSystem readFile(String in) {
-        String[] lines = in.split("\n");
+        return readFile(in.split("\n"));
+    }
+
+    public static TransitionSystem readFile(String[] lines) {
 
         List<String> stateAttr = new ArrayList<>();
         for(String s : lines[2].split(SEPARATOR)) {
@@ -124,6 +127,10 @@ public class ReadWrite {
         return out;
     }
 
+    public static TransitionSystem readFile(List<String> lines) {
+        return readFile(lines.toArray(new String[0]));
+    }
+
     public static TransitionSystem readDESpotFile(String in) {
         String[] use = in.split("\n");
         int curr = 0;
@@ -164,8 +171,11 @@ public class ReadWrite {
     }
 
     public static List<Map<String, List<Boolean>>> readAgentFile(String in) {
+        return readAgentFile(in.split("\n"));
+    }
+
+    public static List<Map<String, List<Boolean>>> readAgentFile(String[] lines) {
         List<Map<String, List<Boolean>>> out = new ArrayList<Map<String, List<Boolean>>>();
-        String[] lines = in.split("\n");
         int index = 4;
         int size = Integer.parseInt(lines[index]);
         index += 2;
@@ -183,6 +193,10 @@ public class ReadWrite {
             index += size + 1;
         }
         return out;
+    }
+
+    public static List<Map<String, List<Boolean>>> readAgentFile(List<String> lines) {
+        return readAgentFile(lines.toArray(new String[0]));
     }
 
 //---  Support Methods   ----------------------------------------------------------------------

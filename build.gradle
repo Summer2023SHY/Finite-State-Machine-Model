@@ -25,6 +25,9 @@ dependencies {
     // graphviz-java
     implementation group: 'guru.nidi', name: 'graphviz-java', version: '0.18.1'
 
+    // Apache Commons
+    implementation group: 'commons-io', name: 'commons-io', version: '2.15.0'
+
     // Apache Log4j2
     runtimeOnly group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4jVersion}"
 }

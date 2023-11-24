@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.RandomAccessFileMode;
+
 /**
  * Provides the ability to convert a .svg
  * describing
@@ -47,14 +51,14 @@ public class SVGtoTikZ {
      */
 
     public static File convertSVGToTikZ(File f, String path) throws IOException {
-        File out = new File(path + ".tikz");
+        File out = new File(path + FilenameUtils.EXTENSION_SEPARATOR + "tikz");
         out.delete();
 
-        RandomAccessFile raf = new RandomAccessFile(out, "rw");
+        RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(out);
 
         raf.writeBytes("\\begin{figure}[h!] \n \\begin{center} \n \\begin{tikzpicture} \n");
 
-        BufferedReader br = new BufferedReader(new FileReader(f.getAbsolutePath()));
+        BufferedReader br = IOUtils.buffer(new FileReader(f.getAbsolutePath()));
         String in = br.readLine();
 
         ArrayList<String> nodes = new ArrayList<String>();

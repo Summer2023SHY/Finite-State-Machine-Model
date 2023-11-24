@@ -1,7 +1,8 @@
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -11,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.RandomAccessFileMode;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
@@ -48,7 +53,7 @@ public class TestFunctionality {
 
 //---  Operations   ---------------------------------------------------------------------------
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws IOException {
         FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES);
         model = new Manager();
         terminalPrint = true;
@@ -57,7 +62,7 @@ public class TestFunctionality {
         f = f.getParentFile();
         defaultWritePath = f.getAbsolutePath() + "/autogenerate";
         f = new File(defaultWritePath);
-        f.mkdir();
+        FileUtils.forceMkdir(f);
 
         SystemGeneration.assignManager(model);
 
@@ -383,12 +388,12 @@ public class TestFunctionality {
         int count = -1;
         File f;
         do {
-            f = new File(defaultWritePath + "/" + testName + ++count);
+            f = new File(defaultWritePath + File.separator + testName + ++count);
         }while(f.exists());
 
         f.mkdir();
         testName += count+"";
-        writePath = defaultWritePath + "/" + testName;
+        writePath = defaultWritePath + File.separator + testName;
         //System.out.println("This test: " + testName);
         printOut(testName + ", " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()) + "\n---------------------------------------------\n");
 
@@ -406,8 +411,8 @@ public class TestFunctionality {
 
         List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
-        f = new File(writePath + "/" + (testName + "_agents.txt"));
-        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+        f = new File(writePath + File.separator + (testName + "_agents.txt"));
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             raf.writeBytes(model.exportAgents(testName + "_agents", agents, eventAtt));
         }
 
@@ -416,46 +421,46 @@ public class TestFunctionality {
 
         for(String s : names) {
             //makeImageDisplay(s, s);
-            f = new File(writePath + "/" + s + ".txt");
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            f = new File(writePath + File.separator + s + ".txt");
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.writeBytes(model.exportFSM(s));
             }
-            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + "/" + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + File.separator + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
         autoTestSystemFull(testName, RandomGeneration.getPlantNames(testName, numPlants), RandomGeneration.getSpecNames(testName, numSpecs), agents, false);
     }
 
     private static void autoTestOldSystem(String prefixNom) throws IOException {
-        String path = defaultWritePath + "/" + prefixNom;
+        String path = defaultWritePath + File.separator + prefixNom;
         List<String> plants = new ArrayList<String>();
         int counter = 0;
-        String hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
+        List<String> hold = pullSourceData(path + File.separator + prefixNom + "_p_" + counter++ + ".txt");
         while(hold != null) {
             plants.add(model.readInFSM(hold));
-            hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
+            hold = pullSourceData(path + File.separator + prefixNom + "_p_" + counter++ + ".txt");
         }
 
         List<String> specs = new ArrayList<String>();
         counter = 0;
-        hold = pullSourceData(path + "/" + prefixNom + "_s_" + counter++ + ".txt");
+        hold = pullSourceData(path + File.separator + prefixNom + "_s_" + counter++ + ".txt");
         while(hold != null) {
             specs.add(model.readInFSM(hold));
-            hold = pullSourceData(path + "/" + prefixNom + "_s_" + counter++ + ".txt");
+            hold = pullSourceData(path + File.separator + prefixNom + "_s_" + counter++ + ".txt");
         }
 
-        hold = pullSourceData(path + "/" + prefixNom + "_agents.txt");
+        hold = pullSourceData(path + File.separator + prefixNom + "_agents.txt");
 
         List<Map<String, List<Boolean>>> agents = model.readInAgents(hold);
 
         printOut("Agent Information: \n" + agents.toString().replace("},", "},\n").replaceAll("[\\[\\]]", " "));
         printOut("\n---------------------------------------------\n");
 
-        hold = writePath;
+        String hold2 = writePath;
         writePath = null;
 
         autoTestSystemFull(prefixNom, plants, specs, agents, true);
-        writePath = hold;
+        writePath = hold2;
     }
 
     private static void pullReserveDisplay() {
@@ -514,8 +519,9 @@ public class TestFunctionality {
             printOut("~~~\nError!!! : Coobs. Algo. claimed True while Infer. Coobs. Algo. claimed False\n~~~");
         }*/
         if(error) {
-            Scanner sc = new Scanner(System.in);
-            sc.nextLine();
+            try (Scanner sc = new Scanner(System.in)) {
+                sc.nextLine();
+            }
         }
         resetModel();
     }
@@ -525,12 +531,12 @@ public class TestFunctionality {
         int count = -1;
         File f;
         do {
-            f = new File(defaultWritePath + "/" + testName + ++count);
+            f = new File(defaultWritePath + File.separator + testName + ++count);
         }while(f.exists());
 
         f.mkdir();
-        testName += count+"";
-        writePath = defaultWritePath + "/" + testName;
+        testName += Integer.toString(count);
+        writePath = defaultWritePath + File.separator + testName;
         System.out.println("This test: " + testName);
         printOut(testName + ", " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()) + "\n---------------------------------------------\n");
 
@@ -553,11 +559,11 @@ public class TestFunctionality {
 
         for(String s : names) {
             //makeImageDisplay(s, s);
-            f = new File(writePath + "/" + s + ".txt");
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            f = new File(writePath + File.separator + s + ".txt");
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.writeBytes(model.exportFSM(s));
             }
-            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + "/" + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + File.separator + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
         printIncrementalLabel(testName, false);
@@ -860,22 +866,19 @@ public class TestFunctionality {
 
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private static String pullSourceData(String path) throws FileNotFoundException {
+    private static List<String> pullSourceData(String path) throws IOException {
         File f = new File(path);
+        List<String> lines = null;
         if(f.exists()) {
-            StringBuilder sb = new StringBuilder();
-            Scanner sc = new Scanner(f);
-            while(sc.hasNextLine()) {
-                sb.append(sc.nextLine() + "\n");
+            try (Reader reader = IOUtils.buffer(new FileReader(f))) {
+                lines = IOUtils.readLines(reader);
             }
-            sc.close();
-            return sb.toString();
         }
-        return null;
+        return lines;
     }
 
-    private static void makeImage(String path, String name) throws FileNotFoundException {
-        String look = pullSourceData(path + name + ".txt");
+    private static void makeImage(String path, String name) throws IOException {
+        List<String> look = pullSourceData(path + name + ".txt");
 
         model.readInFSM(look);
 
@@ -900,8 +903,8 @@ public class TestFunctionality {
 
     private static void printOut(String text) {
         if(writePath != null) {
-            File f = new File(writePath + "/" + RESULTS_FILE);
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            File f = new File(writePath + File.separator + RESULTS_FILE);
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 raf.writeBytes(text + "\n");
             }
@@ -915,8 +918,8 @@ public class TestFunctionality {
 
     private static void printEquivalentResults(List<String> guide, long time, double overallMem, List<Double> vals) {
         if(writePath != null) {
-            File f = new File(writePath + "/" + ANALYSIS_FILE);
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            File f = new File(writePath + File.separator + ANALYSIS_FILE);
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 if(raf.length() == 0) {
                     for(String s : guide)

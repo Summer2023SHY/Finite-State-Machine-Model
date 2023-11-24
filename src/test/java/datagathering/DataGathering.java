@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.io.RandomAccessFileMode;
+
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
 import help.AgentChicanery;
@@ -186,8 +188,7 @@ public class DataGathering {
     }
 
     private void initializeTestFolder(File f, String in) {
-        defaultWritePath = f.getAbsolutePath() + in;
-        File g = new File(defaultWritePath);
+        File g = new File(f, in);
         g.mkdir();
     }
 
@@ -393,10 +394,10 @@ public class DataGathering {
         for(String s : TEST_NAMES) {
             int counter = 0;
 
-            String path = f.getAbsolutePath() + "/" + s + "/";
+            String path = f.getAbsolutePath() + File.separator + s + File.separator;
 
             for(String t : ANALYSIS_TYPES) {
-                new File(path + RAW_DATA_FILE + "/" + t + ".txt").delete();
+                new File(path + RAW_DATA_FILE + File.separator + t + ".txt").delete();
             }
 
             if(!(new File(path).exists())) {
@@ -407,12 +408,12 @@ public class DataGathering {
 
             while(counter < size + 1) {
 
-                String outputFile = path + TEST_NAME + "_" + counter + "/" + RESULTS_FILE;
+                String outputFile = path + TEST_NAME + "_" + counter + File.separator + RESULTS_FILE;
                 new File(outputFile).delete();
                 System.out.println(outputFile);
 
                 for(String t : ANALYSIS_TYPES) {
-                    outputFile = path + TEST_NAME + "_" + counter + "/" + ANALYSIS_FILE + t + ".txt";
+                    outputFile = path + TEST_NAME + "_" + counter + File.separator + ANALYSIS_FILE + t + ".txt";
                     new File(outputFile).delete();
                 }
 
@@ -442,18 +443,18 @@ public class DataGathering {
         int size = new File(path).list().length;
         String[] attributes = null;
 
-        File f = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + ANALYSIS_FILE + type + ".txt");
-        File g = new File(path + "/" + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
+        File g = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
 
         f.delete();
         g.delete();
 
-        try (RandomAccessFile rag = new RandomAccessFile(g, "rw")) {
+        try (RandomAccessFile rag = RandomAccessFileMode.READ_WRITE.create(g)) {
             RandomAccessFile raf;
             while(counter <= size+1) {
 
                 if(f.exists()) {
-                    raf = new RandomAccessFile(f, "rw");
+                    raf = RandomAccessFileMode.READ_WRITE.create(f);
                     boolean skip = false;
                     if(attributes == null) {
                         String line = raf.readLine();
@@ -492,7 +493,7 @@ public class DataGathering {
                     }
                     raf.close();
                 }
-                f = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + ANALYSIS_FILE + type + ".txt");
+                f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
             }
         }
         catch(IOException e) {
@@ -506,12 +507,12 @@ public class DataGathering {
         hold.assignTotalNumberTests(getTotalNumberTests(path));
 
         String[] attributes = null;
-        File f = new File(path + "/" + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
 
         try {
             RandomAccessFile raf;
             if(f.exists()) {
-                raf = new RandomAccessFile(f, "rw");
+                raf = RandomAccessFileMode.READ_WRITE.create(f);
                 String line = raf.readLine();
                 if(line != null) {
                     attributes = line.split(", ");
@@ -540,13 +541,12 @@ public class DataGathering {
     }
 
     private void outputInterpretDataSimple(InterpretData hold, String path, String type, String suffix) {
-        File f = new File(path + "/" + PROCESS_FILE + type + (suffix.isEmpty() ? "" : "_") + suffix + ".txt");
+        File f = new File(path + File.separator + PROCESS_FILE + type + (suffix.isEmpty() ? "" : "_") + suffix + ".txt");
         f.delete();
-        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             fileWriteInterpretDataGeneral(hold, raf);
             raf.writeBytes("\n\n");
             fileWriteInterpretDataOverleafTableGeneral(hold, raf);
-            raf.close();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -616,18 +616,18 @@ public class DataGathering {
         int size = new File(path).list().length;
         String[] attributes = null;
 
-        File f = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + ANALYSIS_FILE + type + ".txt");
-        File g = new File(path + "/" + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
+        File g = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
 
         f.delete();
         g.delete();
 
-        try (RandomAccessFile rag = new RandomAccessFile(g, "rw")) {
+        try (RandomAccessFile rag = RandomAccessFileMode.READ_WRITE.create(g)) {
             RandomAccessFile raf;
             while(counter <= size+1) {
 
                 if(f.exists()) {
-                    raf = new RandomAccessFile(f, "rw");
+                    raf = RandomAccessFileMode.READ_WRITE.create(f);
                     boolean skip = false;
                     if(attributes == null) {
                         String line = raf.readLine();
@@ -677,7 +677,7 @@ public class DataGathering {
                     }
                     raf.close();
                 }
-                f = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + ANALYSIS_FILE + type + ".txt");
+                f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
             }
         }
         catch(IOException e) {
@@ -691,12 +691,12 @@ public class DataGathering {
         hold.assignTotalNumberTests(getTotalNumberTests(path));
 
         String[] attributes = null;
-        File f = new File(path + "/" + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
         int counter = 0;
         try {
             RandomAccessFile raf;
             if(f.exists()) {
-                raf = new RandomAccessFile(f, "rw");
+                raf = RandomAccessFileMode.READ_WRITE.create(f);
                 String line = raf.readLine();
                 attributes = line.split(", ");
                 hold.assignAttributes(attributes);
@@ -732,17 +732,15 @@ public class DataGathering {
     }
 
     private void outputInterpretDataIncremental(InterpretDataNested hold, String path, String type, String suffix) {
-        File f = new File(path + "/" + PROCESS_FILE + type + "_" + suffix + ".txt");
+        File f = new File(path + File.separator + PROCESS_FILE + type + "_" + suffix + ".txt");
         f.delete();
-        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             fileWriteInterpretDataGeneral(hold, raf);
             raf.writeBytes("\n\nAnalysis of Incremental Subsystems\n");
             fileWriteInterpretDataIncremental(hold, raf);
 
             raf.writeBytes("\n\n");
             fileWriteInterpretDataOverleafTableGeneral(hold, raf);
-
-            raf.close();
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -981,10 +979,10 @@ public class DataGathering {
             String testName = TEST_NAME + "_" + counter;
 
             File f;
-            f = new File(defaultWritePath + "/" + testName);
+            f = new File(defaultWritePath + File.separator + testName);
             f.mkdir();
 
-            writePath = defaultWritePath + "/" + testName;
+            writePath = defaultWritePath + File.separator + testName;
 
             int finished = checkTestNumberVerifiedComplete(writePath);
 
@@ -1308,9 +1306,9 @@ public class DataGathering {
     private boolean autoTestRandomSystem(int count, RandomGenStats info, int testChoice) throws IOException {
         String testName = TEST_NAME + "_" +  count;
         File f;
-        f = new File(defaultWritePath + "/" + testName);
+        f = new File(defaultWritePath + File.separator + testName);
 
-        writePath = defaultWritePath + "/" + testName;
+        writePath = defaultWritePath + File.separator + testName;
 
         boolean inMem = false;
 
@@ -1368,27 +1366,27 @@ public class DataGathering {
         String path = writePath;
         List<String> plants = new ArrayList<String>();
         int counter = 0;
-        String hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
+        String hold = pullSourceData(path + File.separator + prefixNom + "_p_" + counter++ + ".txt");
         while(hold != null) {
             plants.add(model.readInFSM(hold));
-            hold = pullSourceData(path + "/" + prefixNom + "_p_" + counter++ + ".txt");
+            hold = pullSourceData(path + File.separator + prefixNom + "_p_" + counter++ + ".txt");
         }
 
         List<String> specs = new ArrayList<String>();
         counter = 0;
-        hold = pullSourceData(path + "/" + prefixNom + "_s_" + counter++ + ".txt");
+        hold = pullSourceData(path + File.separator + prefixNom + "_s_" + counter++ + ".txt");
         while(hold != null) {
             specs.add(model.readInFSM(hold));
-            hold = pullSourceData(path + "/" + prefixNom + "_s_" + counter++ + ".txt");
+            hold = pullSourceData(path + File.separator + prefixNom + "_s_" + counter++ + ".txt");
         }
     }
 
     private void autoGenerateNewRandomSystem(int count, RandomGenStats info) throws IOException {
         String testName = TEST_NAME + "_" +  count;
         File f;
-        f = new File(defaultWritePath + "/" + testName);
+        f = new File(defaultWritePath + File.separator + testName);
 
-        writePath = defaultWritePath + "/" + testName;
+        writePath = defaultWritePath + File.separator + testName;
 
         f.mkdir();
 
@@ -1407,8 +1405,8 @@ public class DataGathering {
 
         List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
-        f = new File(writePath + "/" + (testName + "_agents.txt"));
-        try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+        f = new File(writePath + File.separator + (testName + "_agents.txt"));
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             raf.writeBytes(model.exportAgents(testName + "_agents", agents, eventAtt));
         }
 
@@ -1417,11 +1415,11 @@ public class DataGathering {
 
         for(String s : names) {
             //makeImageDisplay(s, s);
-            f = new File(writePath + "/" + s + ".txt");
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            f = new File(writePath + File.separator + s + ".txt");
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.writeBytes(model.exportFSM(s));
             }
-            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + "/" + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + File.separator + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
@@ -1732,18 +1730,18 @@ public class DataGathering {
     //-- Batch Progress Analysis  -----------------------------
 
     private int checkTestNumberVerifiedComplete(String path) {
-        return checkForTermLinePositions(path + "/" + RESULTS_FILE, VERIFY_COMPLETE_TEST).size();
+        return checkForTermLinePositions(path + File.separator + RESULTS_FILE, VERIFY_COMPLETE_TEST).size();
     }
 
     private boolean checkTestDeclaredTypeMemoryError(String path) {
-        return checkForTerm(path + "/" + RESULTS_FILE, DECLARE_MEMORY_ERROR + analysisSubtype);
+        return checkForTerm(path + File.separator + RESULTS_FILE, DECLARE_MEMORY_ERROR + analysisSubtype);
     }
 
     private List<String> checkTestTypesVerifiedMemoryError(String path){
         List<String> out = new ArrayList<String>();
         if(!heuristics) {
             for(String s : ANALYSIS_TYPES) {
-                if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_MEMORY_ERROR + s)) {
+                if(checkForTerm(path + File.separator + RESULTS_FILE, VERIFY_MEMORY_ERROR + s)) {
                     out.add(s);
                 }
             }
@@ -1753,10 +1751,10 @@ public class DataGathering {
                 for(int j = 0; j < Incremental.NUM_B_HEURISTICS; j++) {
                     for(int k = 0; k < Incremental.NUM_C_HEURISTICS; k++) {
                         String post = generateHeuristicsPostscript(i, j, k);
-                        if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_MEMORY_ERROR + ANALYSIS_INC_SB + post)) {
+                        if(checkForTerm(path + File.separator + RESULTS_FILE, VERIFY_MEMORY_ERROR + ANALYSIS_INC_SB + post)) {
                             out.add(ANALYSIS_INC_SB + post);
                         }
-                        if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_MEMORY_ERROR + ANALYSIS_INC_COOBS + post)) {
+                        if(checkForTerm(path + File.separator + RESULTS_FILE, VERIFY_MEMORY_ERROR + ANALYSIS_INC_COOBS + post)) {
                             out.add(ANALYSIS_INC_COOBS + post);
                         }
                     }
@@ -1770,8 +1768,8 @@ public class DataGathering {
         List<String> out = new ArrayList<String>();
         if(!heuristics) {
             for(String s : ANALYSIS_TYPES) {
-                if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + s)) {
-                    for(int i = 0; i < checkForTermLinePositions(path + "/" + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + s).size(); i++)
+                if(checkForTerm(path + File.separator + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + s)) {
+                    for(int i = 0; i < checkForTermLinePositions(path + File.separator + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + s).size(); i++)
                         out.add(s);
                 }
             }
@@ -1781,10 +1779,10 @@ public class DataGathering {
                 for(int j = 0; j < Incremental.NUM_B_HEURISTICS; j++) {
                     for(int k = 0; k < Incremental.NUM_C_HEURISTICS; k++) {
                         String post = generateHeuristicsPostscript(i, j, k);
-                        if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + ANALYSIS_INC_SB + post)) {
+                        if(checkForTerm(path + File.separator + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + ANALYSIS_INC_SB + post)) {
                             out.add(ANALYSIS_INC_SB + post);
                         }
-                        if(checkForTerm(path + "/" + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + ANALYSIS_INC_COOBS + post)) {
+                        if(checkForTerm(path + File.separator + RESULTS_FILE, VERIFY_COMPLETE_CHECKPOINT + ANALYSIS_INC_COOBS + post)) {
                             out.add(ANALYSIS_INC_COOBS + post);
                         }
                     }
@@ -1800,7 +1798,7 @@ public class DataGathering {
 
         int size = new File(path).list().length;
         while(counter <= size + 5) {
-            File g = new File(path + "/" + TEST_NAME + "_" + counter++ + "/" + RESULTS_FILE);
+            File g = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + RESULTS_FILE);
             if(g.exists()) {
                 validTests++;
             }
@@ -1817,7 +1815,7 @@ public class DataGathering {
             System.out.println(testBatch + " in progress at: " + trueResults + " true outcomes of " + totalTests + " total tests.");
             return false;
         }
-        if(checkTestNumberVerifiedComplete(defaultWritePath + "/" + TEST_NAME + "_" + maxSize) != NUMBER_REPEAT_TEST) {
+        if(checkTestNumberVerifiedComplete(defaultWritePath + File.separator + TEST_NAME + "_" + maxSize) != NUMBER_REPEAT_TEST) {
             System.out.println(testBatch + " in progress at: " + trueResults + " true outcomes of " + totalTests + " total tests.");
             return false;
         }
@@ -1829,9 +1827,9 @@ public class DataGathering {
     private boolean testsCompletedNonRandom(String testBatch, String type, int maxSize) {
         InterpretData d = generateInterpretDataSimple(defaultWritePath, type);
         int totalTests = d.getTotalNumberTests();
-        if(checkTestNumberVerifiedComplete(defaultWritePath + "/" + TEST_NAME + "_" + maxSize) != NUMBER_REPEAT_TEST) {
-            System.out.println(checkTestNumberVerifiedComplete(defaultWritePath + "/" + TEST_NAME + "_" + maxSize));
-            System.out.println(defaultWritePath + "/" + TEST_NAME + "_" + maxSize);
+        if(checkTestNumberVerifiedComplete(defaultWritePath + File.separator + TEST_NAME + "_" + maxSize) != NUMBER_REPEAT_TEST) {
+            System.out.println(checkTestNumberVerifiedComplete(defaultWritePath + File.separator + TEST_NAME + "_" + maxSize));
+            System.out.println(defaultWritePath + File.separator + TEST_NAME + "_" + maxSize);
             return false;
         }
         System.out.println(testBatch + " already complete at: " + totalTests + " tests");
@@ -1897,8 +1895,8 @@ public class DataGathering {
 
     private void printOut(String text) {
         if(writePath != null) {
-            File f = new File(writePath + "/" + RESULTS_FILE);
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            File f = new File(writePath + File.separator + RESULTS_FILE);
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 raf.writeBytes(text + "\n");
             }
@@ -1910,8 +1908,8 @@ public class DataGathering {
 
     private void printEquivalentResults(List<String> guide, long time, double overallMem, List<Double> vals) {
         if(writePath != null) {
-            File f = new File(writePath + "/" + ANALYSIS_FILE + analysisSubtype + TEXT_EXTENSION);
-            try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
+            File f = new File(writePath + File.separator + ANALYSIS_FILE + analysisSubtype + TEXT_EXTENSION);
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 if(raf.length() == 0) {
                     for(String s : guide)
@@ -1956,8 +1954,7 @@ public class DataGathering {
         if(!g.exists()) {
             return false;
         }
-        try (RandomAccessFile raf = new RandomAccessFile(g, "r")) {
-            ;
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(g)) {
             String line = raf.readLine();
             while(line != null && !line.equals(phrase)) {
                 line = raf.readLine();
@@ -1976,8 +1973,7 @@ public class DataGathering {
         if(!g.exists()) {
             return out;
         }
-        try (RandomAccessFile raf = new RandomAccessFile(g, "r")) {
-            ;
+        try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(g)) {
             String line = raf.readLine();
             int counter = 1;
             while(line != null) {
@@ -1998,10 +1994,10 @@ public class DataGathering {
     private List<String> getPlants(String prefix) throws IOException {
         List<String> plants = new ArrayList<String>();
         int counter = 0;
-        String hold = pullSourceData(writePath + "/" + prefix + "_p_" + counter++ + ".txt");
+        String hold = pullSourceData(writePath + File.separator + prefix + "_p_" + counter++ + ".txt");
         while(hold != null) {
             plants.add(model.readInFSM(hold));
-            hold = pullSourceData(writePath + "/" + prefix + "_p_" + counter++ + ".txt");
+            hold = pullSourceData(writePath + File.separator + prefix + "_p_" + counter++ + ".txt");
         }
         return plants;
     }
@@ -2009,16 +2005,16 @@ public class DataGathering {
     private List<String> getSpecs(String prefix) throws IOException {
         List<String> plants = new ArrayList<String>();
         int counter = 0;
-        String hold = pullSourceData(writePath + "/" + prefix + "_s_" + counter++ + ".txt");
+        String hold = pullSourceData(writePath + File.separator + prefix + "_s_" + counter++ + ".txt");
         while(hold != null) {
             plants.add(model.readInFSM(hold));
-            hold = pullSourceData(writePath + "/" + prefix + "_s_" + counter++ + ".txt");
+            hold = pullSourceData(writePath + File.separator + prefix + "_s_" + counter++ + ".txt");
         }
         return plants;
     }
 
     private List<Map<String, List<Boolean>>> getAgents(String prefix) throws IOException {
-        String hold = pullSourceData(writePath + "/" + prefix + "_agents.txt");
+        String hold = pullSourceData(writePath + File.separator + prefix + "_agents.txt");
         return model.readInAgents(hold);
     }
 

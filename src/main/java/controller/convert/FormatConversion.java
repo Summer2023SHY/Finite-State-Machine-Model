@@ -3,6 +3,8 @@ package controller.convert;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FilenameUtils;
+
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 
@@ -80,7 +82,7 @@ public class FormatConversion {
      */
 
     public static String createTikZFromSVG(String fsm, String name) throws IOException {
-        return SVGtoTikZ.convertSVGToTikZ(generateDotFile(fsm, name, Format.SVG), WORKING_PATH + "//" + name).getAbsolutePath();
+        return SVGtoTikZ.convertSVGToTikZ(generateDotFile(fsm, name, Format.SVG), WORKING_PATH + File.separator + name).getAbsolutePath();
     }
 
     /**
@@ -94,7 +96,7 @@ public class FormatConversion {
 
     public static String createTikZFromFSM(String fsm, String name) throws IOException {
         File out = generateDotFile(fsm, "DEMOLISH", Format.SVG);
-        String ret = SVGtoTikZ.convertSVGToTikZ(out, WORKING_PATH + "//" + name).getAbsolutePath();
+        String ret = SVGtoTikZ.convertSVGToTikZ(out, WORKING_PATH + File.separator + name).getAbsolutePath();
         return ret;
     }
 
@@ -102,7 +104,7 @@ public class FormatConversion {
 
     public static File generateDotFile(String fsm, String name, Format type) throws IOException {
         Graphviz gv = Graphviz.fromString(fsm);
-        File out = new File(WORKING_PATH + File.separator + name + '.' + type.fileExtension);
+        File out = new File(WORKING_PATH + File.separator + name + FilenameUtils.EXTENSION_SEPARATOR + type.fileExtension);
         gv.render(type).toFile(out);
         return out;
     }
