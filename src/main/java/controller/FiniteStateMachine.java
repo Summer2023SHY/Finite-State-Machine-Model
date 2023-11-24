@@ -15,12 +15,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 import controller.convert.FormatConversion;
-import filemeta.FileChooser;
-import filemeta.config.Config;
 import model.AttributeList;
 import model.Manager;
 import ui.FSMUI;
-import visual.composite.popout.PopoutAlert;
 
 /*
  * TODO: Auto-load some FSMs on start up (settings menu?) (as an option to the user)
@@ -50,12 +47,6 @@ public class FiniteStateMachine implements InputReceiver{
     public final static String ADDRESS_SOURCES = "./Finite State Machine Model/sources/";
     public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 
-    private final static String DEFAULT_CONFIG_COMMENT = "##############################################################\r\n" +
-            "#                       Configurations                       #\r\n" +
-            "##############################################################\r\n" +
-            "# Format as 'name = address', the \" = \" spacing is necessary\r\n" +
-            "# It's awkward but it makes the file reading easier and I'm telling you this directly";
-
     private final static String SEPARATOR = " - ";
     private final static String SYMBOL_FALSE = "x";
     private final static String SYMBOL_TRUE = "o";
@@ -74,8 +65,7 @@ public class FiniteStateMachine implements InputReceiver{
         view = new FSMUI((int)(r.getWidth()), (int)(r.getHeight()), this);
         view.assignSymbols(SEPARATOR, SYMBOL_TRUE, SYMBOL_FALSE);
         model = new Manager();
-        FormatConversion.assignPaths(ADDRESS_IMAGES, ADDRESS_CONFIG);
-        fileConfiguration();
+        FormatConversion.assignPaths(ADDRESS_IMAGES);
     }
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -282,7 +272,11 @@ public class FiniteStateMachine implements InputReceiver{
                 saveFSM(currFSM);
                 break;
             case CodeReference.CODE_SAVE_IMG:
-                view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Image file saved to: " + generateDotImage(currFSM));
+                try {
+                    view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Image file saved to: " + generateDotImage(currFSM));
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
                 break;
             case CodeReference.CODE_SAVE_TKZ:
                 try {
@@ -292,7 +286,11 @@ public class FiniteStateMachine implements InputReceiver{
                 }
                 break;
             case CodeReference.CODE_SAVE_SVG:
-                view.displayAlert((currFSM == null) ? "Error: No selected FSM" : ".svg file saved to: " + FormatConversion.createSVGFromFSM(model.generateFSMDot(currFSM), currFSM));
+                try {
+                    view.displayAlert((currFSM == null) ? "Error: No selected FSM" : ".svg file saved to: " + FormatConversion.createSVGFromFSM(model.generateFSMDot(currFSM), currFSM));
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
                 break;
             case CodeReference.CODE_LOAD_SOURCE:
                 loadSource();
@@ -481,9 +479,13 @@ public class FiniteStateMachine implements InputReceiver{
     private void codeHandlingDisplay(int code, int mouseType) {
         switch(code) {
             case CodeReference.CODE_GENERATE_IMAGE:
-                String path = generateDotImage(view.getCurrentFSM());
-                if(path != null) {
-                    view.updateFSMImage(view.getCurrentFSM(), path);
+                try {
+                    String path = generateDotImage(view.getCurrentFSM());
+                    if(path != null) {
+                        view.updateFSMImage(view.getCurrentFSM(), path);
+                }
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
                 }
                 break;
             default:
@@ -645,38 +647,9 @@ public class FiniteStateMachine implements InputReceiver{
         view.setTextContent(code, content.size(), choice);
     }
 
-    //-- File Configuration  ----------------------------------
-
-    public static void fileConfiguration() {
-        Config c = new Config("", new UMLConfigValidation());
-        c.addFilePath("Finite State Machine Model");
-        c.addFilePath("Finite State Machine Model/settings");
-        c.addFilePath("Finite State Machine Model/images");
-        c.addFilePath("Finite State Machine Model/sources");
-        c.addFile("Finite State Machine Model/settings", "config.txt", DEFAULT_CONFIG_COMMENT);
-        c.addFileEntry("Finite State Machine Model/settings", "config.txt", DOT_ADDRESS_VAR, "Where is your dot program located? It will be called externally.", "?");
-
-        c.softWriteConfig();
-
-        while(!c.verifyConfig()) {
-            switch(c.getErrorCode()) {
-                case UMLConfigValidation.CODE_FAILURE_DOT_ADDRESS:
-                    PopoutAlert pA = new PopoutAlert(400, 250, "Please navigate to and select the path for your graphviz/bin/dot.exe file in the following navigation tool");
-                    Config.setConfigFileEntry("Finite State Machine Model/settings/config.txt", DOT_ADDRESS_VAR, FileChooser.promptSelectFile("C:/", true, true).getAbsolutePath());
-                    pA.dispose();
-                    break;
-                case UMLConfigValidation.CODE_FAILURE_FILE_MISSING:
-                    c.initializeDefaultConfig();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
 //---  Support Methods   ----------------------------------------------------------------------
 
-    private String generateDotImage(String ref) {
+    private String generateDotImage(String ref) throws IOException {
         if(ref == null) {
             return null;
         }

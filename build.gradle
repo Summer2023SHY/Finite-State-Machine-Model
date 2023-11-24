@@ -3,6 +3,10 @@ plugins {
     id 'java'
 }
 
+ext {
+    log4jVersion = '2.22.0'
+}
+
 repositories {
     mavenCentral()
     flatDir {
@@ -17,6 +21,12 @@ application {
 dependencies {
     implementation name: 'svi_18'
     testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.10.1'
+
+    // graphviz-java
+    implementation group: 'guru.nidi', name: 'graphviz-java', version: '0.18.1'
+
+    // Apache Log4j2
+    runtimeOnly group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4jVersion}"
 }
 
 java {

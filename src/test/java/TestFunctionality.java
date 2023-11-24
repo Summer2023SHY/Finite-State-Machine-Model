@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
@@ -48,8 +49,7 @@ public class TestFunctionality {
 //---  Operations   ---------------------------------------------------------------------------
 
     public static void main(String[] args)  {
-        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES, FiniteStateMachine.ADDRESS_CONFIG);
-        FiniteStateMachine.fileConfiguration();
+        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES);
         model = new Manager();
         terminalPrint = true;
 
@@ -974,31 +974,34 @@ public class TestFunctionality {
     }
 
     private static void makeImageDisplay(String in, String nom) {
-        String path = FormatConversion.createImgFromFSM(model.generateFSMDot(in), nom);
-        //System.out.println(path);
-        WindowFrame fram = new WindowFrame(800, 800) {
-
-            @Override
-            public void reactToResize() {
-
-            }
-
-
-
-        };
-        fram.reserveWindow("Main");
-        fram.setName("Test Functionality: " + nom);
-        fram.showActiveWindow("Main");
-        ElementPanel p = new ElementPanel(0, 0, 800, 800);
-        ImageDisplay iD = new ImageDisplay(path, p);
-        p.setEventReceiver(iD.generateEventReceiver());
-        fram.addPanelToWindow("Main", "pan", p);
-        iD.refresh();
+        try {
+            String path = FormatConversion.createImgFromFSM(model.generateFSMDot(in), nom);
+            //System.out.println(path);
+            WindowFrame fram = new WindowFrame(800, 800) {
+                @Override
+                public void reactToResize() {
+                }
+            };
+            fram.reserveWindow("Main");
+            fram.setName("Test Functionality: " + nom);
+            fram.showActiveWindow("Main");
+            ElementPanel p = new ElementPanel(0, 0, 800, 800);
+            ImageDisplay iD = new ImageDisplay(path, p);
+            p.setEventReceiver(iD.generateEventReceiver());
+            fram.addPanelToWindow("Main", "pan", p);
+            iD.refresh();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     private static void makeSVGImage(String in, String nom) {
-        String path = FormatConversion.createSVGFromFSM(model.generateFSMDot(in), nom);
-        printOut(path);
+        try {
+            String path = FormatConversion.createSVGFromFSM(model.generateFSMDot(in), nom);
+            printOut(path);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
 }

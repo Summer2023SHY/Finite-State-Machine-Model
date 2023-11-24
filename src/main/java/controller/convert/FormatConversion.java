@@ -3,6 +3,9 @@ package controller.convert;
 import java.io.File;
 import java.io.IOException;
 
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+
 /**
  * Handles the transfer of an object from the {@link model.fsm fsm} package to
  * a {@code .dot} format so that it may be visually represented as a graph via
@@ -25,18 +28,9 @@ import java.io.IOException;
 
 public class FormatConversion {
 
-//---  Constant Values   ----------------------------------------------------------------------
-
-    private final static String TYPE_SVG = "svg";
-    private final static String TYPE_JPG = "jpg";
-    private final static String TYPE_PNG = "png";
-    private final static int DPI_INCREASE = 8;
-
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private static String CONFIG_PATH;
-    private static String WORKING_PATH;
-    private static boolean initialized;
+    private static String WORKING_PATH = System.getProperty("user.dir");
 
 //---  Initialization   -----------------------------------------------------------------------
 
@@ -44,10 +38,8 @@ public class FormatConversion {
     private FormatConversion() {
     }
 
-    public static void assignPaths(String workingPath, String configPath) {
+    public static void assignPaths(String workingPath) {
         WORKING_PATH = workingPath;
-        CONFIG_PATH = configPath;
-        initialized = true;
     }
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -60,11 +52,8 @@ public class FormatConversion {
      * @param name - A String object denoting the name to which the file should be saved, including its name.
      */
 
-    public static String createImgFromFSM(String fsm, String name){
-        if(initializeCheck()) {
-            return generateDotFile(fsm, name, TYPE_PNG).getAbsolutePath();
-        }
-        return null;
+    public static String createImgFromFSM(String fsm, String name) throws IOException {
+        return generateDotFile(fsm, name, Format.PNG).getAbsolutePath();
     }
 
     /**
@@ -77,11 +66,8 @@ public class FormatConversion {
      * @param name - A String object denoting the name to which the file should be saved, including its name.
      */
 
-    public static String createSVGFromFSM(String fsm, String name){
-        if(initializeCheck()) {
-            return generateDotFile(fsm, name, TYPE_SVG).getAbsolutePath();
-        }
-        return null;
+    public static String createSVGFromFSM(String fsm, String name) throws IOException {
+        return generateDotFile(fsm, name, Format.SVG).getAbsolutePath();
     }
 
     /**
@@ -94,10 +80,7 @@ public class FormatConversion {
      */
 
     public static String createTikZFromSVG(String fsm, String name) throws IOException {
-        if(initializeCheck()) {
-            return SVGtoTikZ.convertSVGToTikZ(generateDotFile(fsm, name, TYPE_SVG), WORKING_PATH + "//" + name).getAbsolutePath();
-        }
-        return null;
+        return SVGtoTikZ.convertSVGToTikZ(generateDotFile(fsm, name, Format.SVG), WORKING_PATH + "//" + name).getAbsolutePath();
     }
 
     /**
@@ -110,36 +93,18 @@ public class FormatConversion {
      */
 
     public static String createTikZFromFSM(String fsm, String name) throws IOException {
-        if(initializeCheck()) {
-            File out = generateDotFile(fsm, "DEMOLISH", TYPE_SVG);
-            String ret = SVGtoTikZ.convertSVGToTikZ(out, WORKING_PATH + "//" + name).getAbsolutePath();
-            return ret;
-        }
-        return null;
+        File out = generateDotFile(fsm, "DEMOLISH", Format.SVG);
+        String ret = SVGtoTikZ.convertSVGToTikZ(out, WORKING_PATH + "//" + name).getAbsolutePath();
+        return ret;
     }
 
 //---  Support Functions   --------------------------------------------------------------------
 
-    public static File generateDotFile(String fsm, String name, String type) {
-        GraphViz gv = new GraphViz(WORKING_PATH, CONFIG_PATH);
-        gv.addln(gv.start_graph());
-        gv.add(fsm);
-        gv.addln(gv.end_graph());
-        for(int i = 0; i < DPI_INCREASE; i++) {
-            gv.increaseDpi();
-        }
-        File out = new File(WORKING_PATH + "//" + name + "." + type);
-        gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
+    public static File generateDotFile(String fsm, String name, Format type) throws IOException {
+        Graphviz gv = Graphviz.fromString(fsm);
+        File out = new File(WORKING_PATH + File.separator + name + '.' + type.fileExtension);
+        gv.render(type).toFile(out);
         return out;
-    }
-
-    private static boolean initializeCheck() {
-        if(initialized) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
 }

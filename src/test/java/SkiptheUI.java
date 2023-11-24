@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -63,10 +64,9 @@ public class SkiptheUI {
      * @param args
      */
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //Backend stuff to let us generate our FSM Images, should prompt to set up GraphViz location as that makes our graphs.
-        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES, FiniteStateMachine.ADDRESS_CONFIG);
-        FiniteStateMachine.fileConfiguration();
+        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES);
 
         //Instantiate our Model so we can use all its automated fun stuff to make it easier on us
         model = new Manager();
@@ -299,7 +299,7 @@ public class SkiptheUI {
 
 //---  Helper Methods   -----------------------------------------------------------------------
 
-    private static void makeImageDisplay(String in) {
+    private static void makeImageDisplay(String in) throws IOException {
         String path = FormatConversion.createImgFromFSM(model.generateFSMDot(in), in);
         System.out.println(path);
         WindowFrame fram = new WindowFrame(800, 800);

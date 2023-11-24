@@ -67,7 +67,7 @@ public class GenerateDot {
                 }
             }
         }
-        StringBuilder out = new StringBuilder();
+        StringBuilder out = new StringBuilder("digraph G {" + System.lineSeparator());
         for(String s : states) {
             out.append(s + "\n");
         }
@@ -75,7 +75,7 @@ public class GenerateDot {
             out.append(s + "\n");
         }
 
-        return out.toString();
+        return out.append('}').toString();
     }
 
 //---  Getter Methods   -----------------------------------------------------------------------

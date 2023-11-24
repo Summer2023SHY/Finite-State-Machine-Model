@@ -164,8 +164,7 @@ public class DataGathering {
     }
 
     public File initializeDataGathering() {
-        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES, FiniteStateMachine.ADDRESS_CONFIG);
-        FiniteStateMachine.fileConfiguration();
+        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES);
         model = new Manager();
 
         File f = new File(FiniteStateMachine.ADDRESS_IMAGES);
