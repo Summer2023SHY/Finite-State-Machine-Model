@@ -1,3 +1,6 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +20,7 @@ import java.util.Scanner;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
+import org.junit.jupiter.api.*;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
@@ -43,7 +48,7 @@ public class TestFunctionality {
 
     private static Manager model;
 
-    private static List<String> eventAtt;
+    private static List<String> eventAtt = Arrays.asList(EventSets.EVENT_ATTR_LIST);
 
     private static String defaultWritePath;
 
@@ -52,6 +57,12 @@ public class TestFunctionality {
     private static boolean terminalPrint;
 
 //---  Operations   ---------------------------------------------------------------------------
+
+    @BeforeEach
+    public void setup() {
+        model = new Manager();
+        SystemGeneration.assignManager(model);
+    }
 
     public static void main(String[] args) throws IOException {
         FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES);
@@ -66,10 +77,6 @@ public class TestFunctionality {
 
         SystemGeneration.assignManager(model);
 
-        eventAtt = new ArrayList<String>();
-        for(String s : EventSets.EVENT_ATTR_LIST) {
-            eventAtt.add(s);
-        }
         //basicUStructCheck();
         //crushUStructCheck();
         //crushUStructCheck2();
@@ -319,10 +326,11 @@ public class TestFunctionality {
         makeImageDisplay(SystemE, SystemE);
     }
 
-    private static void basicUStructCheck() {
+    @Test
+    public void basicUStructCheck() {
         String SystemA = "Example 1";
         SystemGeneration.generateSystemA(SystemA);
-        makeImageDisplay(SystemA, "Example 1");
+        // makeImageDisplay(SystemA, "Example 1");
 
         String ustruct = model.buildUStructure(SystemA, eventAtt, AgentChicanery.generateAgentsA());
         System.out.println(model.getLastProcessData().produceOutputLog());
@@ -335,10 +343,11 @@ public class TestFunctionality {
         for(String s : model.getFSMTransitionList(ustruct)) {
             System.out.println(s);
         }
-        makeImageDisplay(ustruct, "Example 1 UStruct");
+        // makeImageDisplay(ustruct, "Example 1 UStruct");
     }
 
-    private static void crushUStructCheck() {
+    @Test
+    public void crushUStructCheck() {
         String SystemA = "Example 1";
         SystemGeneration.generateSystemA(SystemA);
         makeImageDisplay(SystemA, "Example 1");
@@ -348,7 +357,8 @@ public class TestFunctionality {
             makeImageDisplay(s, s);
     }
 
-    private static void crushUStructCheck2() {
+    @Test
+    public void crushUStructCheck2() {
         String SystemB = "Example 2";
         SystemGeneration.generateSystemB(SystemB);
         makeImageDisplay(SystemB, "Example 2");
@@ -360,7 +370,8 @@ public class TestFunctionality {
         }
     }
 
-    private static void crushUStructCheck3() {
+    @Test
+    public void crushUStructCheck3() {
         String SystemE = "Example 5";
         SystemGeneration.generateSystemE(SystemE);
         makeImageDisplay(SystemE, "Example 5");
@@ -372,7 +383,8 @@ public class TestFunctionality {
         }
     }
 
-    private static void crushUStructCheckFinn() {
+    @Test
+    public void crushUStructCheckFinn() {
         String SystemFinn = "Example Finn";
         SystemGeneration.generateSystemFinn(SystemFinn);
         makeImageDisplay(SystemFinn, SystemFinn);
@@ -995,6 +1007,7 @@ public class TestFunctionality {
             iD.refresh();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        } catch (HeadlessException e) {
         }
     }
 
