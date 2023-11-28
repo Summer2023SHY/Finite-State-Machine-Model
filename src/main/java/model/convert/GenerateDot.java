@@ -105,7 +105,7 @@ public class GenerateDot {
         boolean first = true;
         boolean second = false;
         while(count < 100) {
-            if(in.getStateAttribute(ref, count+"") != null) {
+            if(in.getStateAttribute(ref, Integer.toString(count)) != null) {
                 line.append((first ? "" : ":") + backgroundColorCycle[count % backgroundColorCycle.length].cycleColor(count / backgroundColorCycle.length));
                 if(!first) {
                     second = true;

@@ -133,7 +133,7 @@ public class RandomGeneration {
             }
             numBorrowed = numBorrowed > out.size() ? out.size() : numBorrowed;
 
-            List<String> events = getPlantEvents(numEvents - numBorrowed, ALPHABET.charAt(i)+"", configureName(prefixNom, i, true));
+            List<String> events = getPlantEvents(numEvents - numBorrowed, String.valueOf(ALPHABET.charAt(i)), configureName(prefixNom, i, true));
             plantEvents.put(configureName(prefixNom, i, true), (List<String>) new ArrayList<>(events));
             out.addAll(events);
 
