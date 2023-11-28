@@ -813,10 +813,10 @@ public class DataGathering {
 
         part.append("}");
 
-        raf.writeBytes("\\begin{table}[H]\r\n"
-                + "\\begin{center}\r\n"
-                + "\\begin{footnotesize}\r\n"
-                + "    \\begin{tabular}" + part.toString() + "\r\n"
+        raf.writeBytes("\\begin{table}[H]\n"
+                + "\\begin{center}\n"
+                + "\\begin{footnotesize}\n"
+                + "    \\begin{tabular}" + part.toString() + "\n"
                 + "    \\hline\n\t");
         for(String s : attributes) {
             raf.writeBytes(" & " + s);
@@ -850,11 +850,11 @@ public class DataGathering {
             raf.writeBytes(" & " + threeSig(v));
         }
 
-        raf.writeBytes("\\\\\n\t\\hline\r\n"
-                + "    \\end{tabular}\r\n"
-                + "\\end{footnotesize}\r\n"
-                + "\\caption{Test results for ...}\r\n"
-                + "\\end{center}\r\n"
+        raf.writeBytes("\\\\\n\t\\hline\n"
+                + "    \\end{tabular}\n"
+                + "\\end{footnotesize}\n"
+                + "\\caption{Test results for ...}\n"
+                + "\\end{center}\n"
                 + "\\end{table}");
     }
 
