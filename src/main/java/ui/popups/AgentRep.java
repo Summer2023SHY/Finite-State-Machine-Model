@@ -3,6 +3,8 @@ package ui.popups;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class AgentRep {
 
 //---  Instance Variables   -------------------------------------------------------------------
@@ -25,7 +27,7 @@ public class AgentRep {
     }
 
     public AgentRep(String readIn) {
-        String[] lines = readIn.split("\n");
+        String[] lines = readIn.split(StringUtils.LF);
         nom = lines[0];
         events = new ArrayList<EventRep>();
         for(int i = 1; i < lines.length; i++) {
@@ -70,13 +72,13 @@ public class AgentRep {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(nom + "\n");
+        sb.append(nom + StringUtils.LF);
         for(EventRep e : events) {
             sb.append(e.getName());
             for(Boolean b : e.getValues()) {
                 sb.append(SEPARATOR + (b ? SYMBOL_TRUE : SYMBOL_FALSE));
             }
-            sb.append("\n");
+            sb.append(StringUtils.LF);
         }
         return sb.toString();
     }

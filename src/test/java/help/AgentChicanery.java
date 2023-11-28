@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  *
  * Notation used is 3D boolean array; first level is for agent data represented as 2D boolean array, second level is each event's
@@ -282,12 +285,7 @@ public class AgentChicanery {
     }
 
     private static String appendControlNumber(String in, int num) {
-        StringBuilder attach = new StringBuilder();
-        // TODO: Use String.repeat() after moving to Java 11+
-        for(int i = 0; i < num; i++) {
-            attach.append('I');
-        }
-        return in + attach;
+        return in + StringUtils.repeat('I', num);
     }
 
 //---  Support Methods   ----------------------------------------------------------------------
@@ -321,15 +319,6 @@ public class AgentChicanery {
         return out;
     }
 
-    private static int indexOf(String[] arr, String key) {
-        for(int i = 0; i < arr.length; i++) {
-            if(arr[i].equals(key)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     /**
      *
      * int pos: 0 = obs, 1 = ctr
@@ -344,7 +333,7 @@ public class AgentChicanery {
 
     private static void assignEventAgentInfo(boolean[][][] array, String[] eventSets, int agentPref, int pos, String ... events) {
         for(String s : events)
-            array[agentPref][indexOf(eventSets, s)][pos] = true;
+            array[agentPref][ArrayUtils.indexOf(eventSets, s)][pos] = true;
     }
 
 }

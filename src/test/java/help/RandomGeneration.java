@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import model.AttributeList;
 import model.Manager;
 
@@ -193,7 +195,7 @@ public class RandomGeneration {
                 agentInfo[i][rand.nextInt(events.size())][1] = true;
             }
         }
-        String[] evens = events.toArray(new String[0]);
+        String[] evens = events.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
         return AgentChicanery.generateAgentSet(agentInfo, evens);
     }
 

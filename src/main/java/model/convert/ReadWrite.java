@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import model.fsm.TransitionSystem;
 
 public class ReadWrite {
@@ -32,8 +35,8 @@ public class ReadWrite {
     public static String generateFile(TransitionSystem in) {
         StringBuilder out = new StringBuilder();
 
-        out.append(in.getId() + "\n");
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(in.getId() + StringUtils.LF);
+        out.append(REGION_SEPARATOR + StringUtils.LF);
 
         List<String> stateAttr = in.getStateAttributes();
         List<String> eventAttr = in.getEventAttributes();
@@ -43,24 +46,24 @@ public class ReadWrite {
         attribute(eventAttr, out);
         attribute(tranAttr, out);
 
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(REGION_SEPARATOR + StringUtils.LF);
 
         for(String s : in.getStateNames()) {
             StringBuilder build = new StringBuilder(s);
             for(int i = 0; i < stateAttr.size(); i++) {
                 build.append(SEPARATOR + (in.getStateAttribute(s, stateAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL));
             }
-            out.append(build.append("\n"));
+            out.append(build.append(StringUtils.LF));
         }
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(REGION_SEPARATOR + StringUtils.LF);
         for(String s : in.getEventNames()) {
             StringBuilder build = new StringBuilder(s);
             for(int i = 0; i < eventAttr.size(); i++) {
                 build.append(SEPARATOR + (in.getEventAttribute(s, eventAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL));
             }
-            out.append(build.append("\n"));
+            out.append(build.append(StringUtils.LF));
         }
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(REGION_SEPARATOR + StringUtils.LF);
 
         for(String s : in.getStateNames()) {
             for(String e : in.getStateTransitionEvents(s)) {
@@ -69,7 +72,7 @@ public class ReadWrite {
                     for(int i = 0; i < tranAttr.size(); i++) {
                         build += SEPARATOR + (in.getTransitionAttribute(s, e, tranAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL);
                     }
-                    out.append(build + "\n");
+                    out.append(build + StringUtils.LF);
                 }
             }
         }
@@ -77,7 +80,7 @@ public class ReadWrite {
     }
 
     public static TransitionSystem readFile(String in) {
-        return readFile(in.split("\n"));
+        return readFile(in.split(StringUtils.LF));
     }
 
     public static TransitionSystem readFile(String[] lines) {
@@ -128,11 +131,11 @@ public class ReadWrite {
     }
 
     public static TransitionSystem readFile(List<String> lines) {
-        return readFile(lines.toArray(new String[0]));
+        return readFile(lines.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     }
 
     public static TransitionSystem readDESpotFile(String in) {
-        String[] use = in.split("\n");
+        String[] use = in.split(StringUtils.LF);
         int curr = 0;
 
         while(!use[curr].contains("Header name")) {
@@ -150,12 +153,12 @@ public class ReadWrite {
 
     public static String generateAgentFile(String nom, List<Map<String, List<Boolean>>> agents, List<String> attributes) {
         StringBuilder sb = new StringBuilder();
-        sb.append(nom + "\n");
-        sb.append(REGION_SEPARATOR + "\n");
+        sb.append(nom + StringUtils.LF);
+        sb.append(REGION_SEPARATOR + StringUtils.LF);
         attribute(attributes, sb);
-        sb.append(REGION_SEPARATOR + "\n");
-        sb.append(agents.get(0).keySet().size() + "\n");
-        sb.append(REGION_SEPARATOR + "\n");
+        sb.append(REGION_SEPARATOR + StringUtils.LF);
+        sb.append(agents.get(0).keySet().size() + StringUtils.LF);
+        sb.append(REGION_SEPARATOR + StringUtils.LF);
 
         for(Map<String, List<Boolean>> s : agents) {
             for(String t : s.keySet()) {
@@ -163,15 +166,15 @@ public class ReadWrite {
                 for(Boolean u : s.get(t)) {
                     sb.append(SEPARATOR + (u ? TRUE_SYMBOL : FALSE_SYMBOL));
                 }
-                sb.append("\n");
+                sb.append(StringUtils.LF);
             }
-            sb.append(REGION_SEPARATOR + "\n");
+            sb.append(REGION_SEPARATOR + StringUtils.LF);
         }
         return sb.toString();
     }
 
     public static List<Map<String, List<Boolean>>> readAgentFile(String in) {
-        return readAgentFile(in.split("\n"));
+        return readAgentFile(in.split(StringUtils.LF));
     }
 
     public static List<Map<String, List<Boolean>>> readAgentFile(String[] lines) {
@@ -196,16 +199,16 @@ public class ReadWrite {
     }
 
     public static List<Map<String, List<Boolean>>> readAgentFile(List<String> lines) {
-        return readAgentFile(lines.toArray(new String[0]));
+        return readAgentFile(lines.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     }
 
 //---  Support Methods   ----------------------------------------------------------------------
 
     private static StringBuilder attribute(List<String> use, StringBuilder out) {
         for(int i = 0; i < use.size(); i++) {
-            out.append(use.get(i) + (i + 1 < use.size() ? SEPARATOR : ""));
+            out.append(use.get(i) + (i + 1 < use.size() ? SEPARATOR : StringUtils.EMPTY));
         }
-        out.append(SEPARATOR + "\n");
+        out.append(SEPARATOR + StringUtils.LF);
         return out;
     }
 

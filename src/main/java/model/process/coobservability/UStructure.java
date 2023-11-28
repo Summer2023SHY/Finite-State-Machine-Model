@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.fsm.TransitionSystem;
 import model.process.coobservability.support.Agent;
 import model.process.coobservability.support.AgentStates;
@@ -341,7 +343,7 @@ public class UStructure extends UStructMemoryMeasure{
                 }
             }
 
-            sb.append(cm.getOutput(important) + "\n");
+            sb.append(cm.getOutput(important) + StringUtils.LF);
         }
         return sb.toString();
     }

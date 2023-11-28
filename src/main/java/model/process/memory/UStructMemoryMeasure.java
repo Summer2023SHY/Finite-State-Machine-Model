@@ -3,6 +3,8 @@ package model.process.memory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
 
     private int stateSize;
@@ -56,8 +58,8 @@ public class UStructMemoryMeasure extends ConcreteMemoryMeasure{
         String out = super.produceOutputLog();
         out += "\n\t\t\t\tState Size: " + stateSize + ", Transition Size: " + transSize;
         if(numberAgentGroups != null) {
-            out += "\n\t\t\t\tAverage Number of State Groups per Agent: " + getAverageAgents() + "\n";
-            out += "\t\t\t\tAverage Number of States per State Group: " + getAverageStates() + "\n";
+            out += "\n\t\t\t\tAverage Number of State Groups per Agent: " + getAverageAgents() + StringUtils.LF;
+            out += "\t\t\t\tAverage Number of States per State Group: " + getAverageStates() + StringUtils.LF;
             out += "\t\t\t\tMaximum Number of States in a State Group: " + getMaximumStates();
         }
         return out;

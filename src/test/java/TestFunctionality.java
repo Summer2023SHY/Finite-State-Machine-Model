@@ -20,6 +20,7 @@ import java.util.Scanner;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 
 import controller.FiniteStateMachine;
@@ -444,7 +445,7 @@ public class TestFunctionality {
         System.out.println("Randomizer Parameters:");
         System.out.println(" Plants: " + numPlants + ", Specs: " + numSpecs + ", # States Average: " + numStates + ", State Variance: " + numStateVar + ", # Events Average: " + numEve + ", Event Variance: " + numEveVar +
         ", Event Share Rate: " + shareRate + ", # Agents: " + numAgents + ", Agent Variance: " + numAgentVar + ", Agent Obs. Event Rate: " + obsRate + ", Agent Ctr. Event Rate: " + ctrRate);
-        System.out.println(" " + numPlants + ", " + numSpecs + ", " + numStates + ", " + numStateVar + ", " + numEve + ", " + numEveVar + ", " + shareRate + ", " + numAgents + ", " + numAgentVar + ", " + obsRate + ", " + ctrRate + "\n");
+        System.out.println(" " + numPlants + ", " + numSpecs + ", " + numStates + ", " + numStateVar + ", " + numEve + ", " + numEveVar + ", " + shareRate + ", " + numAgents + ", " + numAgentVar + ", " + obsRate + ", " + ctrRate + StringUtils.LF);
         System.out.println("---------------------------------------------\n");
 
         RandomGenStats info = new RandomGenStats(numPlants, numSpecs, numStates, numStateVar, numEve, numEveVar, shareRate, numAgents, numAgentVar, obsRate, ctrRate);
@@ -585,7 +586,7 @@ public class TestFunctionality {
         System.out.println("Randomizer Parameters:");
         System.out.println(" Plants: " + numPlants + ", Specs: " + numSpecs + ", # States Average: " + numStates + ", State Variance: " + numStateVar + ", # Events Average: " + numEve + ", Event Variance: " + numEveVar +
         ", Event Share Rate: " + shareRate + ", # Agents: " + numAgents + ", Agent Variance: " + numAgentVar + ", Agent Obs. Event Rate: " + obsRate + ", Agent Ctr. Event Rate: " + ctrRate);
-        System.out.println(" " + numPlants + ", " + numSpecs + ", " + numStates + ", " + numStateVar + ", " + numEve + ", " + numEveVar + ", " + shareRate + ", " + numAgents + ", " + numAgentVar + ", " + obsRate + ", " + ctrRate + "\n");
+        System.out.println(" " + numPlants + ", " + numSpecs + ", " + numStates + ", " + numStateVar + ", " + numEve + ", " + numEveVar + ", " + shareRate + ", " + numAgents + ", " + numAgentVar + ", " + obsRate + ", " + ctrRate + StringUtils.LF);
         System.out.println("---------------------------------------------\n");
 
         RandomGenStats info = new RandomGenStats(numPlants, numSpecs, numStates, numStateVar, numEve, numEveVar, shareRate, numAgents, numAgentVar, obsRate, ctrRate);
@@ -633,7 +634,7 @@ public class TestFunctionality {
     private static boolean checkCoobservable(String name, List<Map<String, List<Boolean>>> agents, boolean inf) {
         boolean result = inf ? model.isInferenceCoobservableUStruct(name, eventAtt, agents) : model.isCoobservableUStruct(name, eventAtt, agents);
         handleOutData();
-        System.out.println("\t\t\t\t" + (inf ? "Inferencing " : "" ) + "Coobservable: " + result);
+        System.out.println("\t\t\t\t" + (inf ? "Inferencing " : StringUtils.EMPTY ) + "Coobservable: " + result);
 
         return result;
     }
@@ -641,7 +642,7 @@ public class TestFunctionality {
     private static boolean checkCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, boolean inf) {
         boolean result = inf ? model.isInferenceCoobservableUStruct(plants, specs, eventAtt, agents) : model.isCoobservableUStruct(plants, specs, eventAtt, agents);
         handleOutData();
-        System.out.println("\t\t\t\t" + (inf ? "Inferencing " : "" ) + "Coobservable: " + result);
+        System.out.println("\t\t\t\t" + (inf ? "Inferencing " : StringUtils.EMPTY ) + "Coobservable: " + result);
 
         return result;
     }
@@ -843,7 +844,7 @@ public class TestFunctionality {
     private static boolean checkIncrementalCoobservable(List<String> plants, List<String> specs, List<Map<String, List<Boolean>>> agents, boolean inf) {
         boolean result = inf ? model.isIncrementalInferenceCoobservable(plants, specs, eventAtt, agents) : model.isIncrementalCoobservable(plants, specs, eventAtt, agents);
         handleOutData();
-        System.out.println("\t\t\t\tIncremental" + (inf ? " Inference" : "") + " Coobservable: " + result);
+        System.out.println("\t\t\t\tIncremental" + (inf ? " Inference" : StringUtils.EMPTY) + " Coobservable: " + result);
 
         return result;
     }
@@ -857,7 +858,7 @@ public class TestFunctionality {
     }
 
     private static void printIncrementalLabel(String system, boolean inf) {
-        System.out.println(system + " Incremental" + (inf ? " Inference" : "") + " Coobservability: \t");
+        System.out.println(system + " Incremental" + (inf ? " Inference" : StringUtils.EMPTY) + " Coobservability: \t");
     }
 
     private static void printIncrementalSBLabel(String system) {
@@ -929,12 +930,12 @@ public class TestFunctionality {
                 if(raf.length() == 0) {
                     for(String s : guide)
                         raf.writeBytes(s + ", ");
-                    raf.writeBytes("\n");
+                    raf.writeBytes(StringUtils.LF);
                 }
                 for(Double d : vals) {
                     raf.writeBytes(threeSig(d) + ", \t");
                 }
-                raf.writeBytes("\n");
+                raf.writeBytes(StringUtils.LF);
             }
             catch (IOException e) {
                 e.printStackTrace();

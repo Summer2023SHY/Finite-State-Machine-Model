@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.convert.GenerateDot;
 import model.convert.GenerateFSM;
 import model.convert.ReadWrite;
@@ -523,7 +525,7 @@ public class Manager implements ReceiveMemoryMeasure{
         int used = 0;
         int curr = 0;
         while(used < num) {
-            String nom = "";
+            String nom = StringUtils.EMPTY;
             int cop = curr;
             do {
                 nom = alph.charAt(cop % alph.length()) + nom;

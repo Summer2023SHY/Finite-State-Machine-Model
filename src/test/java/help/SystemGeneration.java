@@ -3,6 +3,9 @@ package help;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import model.AttributeList;
 import model.Manager;
 import model.fsm.TransitionSystem;
@@ -316,7 +319,7 @@ public class SystemGeneration {
 
         initialState(name, "0");
 
-        String[] use = events.toArray(new String[0]);
+        String[] use = events.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
 
         initiateEvents(name, use);
 
@@ -734,12 +737,7 @@ public class SystemGeneration {
     }
 
     private static String appendControlNumber(String in, int num) {
-        StringBuilder attach = new StringBuilder();
-        // TODO: Use String.repeat() after moving to Java 11+
-        for(int i = 0; i < num; i++) {
-            attach.append('I');
-        }
-        return in + attach;
+        return in + StringUtils.repeat('I', num);
     }
 
     //-- Plant Parts  -----------------------------------------

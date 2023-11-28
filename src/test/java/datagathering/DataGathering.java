@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
@@ -461,7 +462,7 @@ public class DataGathering {
                         String line = raf.readLine();
                         if(line != null) {
                             attributes = line.split(", ");
-                            rag.writeBytes(line + "\n");
+                            rag.writeBytes(line + StringUtils.LF);
                         }
                         else
                             skip = true;
@@ -488,9 +489,9 @@ public class DataGathering {
                         List<Double> aver = hold.calculateAverages();
                         //System.out.println(hold.calculateInterquartileRange() + " " + hold.calculateFirstQuartile() + " " + hold.calculateThirdQuartile());
                         for(int i = 0; i < aver.size(); i++) {
-                            rag.writeBytes((threeSig(aver.get(i))+"") + (i + 1 == aver.size() ? "" : ", "));
+                            rag.writeBytes((threeSig(aver.get(i))+"") + (i + 1 == aver.size() ? StringUtils.EMPTY : ", "));
                         }
-                        rag.writeBytes("\n");
+                        rag.writeBytes(StringUtils.LF);
                     }
                     raf.close();
                 }
@@ -542,7 +543,7 @@ public class DataGathering {
     }
 
     private void outputInterpretDataSimple(InterpretData hold, String path, String type, String suffix) {
-        File f = new File(path, PROCESS_FILE + type + (suffix.isEmpty() ? "" : "_") + suffix + ".txt");
+        File f = new File(path, PROCESS_FILE + type + (suffix.isEmpty() ? StringUtils.EMPTY : "_") + suffix + ".txt");
         f.delete();
         try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             fileWriteInterpretDataGeneral(hold, raf);
@@ -603,12 +604,12 @@ public class DataGathering {
     private void interpretTestBatchDataIncremental(String path, String type) {
         generateRawDataFileIncremental(path, type);
         InterpretDataNested hold = generateInterpretDataIncremental(path, type);
-        outputInterpretDataIncremental(hold, path, type, "");
+        outputInterpretDataIncremental(hold, path, type, StringUtils.EMPTY);
         hold.setColumnFilter(2);
         hold.setFilterValue(1.0);
-        outputInterpretDataIncremental(hold, path, type, "true");
+        outputInterpretDataIncremental(hold, path, type, BooleanUtils.TRUE);
         hold.setFilterValue(0.0);
-        outputInterpretDataIncremental(hold, path, type, "false");
+        outputInterpretDataIncremental(hold, path, type, BooleanUtils.FALSE);
     }
 
     private void generateRawDataFileIncremental(String path, String type) {
@@ -634,7 +635,7 @@ public class DataGathering {
                         String line = raf.readLine();
                         if(line != null) {
                             attributes = line.split(", ");
-                            rag.writeBytes(line + "\n");
+                            rag.writeBytes(line + StringUtils.LF);
                         }
                         else
                             skip = true;
@@ -668,13 +669,13 @@ public class DataGathering {
                         List<Double> averSub = holdSub.calculateAverages();
                         //System.out.println(hold.calculateInterquartileRange() + " " + hold.calculateFirstQuartile() + " " + hold.calculateThirdQuartile());
                         for(int i = 0; i < averOverall.size(); i++) {
-                            rag.writeBytes((threeSig(averOverall.get(i))+"") + (i + 1 == averOverall.size() ? "" : ", "));
+                            rag.writeBytes((threeSig(averOverall.get(i))+"") + (i + 1 == averOverall.size() ? StringUtils.EMPTY : ", "));
                         }
                         rag.writeBytes("\n, , ");
                         for(int i = 0; i < averSub.size(); i++) {
-                            rag.writeBytes((threeSig(averSub.get(i))+"") + (i + 1 == averSub.size() ? "" : ", "));
+                            rag.writeBytes((threeSig(averSub.get(i))+"") + (i + 1 == averSub.size() ? StringUtils.EMPTY : ", "));
                         }
-                        rag.writeBytes("\n");
+                        rag.writeBytes(StringUtils.LF);
                     }
                     raf.close();
                 }
@@ -1398,7 +1399,7 @@ public class DataGathering {
         printOut("Test Configuration: Full Suite");
         printOut("Randomizer Parameters: ");
         printOut(" " + info.toString());
-        printOut(" " + info.shortToString() + "\n");
+        printOut(" " + info.shortToString() + StringUtils.LF);
         printOut("---------------------------------------------\n");
 
         List<String> events = RandomGeneration.generateRandomSystemSet(testName, model, info);
@@ -1617,13 +1618,13 @@ public class DataGathering {
         assignAnalysisSubtype(TYPE_COOBS);
         Boolean result = inf ? model.isInferenceCoobservableUStruct(plants, specs, eventAtt, agents) : model.isCoobservableUStruct(plants, specs, eventAtt, agents);
         handleOutData(t, hold);
-        printOut("\t\t\t\t" + (inf ? "Inferencing " : "" ) + "Coobservable: " + result);
+        printOut("\t\t\t\t" + (inf ? "Inferencing " : StringUtils.EMPTY ) + "Coobservable: " + result);
         
         return result;
     }
 
     private void printCoobsLabel(String system, boolean type) {
-        printOut(system + " " + (type ? "Inference Coobservability:" : "Coobservability:") + " \t");
+        printOut(system + StringUtils.SPACE + (type ? "Inference Coobservability:" : "Coobservability:") + " \t");
     }
 
     //-- SB Coobservability Testing  --------------------------
@@ -1651,7 +1652,7 @@ public class DataGathering {
         assignAnalysisSubtype(TYPE_INC_COOBS);
         boolean result = inf ? model.isIncrementalInferenceCoobservable(plants, specs, eventAtt, agents) : model.isIncrementalCoobservable(plants, specs, eventAtt, agents);
         handleOutData(t, hold);
-        printOut("\t\t\t\tIncremental" + (inf ? " Inference" : "") + " Coobservable: " + result);
+        printOut("\t\t\t\tIncremental" + (inf ? " Inference" : StringUtils.EMPTY) + " Coobservable: " + result);
         
         return result;
     }
@@ -1668,7 +1669,7 @@ public class DataGathering {
     }
 
     private void printIncrementalLabel(String system, boolean inf) {
-        printOut(system + " Incremental" + (inf ? " Inference" : "") + " Coobservability: \t");
+        printOut(system + " Incremental" + (inf ? " Inference" : StringUtils.EMPTY) + " Coobservability: \t");
     }
 
     private void printIncrementalSBLabel(String system) {
@@ -1706,7 +1707,7 @@ public class DataGathering {
                 analysisSubtype = ANALYSIS_INC_SB;
                 break;
             default:
-                analysisSubtype = "";
+                analysisSubtype = StringUtils.EMPTY;
         }
     }
 
@@ -1831,7 +1832,7 @@ public class DataGathering {
     //-- Data Output Gathering  -------------------------------
 
     private void handleOutData(long t, long hold) {
-        printOut(VERIFY_COMPLETE_CHECKPOINT + analysisSubtype + (heuristics ? retrieveHeuristicsPostscript() : ""));
+        printOut(VERIFY_COMPLETE_CHECKPOINT + analysisSubtype + (heuristics ? retrieveHeuristicsPostscript() : StringUtils.EMPTY));
         printOut(model.getLastProcessData().produceOutputLog());
         long res = (System.currentTimeMillis() - t);
         printTimeTook(res);
@@ -1878,7 +1879,7 @@ public class DataGathering {
     }
 
     private void confirmComplete() {
-        printOut("\n" + VERIFY_COMPLETE_TEST + "\n");
+        printOut(StringUtils.LF + VERIFY_COMPLETE_TEST + StringUtils.LF);
         clock.resetClock();
     }
 
@@ -1889,7 +1890,7 @@ public class DataGathering {
             File f = new File(writePath, RESULTS_FILE);
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
-                raf.writeBytes(text + "\n");
+                raf.writeBytes(text + StringUtils.LF);
             }
             catch(IOException e) {
                 e.printStackTrace();
@@ -1905,18 +1906,18 @@ public class DataGathering {
                 if(raf.length() == 0) {
                     for(String s : guide)
                         raf.writeBytes(s + ", ");
-                    raf.writeBytes("\n");
+                    raf.writeBytes(StringUtils.LF);
                 }
                 raf.writeBytes(time + ", \t" + threeSig(overallMem) + ", \t");
                 for(int i = 0; i < vals.size(); i++){
                     Double d = vals.get(i);
                     if(d != null)
-                        raf.writeBytes(threeSig(d) + (i + 1 < vals.size() ? ", \t" : ""));
+                        raf.writeBytes(threeSig(d) + (i + 1 < vals.size() ? ", \t" : StringUtils.EMPTY));
                     else {
                         raf.writeBytes("\n, , \t\t\t");
                     }
                 }
-                raf.writeBytes("\n");
+                raf.writeBytes(StringUtils.LF);
             }
             catch(IOException e) {
                 e.printStackTrace();
@@ -1932,7 +1933,7 @@ public class DataGathering {
             StringBuilder sb = new StringBuilder();
             Scanner sc = new Scanner(f);
             while(sc.hasNextLine()) {
-                sb.append(sc.nextLine() + "\n");
+                sb.append(sc.nextLine() + StringUtils.LF);
             }
             sc.close();
             return sb.toString();

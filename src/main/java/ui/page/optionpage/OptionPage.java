@@ -11,6 +11,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ui.InputHandler;
 import ui.page.optionpage.entryset.EntrySetFactory;
 import visual.composite.HandlePanel;
@@ -102,7 +104,7 @@ public abstract class OptionPage {
     public void handleMouseInput(int code, int x, int y, int mouseType) {
         if(code == helpKey || showHelp == true) {
             showHelp = !showHelp;
-            p.removeElementPrefixed("");
+            p.removeElementPrefixed(StringUtils.EMPTY);
             drawPage();
             return;
         }

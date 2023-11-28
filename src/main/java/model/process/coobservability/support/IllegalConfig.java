@@ -2,6 +2,9 @@ package model.process.coobservability.support;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashSet;
 
 public class IllegalConfig {
@@ -52,7 +55,7 @@ public class IllegalConfig {
 
     @Override
     public String toString() {
-        return stateSet.toString() + ", " + stateSet.getEventPath() + ", " + event + "\n" + observedPaths;
+        return stateSet.toString() + ", " + stateSet.getEventPath() + ", " + event + StringUtils.LF + observedPaths;
     }
 
 }

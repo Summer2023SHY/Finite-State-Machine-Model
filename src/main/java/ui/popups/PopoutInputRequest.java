@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import visual.composite.popout.PopoutWindow;
 
 public class PopoutInputRequest extends PopoutWindow{
@@ -55,7 +57,7 @@ public class PopoutInputRequest extends PopoutWindow{
         posX = distBet;
         int entryHeight = POPUP_HEIGHT / 5;
         for(int i = 0; i < num; i++) {
-            handleTextEntry(compileEntryName(i), "move", 10, posX, posY, entryWidth, entryHeight, -55 - i, null, "");
+            handleTextEntry(compileEntryName(i), "move", 10, posX, posY, entryWidth, entryHeight, -55 - i, null, StringUtils.EMPTY);
             handleRectangle("rect_" + i, "move", 5, posX, posY, entryWidth, entryHeight, Color.white, Color.black);
             posX += distBet;
         }

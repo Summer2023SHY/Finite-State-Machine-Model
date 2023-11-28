@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import controller.InputReceiver;
 import filemeta.FileChooser;
@@ -145,7 +146,7 @@ public class FSMUI implements InputHandler{
     }
 
     public String requestUserInputList(List<String> refs, boolean search) {
-        return requestUserInputList(refs.toArray(new String[0]), search);
+        return requestUserInputList(refs.toArray(ArrayUtils.EMPTY_STRING_ARRAY), search);
     }
 
     public String requestUserInput(String phrase) {

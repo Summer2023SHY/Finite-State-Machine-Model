@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * This class is used to generate files readable as Finite State Machines to the constructors
  * that accept file input from the classes in the fsm package. It does so randomly with no
@@ -115,12 +117,12 @@ public class GenerateFSM {
             throw new IllegalStateException("Error: FSM Attribute Component Not Defined; Check State/Event/Transition Attribute Assignment");
         }
         StringBuilder out = new StringBuilder();
-        out.append(name + "\n");
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(name + StringUtils.LF);
+        out.append(REGION_SEPARATOR + StringUtils.LF);
         writeAttribute(out, stateAttributes);
         writeAttribute(out, eventAttributes);
         writeAttribute(out, transitionAttributes);
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(REGION_SEPARATOR + StringUtils.LF);
 
         Random rand = new Random();
 
@@ -142,9 +144,9 @@ public class GenerateFSM {
             String name = generateName(i, stateNames);
             nameMapping.put(i, name);
             String line = name + writeAttributes(getRandomValue(rand), sizeComponent, i, attributes, numbers, track);
-            out.append(line + "\n");
+            out.append(line + StringUtils.LF);
         }
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(REGION_SEPARATOR + StringUtils.LF);
         return nameMapping;
     }
 
@@ -158,9 +160,9 @@ public class GenerateFSM {
             String name = components.get(i);
             nameMapping.put(i, name);
             String line = name + writeAttributes(getRandomValue(rand), components.size(), i, attributes, numbers, track);
-            out.append(line + "\n");
+            out.append(line + StringUtils.LF);
         }
-        out.append(REGION_SEPARATOR + "\n");
+        out.append(REGION_SEPARATOR + StringUtils.LF);
         return nameMapping;
     }
 
@@ -200,7 +202,7 @@ public class GenerateFSM {
                 String line = stateNames.get(order ? state1 : state2) + SEPARATOR + eventNames.get(event) + SEPARATOR + stateNames.get(order ? state2 : state1);
                 //TODO: Examine use of sizeTrans here for proportion of transition attributes
                 line += writeAttributes(getRandomValue(rand), numTransPerState.size(), i, transitionAttributes, transitionNumbers, track);
-                out.append(line + "\n");
+                out.append(line + StringUtils.LF);
             }
         }
         //System.out.println(eventNames);
@@ -213,7 +215,7 @@ public class GenerateFSM {
             int state2 = rand.nextInt(sizeStates);
             String line = stateNames.get(state1) + SEPARATOR + eventNames.get(event) + SEPARATOR + stateNames.get(state2);
             line += writeAttributes(getRandomValue(rand), numTransPerState.size(), state1, transitionAttributes, transitionNumbers, track);
-            out.append(line + "\n");
+            out.append(line + StringUtils.LF);
             usedEvents.add(event);
         }
         return out;
@@ -259,9 +261,9 @@ public class GenerateFSM {
 
     private static void writeAttribute(StringBuilder out, List<String> attri) {
         for(int i = 0; i < attri.size(); i++) {
-            out.append(attri.get(i) + (i + 1 < attri.size() ? SEPARATOR : ""));
+            out.append(attri.get(i) + (i + 1 < attri.size() ? SEPARATOR : StringUtils.EMPTY));
         }
-        out.append(SEPARATOR + "\n");
+        out.append(SEPARATOR + StringUtils.LF);
     }
 
 }

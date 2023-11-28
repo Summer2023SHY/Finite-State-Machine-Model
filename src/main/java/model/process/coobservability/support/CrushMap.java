@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class CrushMap {
 
 //---  Instance Variables   -------------------------------------------------------------------
@@ -48,7 +50,7 @@ public class CrushMap {
             for(String s : mapCrush.get(i)) {
                 sb.append(s + ",");
             }
-            sb.append("\n");
+            sb.append(StringUtils.LF);
         }
 
 
@@ -59,7 +61,7 @@ public class CrushMap {
                 for(int i : crushMapping.get(s)) {
                     sb.append(i + ", ");
                 }
-                sb.append("\n");
+                sb.append(StringUtils.LF);
             }
         }
 

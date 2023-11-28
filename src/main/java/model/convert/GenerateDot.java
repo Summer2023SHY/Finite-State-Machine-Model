@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.AttributeList;
 import model.fsm.TransitionSystem;
 
@@ -69,10 +71,10 @@ public class GenerateDot {
         }
         StringBuilder out = new StringBuilder("digraph G {" + System.lineSeparator());
         for(String s : states) {
-            out.append(s + "\n");
+            out.append(s + StringUtils.LF);
         }
         for(String s : transitions) {
-            out.append(s + "\n");
+            out.append(s + StringUtils.LF);
         }
 
         return out.append('}').toString();
@@ -106,7 +108,7 @@ public class GenerateDot {
         boolean second = false;
         while(count < 100) {
             if(in.getStateAttribute(ref, Integer.toString(count)) != null) {
-                line.append((first ? "" : ":") + backgroundColorCycle[count % backgroundColorCycle.length].cycleColor(count / backgroundColorCycle.length));
+                line.append((first ? StringUtils.EMPTY : ":") + backgroundColorCycle[count % backgroundColorCycle.length].cycleColor(count / backgroundColorCycle.length));
                 if(!first) {
                     second = true;
                 }
@@ -143,10 +145,10 @@ public class GenerateDot {
         Boolean bad = in.getTransitionAttribute(state, event, AttributeList.ATTRIBUTE_BAD);
         trans.append(obs == null || obs ? "black" : "red");
         trans.append("\" arrowhead=\"normal");
-        trans.append(atkObs != null && atkObs ? "odot" : "");
-        trans.append(cont != null && cont ? "diamond" : "");
+        trans.append(atkObs != null && atkObs ? "odot" : StringUtils.EMPTY);
+        trans.append(cont != null && cont ? "diamond" : StringUtils.EMPTY);
         trans.append("\" style=\"");
-        trans.append(bad != null && bad ? "dashed" : "");
+        trans.append(bad != null && bad ? "dashed" : StringUtils.EMPTY);
         trans.append("\" fontsize=\"28");
         trans.append("\"];");
         return trans.toString();

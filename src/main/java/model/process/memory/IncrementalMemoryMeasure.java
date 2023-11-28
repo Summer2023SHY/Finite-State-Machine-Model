@@ -3,6 +3,8 @@ package model.process.memory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
 
     private List<MemoryMeasure> endStates;
@@ -47,7 +49,7 @@ public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
             out.append("\n\t\t\t\tPerformance Log Within Incremental Loop:");
 
             for(int i = 0; i < endStates.size(); i++) {
-                out.append("\n\t\t\t" + ((i+1) + ": " + endNumComponents.get(i) + " Components: " + componentNames.get(i) + "\n") + (endStates.get(i)).produceOutputLog());
+                out.append("\n\t\t\t" + ((i+1) + ": " + endNumComponents.get(i) + " Components: " + componentNames.get(i) + StringUtils.LF) + (endStates.get(i)).produceOutputLog());
             }
         }
 

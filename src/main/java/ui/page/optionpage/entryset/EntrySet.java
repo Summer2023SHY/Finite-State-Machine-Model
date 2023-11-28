@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 
 import visual.composite.HandlePanel;
@@ -43,7 +46,7 @@ public abstract class EntrySet {
         button = submit;
         code = inCode;
         codes = new HashMap<Integer, String>();
-        codes.put(code, "");
+        codes.put(code, StringUtils.EMPTY);
     }
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -74,17 +77,17 @@ public abstract class EntrySet {
         int i = contents.size();
         contents.clear();
         for(int a = 0; a < i; a++) {
-            contents.add("");
+            contents.add(StringUtils.EMPTY);
         }
         return prefix();
     }
 
     public void reset(HandlePanel p) {
         for(int i = 0; i < contents.size(); i++) {
-            contents.set(i, "");
+            contents.set(i, StringUtils.EMPTY);
         }
         deregisterCodes();
-        registerCode(code, "");
+        registerCode(code, StringUtils.EMPTY);
         p.removeElementPrefixed(prefix());
     }
 
@@ -127,7 +130,7 @@ public abstract class EntrySet {
 
     public void resetContentAt(int i) {
         contents.remove(i);
-        contents.add("");
+        contents.add(StringUtils.EMPTY);
     }
 
     public void deleteContentAt(int i) {

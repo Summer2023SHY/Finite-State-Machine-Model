@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.AttributeList;
 import model.fsm.component.EventMap;
 import model.fsm.component.StateMap;
@@ -73,7 +75,7 @@ public class TransitionSystem {
     public String compileStateName(List<String> in) {
         String out = "(";
         for(int i = 0; i < in.size(); i++) {
-            out += in.get(i) + (i + 1 < in.size() ? "," : "");
+            out += in.get(i) + (i + 1 < in.size() ? "," : StringUtils.EMPTY);
         }
         return out + ")";
     }

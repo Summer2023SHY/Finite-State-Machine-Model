@@ -3,6 +3,8 @@ package ui.page.optionpage.entryset;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
+
 import visual.composite.HandlePanel;
 
 public class EntryText extends EntrySet{
@@ -16,7 +18,7 @@ public class EntryText extends EntrySet{
         expand = fill;
         ArrayList<String> use = new ArrayList<>();
         for(int i = 0; i < len; i++) {
-            use.add("");
+            use.add(StringUtils.EMPTY);
         }
         setContents(use);
     }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Provides the ability to convert a .svg
@@ -69,29 +70,29 @@ public class SVGtoTikZ {
 
         while (in != null) {
             if (in.matches("<svg(.*)")) {
-                width = 10.0 / Double.parseDouble(in.replaceAll("(.*)width=\"", "").replaceAll("pt\"(.*)", ""));
-                height = 10.0 / Double.parseDouble(in.replaceAll("(.*)height=\"", "").replaceAll("pt\"(.*)", ""));
+                width = 10.0 / Double.parseDouble(in.replaceAll("(.*)width=\"", StringUtils.EMPTY).replaceAll("pt\"(.*)", StringUtils.EMPTY));
+                height = 10.0 / Double.parseDouble(in.replaceAll("(.*)height=\"", StringUtils.EMPTY).replaceAll("pt\"(.*)", StringUtils.EMPTY));
                 width = width > 0.015 ? width : 0.015;
                 height = height > 0.015 ? height : 0.015;
             } else if (in.matches("(.*)class=\"node\"(.*)")) {
-                String name = in.replaceAll("(.*)<title>", "").replaceAll("</titl(.*)", "").replaceAll("_(.*)_(.*)",
-                        "");
+                String name = in.replaceAll("(.*)<title>", StringUtils.EMPTY).replaceAll("</titl(.*)", StringUtils.EMPTY).replaceAll("_(.*)_(.*)",
+                        StringUtils.EMPTY);
                 double[] values = new double[3];
                 boolean doubleCircle = false;
                 in = br.readLine();
-                values[0] = width * Double.parseDouble(in.replaceAll("(.*)cx=\"", "").replaceAll("\"(.*)", ""));
+                values[0] = width * Double.parseDouble(in.replaceAll("(.*)cx=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY));
                 values[1] = height
-                        * (height - Double.parseDouble(in.replaceAll("(.*)cy=\"", "").replaceAll("\"(.*)", "")));
+                        * (height - Double.parseDouble(in.replaceAll("(.*)cy=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY)));
                 values[2] = (width < height ? width : height)
-                        * Double.parseDouble(in.replaceAll("(.*)rx=\"", "").replaceAll("\"(.*)", ""));
-                String color = in.replaceAll("(.*)stroke=\"", "").replaceAll("\"(.*)", "");
+                        * Double.parseDouble(in.replaceAll("(.*)rx=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY));
+                String color = in.replaceAll("(.*)stroke=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY);
                 in = br.readLine();
                 if (in.matches("<e(.*)")) {
                     doubleCircle = true;
                 }
                 nodes.add(drawCircleNode(values[0], values[1], values[2], doubleCircle, name, color));
             } else if (in.matches("(.*)class=\"edge\"(.*)")) {
-                String name = "";
+                String name = StringUtils.EMPTY;
                 in = br.readLine();
 
                 ArrayList<Double> pathEdge = new ArrayList<Double>();
@@ -102,7 +103,7 @@ public class SVGtoTikZ {
                     pathEdge.add(width * Double.parseDouble(s.split(",")[0]));
                     pathEdge.add(height * (height - Double.parseDouble(s.split(",")[1])));
                 }
-                String color = in.replaceAll("(.*)stroke=\"", "").replaceAll("\"(.*)", "");
+                String color = in.replaceAll("(.*)stroke=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY);
                 boolean dotted = in.contains("stroke-dasharray");
                 edges.add(drawEdges(pathEdge, color, dotted));
                 pathEdge.clear();
@@ -112,14 +113,14 @@ public class SVGtoTikZ {
                     if (in.matches("<ellipse(.*)")) {
                         double[] values = new double[3];
                         values[0] = width
-                                * Double.parseDouble(in.replaceAll("(.*)cx=\"", "").replaceAll("\"(.*)", ""));
+                                * Double.parseDouble(in.replaceAll("(.*)cx=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY));
                         values[1] = height * (height
-                                - Double.parseDouble(in.replaceAll("(.*)cy=\"", "").replaceAll("\"(.*)", "")));
+                                - Double.parseDouble(in.replaceAll("(.*)cy=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY)));
                         values[2] = (width < height ? width : height)
-                                * Double.parseDouble(in.replaceAll("(.*)rx=\"", "").replaceAll("\"(.*)", ""));
+                                * Double.parseDouble(in.replaceAll("(.*)rx=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY));
                         nodes.add(drawCircleNode(values[0], values[1], values[2], false, " ", color));
                     } else if (in.matches("<polygon(.*)")) {
-                        points = in.replaceAll("(.*)points=\"", "").replaceAll("\"(.*)", "").split(" ");
+                        points = in.replaceAll("(.*)points=\"", StringUtils.EMPTY).replaceAll("\"(.*)", StringUtils.EMPTY).split(StringUtils.SPACE);
                         for (String s : points) {
                             pathEdge.add(width * Double.parseDouble(s.split(",")[0]));
                             pathEdge.add(height * (height - Double.parseDouble(s.split(",")[1])));
@@ -129,10 +130,10 @@ public class SVGtoTikZ {
                     } else if (in.matches("<text(.*)")) {
                         double[] values = new double[2];
                         values[0] = width
-                                * Double.parseDouble(in.replaceAll("(.*)x=\"", "").replaceAll("\" y(.*)", ""));
+                                * Double.parseDouble(in.replaceAll("(.*)x=\"", StringUtils.EMPTY).replaceAll("\" y(.*)", StringUtils.EMPTY));
                         values[1] = height * (height
-                                - Double.parseDouble(in.replaceAll("(.*) y=\"", "").replaceAll("\" f(.*)", "")));
-                        name = in.replaceAll("(.*)\">", "").replaceAll("<(.*)", "");
+                                - Double.parseDouble(in.replaceAll("(.*) y=\"", StringUtils.EMPTY).replaceAll("\" f(.*)", StringUtils.EMPTY)));
+                        name = in.replaceAll("(.*)\">", "").replaceAll("<(.*)", StringUtils.EMPTY);
                         edges.add(drawLabel(values[0], values[1], name));
                     }
                     in = br.readLine();
@@ -179,7 +180,7 @@ public class SVGtoTikZ {
         return (mark
                 ? "\\filldraw [" + color + ", very thick, fill=white] (" + x + "," + y + ") circle [radius="
                         + (rad * 1.2) + "] node {" + name + "};\n"
-                : "")
+                : StringUtils.EMPTY)
                 + "\\filldraw [" + color + ", very thick, fill=" + (name.isEmpty() ? "black" : "white") + "] (" + x
                 + "," + y + ") circle [radius=" + rad + "] node {" + name + "};\n";
     }
@@ -203,7 +204,7 @@ public class SVGtoTikZ {
 
     private static String drawEdges(ArrayList<Double> path, String color, boolean dotted) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\\draw [color = " + color + ", thick, " + (dotted ? "dash dot" : "") + "] (" + path.get(0) + ","
+        sb.append("\\draw [color = " + color + ", thick, " + (dotted ? "dash dot" : StringUtils.EMPTY) + "] (" + path.get(0) + ","
                 + path.get(1) + ")\n ");
         for (int i = 2; i < path.size(); i += 2)
             sb.append("to (" + path.get(i) + "," + path.get(i + 1) + ") \n ");

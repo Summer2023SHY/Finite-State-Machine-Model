@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import visual.composite.popout.PopoutWindow;
 
 public class PopoutAgentSelection extends PopoutWindow{
@@ -127,7 +129,7 @@ public class PopoutAgentSelection extends PopoutWindow{
         handleText("submit", "move", 15, posX, posY, horizSpacing, height, DEFAULT_FONT, "Submit");
         handleButton("submit_button", "move", 15, posX, posY, horizSpacing, height, CODE_SUBMIT);
         posY += height;
-        handleText("buffer", "move", 15, 0, posY, 1, 1, DEFAULT_FONT, "");
+        handleText("buffer", "move", 15, 0, posY, 1, 1, DEFAULT_FONT, StringUtils.EMPTY);
     }
 
     @Override
@@ -147,7 +149,7 @@ public class PopoutAgentSelection extends PopoutWindow{
                     agents.get(i).setName((i+1)+"");
                 }
                 agents.remove(agents.size() - 1);
-                removeElementPrefixed("");
+                removeElementPrefixed(StringUtils.EMPTY);
             }
         }
         switch(code) {

@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ui.page.optionpage.entryset.EntrySet;
 import visual.composite.HandlePanel;
 
@@ -113,7 +115,7 @@ public class Category {
         if(e != null) {
             return e.resetContent();
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
 //---  Getter Methods   -----------------------------------------------------------------------

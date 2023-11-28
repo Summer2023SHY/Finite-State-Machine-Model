@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class CrushIdentityGroup implements Comparable<CrushIdentityGroup> {
 
     private CrushIdentityGroup parentGroup;
@@ -14,7 +16,7 @@ public class CrushIdentityGroup implements Comparable<CrushIdentityGroup> {
 
     public CrushIdentityGroup(CrushIdentityGroup parent, String ev, Set<String> group) {
         parentGroup = parent;
-        event = ev == null ? "" : ev;
+        event = StringUtils.defaultString(ev);
         thisGroup = parent != null && parent.search(group) ? null : group;
     }
 

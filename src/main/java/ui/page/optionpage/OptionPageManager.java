@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import input.CustomEventReceiver;
 import ui.InputHandler;
 import ui.headers.HeaderSelect;
@@ -150,7 +152,7 @@ public class OptionPageManager {
             currentOptionPageIndex = in;
             bodyPanel.setOffsetX("move", 0);
             bodyPanel.setOffsetY("move", 0);
-            bodyPanel.removeElementPrefixed("");
+            bodyPanel.removeElementPrefixed(StringUtils.EMPTY);
         }
     }
 

@@ -17,6 +17,8 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import controller.convert.FormatConversion;
 import model.AttributeList;
@@ -321,7 +323,7 @@ public class FiniteStateMachine implements InputReceiver{
 
     private void codeHandlingOperations(int code, int mouseType) {
         String currFSM = view.getCurrentFSM();
-        String ret = "";
+        String ret = null;
         switch(code) {
             case CodeReference.CODE_TRIM:
                 try {
@@ -391,7 +393,7 @@ public class FiniteStateMachine implements InputReceiver{
                 Boolean res;
                 try {
                     res = model.isBlocking(currFSM);
-                    view.displayAlert("FSM is " + (res ? "" : "not") + " blocking");
+                    view.displayAlert("FSM is " + (res ? StringUtils.EMPTY : "not") + " blocking");
                 } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to query Blocking did not possess attributes: State - Initial");
                     e.printStackTrace();
@@ -404,7 +406,7 @@ public class FiniteStateMachine implements InputReceiver{
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Requisite FSM to query presence of State does not exist");
                 }
                 else {
-                    view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "State " + chkSt + " is " + (res2 ? "" : "not") + " in the FSM");
+                    view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "State " + chkSt + " is " + (res2 ? StringUtils.EMPTY : "not") + " in the FSM");
                 }
                 break;
             default:
@@ -428,12 +430,12 @@ public class FiniteStateMachine implements InputReceiver{
                 attrib.add(AttributeList.ATTRIBUTE_CONTROLLABLE);
                 List<String> content = view.getContent(CodeReference.CODE_BUILD_AGENTS);
                 for(int i = 0; i < content.size(); i++) {
-                    content.set(i, content.get(i).replaceAll(REGEX_NEWLINE_REPLACE, "\n"));
+                    content.set(i, content.get(i).replaceAll(REGEX_NEWLINE_REPLACE, StringUtils.LF));
                 }
                 List<String> agents = view.requestAgentInput(content, model.getFSMEventList(view.getCurrentFSM()), attrib);
                 view.clearTextContents(CodeReference.CODE_BUILD_AGENTS);
                 for(int i = 0; i < agents.size(); i++) {
-                    view.setTextContent(CodeReference.CODE_BUILD_AGENTS, i, agents.get(i).replaceAll("\n", REGEX_NEWLINE_REPLACE));
+                    view.setTextContent(CodeReference.CODE_BUILD_AGENTS, i, agents.get(i).replaceAll(StringUtils.LF, REGEX_NEWLINE_REPLACE));
                 }
                 break;
             case CodeReference.CODE_BUILD_USTRUCT:
@@ -499,7 +501,7 @@ public class FiniteStateMachine implements InputReceiver{
 
     private void loadSource() {
         view.endLoading();
-        String path = view.requestFilePath(ADDRESS_SOURCES, "");
+        String path = view.requestFilePath(ADDRESS_SOURCES, StringUtils.EMPTY);
         view.startLoading();
         File f = new File(path);
         try (Reader reader = IOUtils.buffer(new FileReader(f))) {
@@ -641,7 +643,7 @@ public class FiniteStateMachine implements InputReceiver{
     private void requestFSMChoice(int code) {
         List<String> content = view.getContent(code);
         List<String> start = model.getReferences();
-        String[] use = start.toArray(new String[0]);
+        String[] use = start.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
         view.endLoading();
         String choice = view.requestUserInputList(use, true);
         view.startLoading();

@@ -379,7 +379,8 @@ public class StateBased extends ConcreteMemoryMeasure {
     }
 
     private void printEnableDisableSets() {
-        System.out.println("Enable/Disable Sets:\nEnable: " + enable + "\nDisable: " + disable + "\n");
+        System.out.println("Enable/Disable Sets:\nEnable: " + enable + "\nDisable: " + disable);
+        System.out.println();
     }
 
     //-- SubsetConstructHiding  ---------------------------------------------------------------
