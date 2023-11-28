@@ -104,7 +104,7 @@ public class FormatConversion {
 
     public static File generateDotFile(String fsm, String name, Format type) throws IOException {
         Graphviz gv = Graphviz.fromString(fsm);
-        File out = new File(WORKING_PATH + File.separator + name + FilenameUtils.EXTENSION_SEPARATOR + type.fileExtension);
+        File out = new File(WORKING_PATH, name + FilenameUtils.EXTENSION_SEPARATOR + type.fileExtension);
         gv.render(type).toFile(out);
         return out;
     }

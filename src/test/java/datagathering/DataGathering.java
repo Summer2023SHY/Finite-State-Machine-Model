@@ -397,7 +397,7 @@ public class DataGathering {
             String path = f.getAbsolutePath() + File.separator + s + File.separator;
 
             for(String t : ANALYSIS_TYPES) {
-                new File(path + RAW_DATA_FILE + File.separator + t + ".txt").delete();
+                new File(path + RAW_DATA_FILE, t + ".txt").delete();
             }
 
             if(!(new File(path).exists())) {
@@ -443,8 +443,8 @@ public class DataGathering {
         int size = new File(path).list().length;
         String[] attributes = null;
 
-        File f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
-        File g = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path, TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
+        File g = new File(path, RAW_DATA_FILE + type + ".txt");
 
         f.delete();
         g.delete();
@@ -493,7 +493,7 @@ public class DataGathering {
                     }
                     raf.close();
                 }
-                f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
+                f = new File(path, TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
             }
         }
         catch(IOException e) {
@@ -507,7 +507,7 @@ public class DataGathering {
         hold.assignTotalNumberTests(getTotalNumberTests(path));
 
         String[] attributes = null;
-        File f = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path, RAW_DATA_FILE + type + ".txt");
 
         try {
             RandomAccessFile raf;
@@ -541,7 +541,7 @@ public class DataGathering {
     }
 
     private void outputInterpretDataSimple(InterpretData hold, String path, String type, String suffix) {
-        File f = new File(path + File.separator + PROCESS_FILE + type + (suffix.isEmpty() ? "" : "_") + suffix + ".txt");
+        File f = new File(path, PROCESS_FILE + type + (suffix.isEmpty() ? "" : "_") + suffix + ".txt");
         f.delete();
         try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             fileWriteInterpretDataGeneral(hold, raf);
@@ -616,8 +616,8 @@ public class DataGathering {
         int size = new File(path).list().length;
         String[] attributes = null;
 
-        File f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
-        File g = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path, TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
+        File g = new File(path, RAW_DATA_FILE + type + ".txt");
 
         f.delete();
         g.delete();
@@ -677,7 +677,7 @@ public class DataGathering {
                     }
                     raf.close();
                 }
-                f = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
+                f = new File(path, TEST_NAME + "_" + counter++ + File.separator + ANALYSIS_FILE + type + ".txt");
             }
         }
         catch(IOException e) {
@@ -691,7 +691,7 @@ public class DataGathering {
         hold.assignTotalNumberTests(getTotalNumberTests(path));
 
         String[] attributes = null;
-        File f = new File(path + File.separator + RAW_DATA_FILE + type + ".txt");
+        File f = new File(path, RAW_DATA_FILE + type + ".txt");
         int counter = 0;
         try {
             RandomAccessFile raf;
@@ -979,7 +979,7 @@ public class DataGathering {
             String testName = TEST_NAME + "_" + counter;
 
             File f;
-            f = new File(defaultWritePath + File.separator + testName);
+            f = new File(defaultWritePath, testName);
             f.mkdir();
 
             writePath = defaultWritePath + File.separator + testName;
@@ -1306,7 +1306,7 @@ public class DataGathering {
     private boolean autoTestRandomSystem(int count, RandomGenStats info, int testChoice) throws IOException {
         String testName = TEST_NAME + "_" +  count;
         File f;
-        f = new File(defaultWritePath + File.separator + testName);
+        f = new File(defaultWritePath, testName);
 
         writePath = defaultWritePath + File.separator + testName;
 
@@ -1384,7 +1384,7 @@ public class DataGathering {
     private void autoGenerateNewRandomSystem(int count, RandomGenStats info) throws IOException {
         String testName = TEST_NAME + "_" +  count;
         File f;
-        f = new File(defaultWritePath + File.separator + testName);
+        f = new File(defaultWritePath, testName);
 
         writePath = defaultWritePath + File.separator + testName;
 
@@ -1405,7 +1405,7 @@ public class DataGathering {
 
         List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
-        f = new File(writePath + File.separator + (testName + "_agents.txt"));
+        f = new File(writePath, testName + "_agents.txt");
         try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             raf.writeBytes(model.exportAgents(testName + "_agents", agents, eventAtt));
         }
@@ -1415,11 +1415,11 @@ public class DataGathering {
 
         for(String s : names) {
             //makeImageDisplay(s, s);
-            f = new File(writePath + File.separator + s + ".txt");
+            f = new File(writePath, s + ".txt");
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.writeBytes(model.exportFSM(s));
             }
-            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + File.separator + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath, s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
@@ -1617,7 +1617,7 @@ public class DataGathering {
         Boolean result = inf ? model.isInferenceCoobservableUStruct(plants, specs, eventAtt, agents) : model.isCoobservableUStruct(plants, specs, eventAtt, agents);
         handleOutData(t, hold);
         printOut("\t\t\t\t" + (inf ? "Inferencing " : "" ) + "Coobservable: " + result);
-        garbageCollect();
+        
         return result;
     }
 
@@ -1634,7 +1634,7 @@ public class DataGathering {
         boolean result = model.isSBCoobservableUrvashi(plants, specs, eventAtt, agents);
         handleOutData(t, hold);
         printOut("\t\t\t\tSB-Coobservable: " + result);
-        garbageCollect();
+        
         return result;
     }
 
@@ -1651,7 +1651,7 @@ public class DataGathering {
         boolean result = inf ? model.isIncrementalInferenceCoobservable(plants, specs, eventAtt, agents) : model.isIncrementalCoobservable(plants, specs, eventAtt, agents);
         handleOutData(t, hold);
         printOut("\t\t\t\tIncremental" + (inf ? " Inference" : "") + " Coobservable: " + result);
-        garbageCollect();
+        
         return result;
     }
 
@@ -1662,7 +1662,7 @@ public class DataGathering {
         boolean result = model.isIncrementalSBCoobservable(plants, specs, eventAtt, agents);
         handleOutData(t, hold);
         printOut("\t\t\t\tIncremental SB Coobservable: " + result);
-        garbageCollect();
+        
         return result;
     }
 
@@ -1798,7 +1798,7 @@ public class DataGathering {
 
         int size = new File(path).list().length;
         while(counter <= size + 5) {
-            File g = new File(path + File.separator + TEST_NAME + "_" + counter++ + File.separator + RESULTS_FILE);
+            File g = new File(path, TEST_NAME + "_" + counter++ + File.separator + RESULTS_FILE);
             if(g.exists()) {
                 validTests++;
             }
@@ -1861,7 +1861,7 @@ public class DataGathering {
 
     private void printMemoryUsage(double reduction) {
         printOut("\t\t\t\tUsing " + threeSig(reduction) + " Mb");
-        garbageCollect();
+        
     }
 
     private long getCurrentMemoryUsage() {
@@ -1873,16 +1873,15 @@ public class DataGathering {
         return (double)in / 1000000;
     }
 
-    private Double threeSig(double in) {
+    private double threeSig(double in) {
         String use = (in < 0 ? 0 : in)+"0000";
         int posit = use.indexOf(".") + 4;
         try {
-            Double out = Double.parseDouble(use.substring(0, posit));
-            return out;
+            return Double.parseDouble(use.substring(0, posit));
         }
         catch(NumberFormatException e) {
             System.out.println(in);
-            return 0.0;
+            return 0d;
         }
     }
 
@@ -1895,7 +1894,7 @@ public class DataGathering {
 
     private void printOut(String text) {
         if(writePath != null) {
-            File f = new File(writePath + File.separator + RESULTS_FILE);
+            File f = new File(writePath, RESULTS_FILE);
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 raf.writeBytes(text + "\n");
@@ -1908,7 +1907,7 @@ public class DataGathering {
 
     private void printEquivalentResults(List<String> guide, long time, double overallMem, List<Double> vals) {
         if(writePath != null) {
-            File f = new File(writePath + File.separator + ANALYSIS_FILE + analysisSubtype + TEXT_EXTENSION);
+            File f = new File(writePath, ANALYSIS_FILE + analysisSubtype + TEXT_EXTENSION);
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 if(raf.length() == 0) {
@@ -2020,14 +2019,9 @@ public class DataGathering {
 
     //-- Model Management  ------------------------------------
 
-    private void garbageCollect() {
-        System.gc();
-        Runtime.getRuntime().gc();
-    }
-
     private void resetModel() {
         model.flushFSMs();
-        garbageCollect();
+        
     }
 
 }

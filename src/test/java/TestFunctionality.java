@@ -430,11 +430,11 @@ public class TestFunctionality {
         int count = -1;
         File f;
         do {
-            f = new File(defaultWritePath + File.separator + testName + ++count);
+            f = new File(defaultWritePath, testName + ++count);
         }while(f.exists());
 
         f.mkdir();
-        testName += count+"";
+        testName += Integer.toString(count);
         writePath = defaultWritePath + File.separator + testName;
         //System.out.println("This test: " + testName);
         System.out.println(testName + ", " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()) + "\n---------------------------------------------\n");
@@ -453,7 +453,7 @@ public class TestFunctionality {
 
         List<Map<String, List<Boolean>>> agents = RandomGeneration.generateRandomAgents(events, info);
 
-        f = new File(writePath + File.separator + (testName + "_agents.txt"));
+        f = new File(writePath, testName + "_agents.txt");
         try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
             raf.writeBytes(model.exportAgents(testName + "_agents", agents, eventAtt));
         }
@@ -463,11 +463,11 @@ public class TestFunctionality {
 
         for(String s : names) {
             //makeImageDisplay(s, s);
-            f = new File(writePath + File.separator + s + ".txt");
+            f = new File(writePath, s + ".txt");
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.writeBytes(model.exportFSM(s));
             }
-            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + File.separator + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath, s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
         autoTestSystemFull(testName, RandomGeneration.getPlantNames(testName, numPlants), RandomGeneration.getSpecNames(testName, numSpecs), agents, false);
@@ -571,7 +571,7 @@ public class TestFunctionality {
         int count = -1;
         File f;
         do {
-            f = new File(defaultWritePath + File.separator + testName + ++count);
+            f = new File(defaultWritePath, testName + ++count);
         }while(f.exists());
 
         f.mkdir();
@@ -599,11 +599,11 @@ public class TestFunctionality {
 
         for(String s : names) {
             //makeImageDisplay(s, s);
-            f = new File(writePath + File.separator + s + ".txt");
+            f = new File(writePath, s + ".txt");
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.writeBytes(model.exportFSM(s));
             }
-            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath + File.separator + s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(new File(FormatConversion.createImgFromFSM(model.generateFSMDot(s), s)).toPath(), new File(writePath, s + ".png").toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
         printIncrementalLabel(testName, false);
@@ -923,7 +923,7 @@ public class TestFunctionality {
 
     private static void printEquivalentResults(List<String> guide, List<Double> vals) {
         if(writePath != null) {
-            File f = new File(writePath + File.separator + ANALYSIS_FILE);
+            File f = new File(writePath, ANALYSIS_FILE);
             try (RandomAccessFile raf = RandomAccessFileMode.READ_WRITE.create(f)) {
                 raf.seek(raf.length());
                 if(raf.length() == 0) {
@@ -947,7 +947,7 @@ public class TestFunctionality {
         model.flushFSMs();
     }
 
-    private static Double threeSig(double in) {
+    private static double threeSig(double in) {
         String use = in+"0000";
         int posit = use.indexOf(".") + 4;
         return Double.parseDouble(use.substring(0, posit));

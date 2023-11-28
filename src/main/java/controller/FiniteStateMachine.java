@@ -301,7 +301,7 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_DELETE_SOURCE:
-                File remv = new File(ADDRESS_SOURCES + File.separator + currFSM + ".fsm");
+                File remv = new File(ADDRESS_SOURCES, currFSM + ".fsm");
                 remv.delete();
                 updateViewFSM(view.getCurrentFSM());
                 break;
