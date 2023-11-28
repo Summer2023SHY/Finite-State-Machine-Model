@@ -577,14 +577,14 @@ public class Manager implements ReceiveMemoryMeasure{
         int used = 0;
         int curr = 0;
         while(used < num) {
-            String nom = "";
+            StringBuilder nom = new StringBuilder();
             int cop = curr;
             do {
-                nom += alph.charAt(cop % alph.length());
+                nom.append(alph.charAt(cop % alph.length()));
                 cop /= alph.length();
             }while(cop != 0);
-            if(!eventExists(ref, nom)) {
-                addEvent(ref, nom);
+            if(!eventExists(ref, nom.toString())) {
+                addEvent(ref, nom.toString());
                 used++;
             }
             curr++;

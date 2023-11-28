@@ -37,21 +37,21 @@ public class IncrementalMemoryMeasure extends ConcreteMemoryMeasure{
 
     @Override
     public String produceOutputLog() {
-        String out = super.produceOutputLog();
+        StringBuilder out = new StringBuilder(super.produceOutputLog());
 
         if(heuristics != null && heuristics.length > 2)
-            out += "\n\t\t\t\tUsing Heuristics: " + heuristics[0] + ", " + heuristics[1] + ", " + heuristics[2];
+            out.append("\n\t\t\t\tUsing Heuristics: " + heuristics[0] + ", " + heuristics[1] + ", " + heuristics[2]);
 
         if(endNumComponents != null) {
 
-            out += "\n\t\t\t\tPerformance Log Within Incremental Loop:";
+            out.append("\n\t\t\t\tPerformance Log Within Incremental Loop:");
 
             for(int i = 0; i < endStates.size(); i++) {
-                out += "\n\t\t\t" + ((i+1) + ": " + endNumComponents.get(i) + " Components: " + componentNames.get(i) + "\n") + (endStates.get(i)).produceOutputLog();
+                out.append("\n\t\t\t" + ((i+1) + ": " + endNumComponents.get(i) + " Components: " + componentNames.get(i) + "\n") + (endStates.get(i)).produceOutputLog());
             }
         }
 
-        return out;
+        return out.toString();
     }
 
     @Override

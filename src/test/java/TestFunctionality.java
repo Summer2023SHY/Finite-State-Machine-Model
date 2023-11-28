@@ -949,7 +949,7 @@ public class TestFunctionality {
 
     private static double threeSig(double in) {
         String use = in+"0000";
-        int posit = use.indexOf(".") + 4;
+        int posit = use.indexOf('.') + 4;
         return Double.parseDouble(use.substring(0, posit));
     }
 

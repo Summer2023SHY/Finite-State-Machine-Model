@@ -282,9 +282,10 @@ public class AgentChicanery {
     }
 
     private static String appendControlNumber(String in, int num) {
-        String attach = "";
+        StringBuilder attach = new StringBuilder();
+        // TODO: Use String.repeat() after moving to Java 11+
         for(int i = 0; i < num; i++) {
-            attach += "I";
+            attach.append('I');
         }
         return in + attach;
     }

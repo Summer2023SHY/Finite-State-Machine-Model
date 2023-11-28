@@ -91,22 +91,22 @@ public class GenerateDot {
         good = good == null ? false : good;
         mark = mark == null ? false : mark;
         priv = priv == null ? false : priv;
-        String line = mark || bad || good ? "doublecircle" : "circle";
-        line += " color=\"";
+        StringBuilder line = new StringBuilder(mark || bad || good ? "doublecircle" : "circle");
+        line.append(" color=\"");
         if(priv) {
-            line += bad ? "purple" : "orange";
+            line.append(bad ? "purple" : "orange");
         }
         else {
-            line += bad ? "red" : good ? "green" : "black";
+            line.append(bad ? "red" : good ? "green" : "black");
         }
-        line += "\" style=wedged fillcolor=\"";
+        line.append("\" style=wedged fillcolor=\"");
 
         int count = 0;        // how do we actually record multiple colors onto one node oh god oh no
         boolean first = true;
         boolean second = false;
         while(count < 100) {
             if(in.getStateAttribute(ref, count+"") != null) {
-                line+= (first ? "" : ":") + backgroundColorCycle[count % backgroundColorCycle.length].cycleColor(count / backgroundColorCycle.length);
+                line.append((first ? "" : ":") + backgroundColorCycle[count % backgroundColorCycle.length].cycleColor(count / backgroundColorCycle.length));
                 if(!first) {
                     second = true;
                 }
@@ -116,16 +116,16 @@ public class GenerateDot {
         }
 
         if(second) {
-            line += "\" style=wedged";
+            line.append("\" style=wedged");
         }
         else {
             if(first) {
-                line += "white";
+                line.append("white");
             }
-            line += "\" style=filled";
+            line.append("\" style=filled");
         }
-        line += " fontsize=\"28\"";
-        return line + "];";
+        line.append(" fontsize=\"28\"");
+        return line.append("];").toString();
     }
 
     /*
@@ -136,20 +136,20 @@ public class GenerateDot {
      */
 
     private static String generateTransitionDot(TransitionSystem in, String state, String event) {
-        String trans = "[label = <" + processObjectNameScripts(event) + "> color=\"";
+        StringBuilder trans = new StringBuilder("[label = <" + processObjectNameScripts(event) + "> color=\"");
         Boolean obs = in.getEventAttribute(event, AttributeList.ATTRIBUTE_OBSERVABLE);
         Boolean atkObs = in.getEventAttribute(event, AttributeList.ATTRIBUTE_ATTACKER_OBSERVABLE);
         Boolean cont = in.getEventAttribute(event, AttributeList.ATTRIBUTE_CONTROLLABLE);
         Boolean bad = in.getTransitionAttribute(state, event, AttributeList.ATTRIBUTE_BAD);
-        trans += obs == null || obs ? "black" : "red";
-        trans += "\" arrowhead=\"normal";
-        trans += atkObs != null && atkObs ? "odot" : "";
-        trans += cont != null && cont ? "diamond" : "";
-        trans += "\" style=\"";
-        trans += bad != null && bad ? "dashed" : "";
-        trans += "\" fontsize=\"28";
-        trans += "\"];";
-        return trans;
+        trans.append(obs == null || obs ? "black" : "red");
+        trans.append("\" arrowhead=\"normal");
+        trans.append(atkObs != null && atkObs ? "odot" : "");
+        trans.append(cont != null && cont ? "diamond" : "");
+        trans.append("\" style=\"");
+        trans.append(bad != null && bad ? "dashed" : "");
+        trans.append("\" fontsize=\"28");
+        trans.append("\"];");
+        return trans.toString();
     }
 
     /**

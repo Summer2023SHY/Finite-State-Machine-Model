@@ -46,19 +46,19 @@ public class ReadWrite {
         out.append(REGION_SEPARATOR + "\n");
 
         for(String s : in.getStateNames()) {
-            String build = s;
+            StringBuilder build = new StringBuilder(s);
             for(int i = 0; i < stateAttr.size(); i++) {
-                build += SEPARATOR + (in.getStateAttribute(s, stateAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL);
+                build.append(SEPARATOR + (in.getStateAttribute(s, stateAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL));
             }
-            out.append(build + "\n");
+            out.append(build.append("\n"));
         }
         out.append(REGION_SEPARATOR + "\n");
         for(String s : in.getEventNames()) {
-            String build = s;
+            StringBuilder build = new StringBuilder(s);
             for(int i = 0; i < eventAttr.size(); i++) {
-                build += SEPARATOR + (in.getEventAttribute(s, eventAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL);
+                build.append(SEPARATOR + (in.getEventAttribute(s, eventAttr.get(i)) ? TRUE_SYMBOL : FALSE_SYMBOL));
             }
-            out.append(build + "\n");
+            out.append(build.append("\n"));
         }
         out.append(REGION_SEPARATOR + "\n");
 

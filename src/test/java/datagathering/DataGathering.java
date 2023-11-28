@@ -802,18 +802,18 @@ public class DataGathering {
     private void fileWriteInterpretDataOverleafTableGeneral(InterpretData holdIn, RandomAccessFile raf) throws IOException {
         String[] attributes = holdIn.getAttributes();
 
-        String part = "{|";
+        StringBuilder part = new StringBuilder("{|");
 
         for(int i = 0; i < attributes.length; i++) {
-            part += "c|";
+            part.append("c|");
         }
 
-        part += "}";
+        part.append("}");
 
         raf.writeBytes("\\begin{table}[H]\r\n"
                 + "\\begin{center}\r\n"
                 + "\\begin{footnotesize}\r\n"
-                + "    \\begin{tabular}" + part + "\r\n"
+                + "    \\begin{tabular}" + part.toString() + "\r\n"
                 + "    \\hline\n\t");
         for(String s : attributes) {
             raf.writeBytes(" & " + s);
@@ -1875,7 +1875,7 @@ public class DataGathering {
 
     private double threeSig(double in) {
         String use = (in < 0 ? 0 : in)+"0000";
-        int posit = use.indexOf(".") + 4;
+        int posit = use.indexOf('.') + 4;
         try {
             return Double.parseDouble(use.substring(0, posit));
         }
