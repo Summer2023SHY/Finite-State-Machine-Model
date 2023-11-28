@@ -146,7 +146,7 @@ public class PopoutAgentSelection extends PopoutWindow{
             if(pos >= 0 && pos < agents.size()) {
                 for(int i = pos; i < agents.size() - 1; i++) {
                     agents.set(i, agents.get(i + 1));
-                    agents.get(i).setName((i+1)+"");
+                    agents.get(i).setName(Integer.toString(i+1));
                 }
                 agents.remove(agents.size() - 1);
                 removeElementPrefixed(StringUtils.EMPTY);
@@ -155,7 +155,7 @@ public class PopoutAgentSelection extends PopoutWindow{
         switch(code) {
         //TODO: Allow removal of an agent
             case CODE_ADD_AGENT:
-                agents.add(new AgentRep(""+(agents.size() + 1), refEvents, attributes.size()));
+                agents.add(new AgentRep(Integer.toString(agents.size() + 1), refEvents, attributes.size()));
                 break;
             case CODE_SUBMIT:
                 ready = true;

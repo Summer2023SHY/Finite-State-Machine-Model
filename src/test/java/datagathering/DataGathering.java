@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import controller.FiniteStateMachine;
@@ -489,7 +490,7 @@ public class DataGathering {
                         List<Double> aver = hold.calculateAverages();
                         //System.out.println(hold.calculateInterquartileRange() + " " + hold.calculateFirstQuartile() + " " + hold.calculateThirdQuartile());
                         for(int i = 0; i < aver.size(); i++) {
-                            rag.writeBytes((threeSig(aver.get(i))+"") + (i + 1 == aver.size() ? StringUtils.EMPTY : ", "));
+                            rag.writeBytes(Double.toString(threeSig(aver.get(i))) + (i + 1 == aver.size() ? StringUtils.EMPTY : ", "));
                         }
                         rag.writeBytes(StringUtils.LF);
                     }
@@ -669,11 +670,11 @@ public class DataGathering {
                         List<Double> averSub = holdSub.calculateAverages();
                         //System.out.println(hold.calculateInterquartileRange() + " " + hold.calculateFirstQuartile() + " " + hold.calculateThirdQuartile());
                         for(int i = 0; i < averOverall.size(); i++) {
-                            rag.writeBytes((threeSig(averOverall.get(i))+"") + (i + 1 == averOverall.size() ? StringUtils.EMPTY : ", "));
+                            rag.writeBytes(Double.toString(threeSig(averOverall.get(i))) + (i + 1 == averOverall.size() ? StringUtils.EMPTY : ", "));
                         }
                         rag.writeBytes("\n, , ");
                         for(int i = 0; i < averSub.size(); i++) {
-                            rag.writeBytes((threeSig(averSub.get(i))+"") + (i + 1 == averSub.size() ? StringUtils.EMPTY : ", "));
+                            rag.writeBytes(Double.toString(threeSig(averSub.get(i))) + (i + 1 == averSub.size() ? StringUtils.EMPTY : ", "));
                         }
                         rag.writeBytes(StringUtils.LF);
                     }

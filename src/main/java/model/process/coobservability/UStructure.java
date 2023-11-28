@@ -382,7 +382,7 @@ public class UStructure extends UStructMemoryMeasure{
             local.setId(uStructure.getId() + (i == 0 ? " - Plant Observer" : " - Observer " + i));
             for(String s : local.getStateNames()) {
                 for(int j : crushMap[i].getStateMemberships(s)) {
-                    local.addAttributeToState(s, j+"", true);
+                    local.addAttributeToState(s, Integer.toString(j), true);
                 }
             }
             out.add(local);

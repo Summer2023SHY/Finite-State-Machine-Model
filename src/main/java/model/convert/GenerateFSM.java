@@ -233,15 +233,15 @@ public class GenerateFSM {
 //---  Support Methods   ----------------------------------------------------------------------
 
     private static String generateName(int i, boolean character) {
-        String out = "";
+        StringBuilder out = new StringBuilder();
         String language = character ? ALPHABET_STATE : ALPHABET_EVENT;
         do {
             int use = i % (language.length());
-            out = language.charAt(use) + out;
+            out.append(language.charAt(use));
             i /= language.length();
         }while(i > 0);
 
-        return out;
+        return out.reverse().toString();
     }
 
     private static int getRandomValue(Random rand) {
@@ -249,14 +249,14 @@ public class GenerateFSM {
     }
 
     private static String writeAttributes(int rand, int size, int index, List<String> attri, List<Integer> numbers, List<Integer> track) {
-        String line = "";
+        StringBuilder line = new StringBuilder();
         for(int j = 0; j < attri.size(); j++) {
             int prop = MAX_PERCENTAGE_VALUE * numbers.get(j) / size;
             boolean result = (track.get(j) < numbers.get(j) && (rand <= prop || size - index == numbers.get(j) - track.get(j)));
-            line += SEPARATOR + (result ? TRUE_SYMBOL : FALSE_SYMBOL);
+            line.append(SEPARATOR + (result ? TRUE_SYMBOL : FALSE_SYMBOL));
             track.set(j, track.get(j) + (result ? 1 : 0));
         }
-        return line;
+        return line.toString();
     }
 
     private static void writeAttribute(StringBuilder out, List<String> attri) {

@@ -86,7 +86,7 @@ public class StateMap {
     public void renameStates() {
         Entity[] stateArr = states.values().toArray(new Entity[states.size()]);
         for(int i = 0; i < states.size(); i++)
-            renameState(stateArr[i].getName(), i + "");
+            renameState(stateArr[i].getName(), Integer.toString(i));
         composition = null;
     }
 
