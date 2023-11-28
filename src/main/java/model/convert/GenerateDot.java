@@ -15,19 +15,19 @@ public class GenerateDot {
 
     private final static String INITIAL_STATE_MARKER = "ArbitraryUnusedNameNoWorriesJustGrooving";
     //TODO: Make sure there are a lot of potential colors here, preferably prime, to avoid reuse
-    private final static ColorPack[] backgroundColorCycle = new ColorPack[] {new ColorPack("4f", "4f", "4f"),
-                                                                             new ColorPack("96", "32", "32"),
-                                                                             new ColorPack("00", "80", "00"),
-                                                                              new ColorPack("5b", "32", "92"),
-                                                                             new ColorPack("ff", "a5", "00"),
-                                                                             new ColorPack("7f", "ff", "00"),
-                                                                             new ColorPack("00", "ff", "ff"),
-                                                                             new ColorPack("00", "00", "ff"),
-                                                                             new ColorPack("ff", "00", "ff"),
-                                                                             new ColorPack("ee", "e8", "aa"),
-                                                                             new ColorPack("64", "95", "ed"),
-                                                                             new ColorPack("ff", "69", "b4"),
-                                                                             new ColorPack("8b", "45", "13"),
+    private final static ColorPack[] backgroundColorCycle = new ColorPack[] {new ColorPack(0x4f, 0x4f, 0x4f),
+                                                                             new ColorPack(0x96, 0x32, 0x32),
+                                                                             new ColorPack(0x00, 0x80, 0x00),
+                                                                             new ColorPack(0x5b, 0x32, 0x92),
+                                                                             new ColorPack(0xff, 0xa5, 0x00),
+                                                                             new ColorPack(0x7f, 0xff, 0x00),
+                                                                             new ColorPack(0x00, 0xff, 0xff),
+                                                                             new ColorPack(0x00, 0x00, 0xff),
+                                                                             new ColorPack(0xff, 0x00, 0xff),
+                                                                             new ColorPack(0xee, 0xe8, 0xaa),
+                                                                             new ColorPack(0x64, 0x95, 0xed),
+                                                                             new ColorPack(0xff, 0x69, 0xb4),
+                                                                             new ColorPack(0x8b, 0x45, 0x13),
                                                                              };
 
     private final static String SUB_START = "_{";
