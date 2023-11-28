@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.lang3.ArrayUtils;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
@@ -1583,7 +1584,7 @@ public class DataGathering {
                     }
 
                     Boolean icSbCoobs = null;
-                    if(indexOf(Incremental.INCREMENTAL_B_NO_REJECT, j) != -1 && (!completedTests.contains(ANALYSIS_INC_SB + post) && !memoryError.contains(ANALYSIS_INC_SB + post))) {
+                    if(ArrayUtils.contains(Incremental.INCREMENTAL_B_NO_REJECT, j) && (!completedTests.contains(ANALYSIS_INC_SB + post) && !memoryError.contains(ANALYSIS_INC_SB + post))) {
                         printIncrementalSBLabel(prefixNom + post);
                         icSbCoobs = checkIncrementalSBCoobservable(plantNames, specNames, agents);
                     }
@@ -1681,15 +1682,6 @@ public class DataGathering {
     }
 
 //---  Support Methods   ----------------------------------------------------------------------
-
-    private int indexOf(int[] arr, int key) {
-        for(int i = 0; i < arr.length; i++) {
-            if(arr[i] == key) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     private int contains(List<String> list, String find) {
         int out = 0;

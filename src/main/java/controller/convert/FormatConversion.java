@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
@@ -32,7 +33,7 @@ public class FormatConversion {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private static String WORKING_PATH = System.getProperty("user.dir");
+    private static String WORKING_PATH = SystemUtils.USER_DIR;
 
 //---  Initialization   -----------------------------------------------------------------------
 
