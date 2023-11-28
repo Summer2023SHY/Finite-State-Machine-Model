@@ -2,6 +2,7 @@ package datagathering;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import model.process.memory.ConcreteMemoryMeasure;
 
@@ -35,7 +36,7 @@ public class InterpretData {
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-    private ArrayList<ArrayList<Double>> data;
+    private List<List<Double>> data;
 
     private String[] attributes;
 
@@ -48,7 +49,7 @@ public class InterpretData {
 //---  Constructors   -------------------------------------------------------------------------
 
     public InterpretData() {
-        data = new ArrayList<ArrayList<Double>>();
+        data = new ArrayList<List<Double>>();
     }
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -56,7 +57,7 @@ public class InterpretData {
     public InterpretData copy() {
         InterpretData out = new InterpretData();
 
-        for(ArrayList<Double> d : data) {
+        for(List<Double> d : data) {
             ArrayList<Double> newD = new ArrayList<Double>();
             for(Double v : d) {
                 newD.add(v);
@@ -75,7 +76,7 @@ public class InterpretData {
     }
 
     public void deleteFirstValue() {
-        for(ArrayList<Double> d : data) {
+        for(List<Double> d : data) {
             d.remove(0);
         }
     }
@@ -96,18 +97,18 @@ public class InterpretData {
         data.add(hold);
     }
 
-    public void addDataRow(ArrayList<Double> inData) {
+    public void addDataRow(List<Double> inData) {
         if(data == null) {
-            data = new ArrayList<ArrayList<Double>>();
+            data = new ArrayList<List<Double>>();
         }
         data.add(inData);
     }
 
-    public ArrayList<Double> calculateAverages() {
+    public List<Double> calculateAverages() {
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.get(0).size(); i++) {
             double total = 0.0;
-            ArrayList<Double> column = pullColumn(i);
+            List<Double> column = pullColumn(i);
             for(Double d : column) {
                 total += d;
             }
@@ -117,7 +118,7 @@ public class InterpretData {
         return out;
     }
 
-    public ArrayList<Double> calculateMinimums(){
+    public List<Double> calculateMinimums(){
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.get(0).size(); i++) {
             out.add(pullColumn(i).get(0));
@@ -125,7 +126,7 @@ public class InterpretData {
         return out;
     }
 
-    public ArrayList<Double> calculateMaximums(){
+    public List<Double> calculateMaximums(){
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.get(0).size(); i++) {
             out.add(pullColumn(i).get(pullColumn(i).size() - 1));
@@ -133,10 +134,10 @@ public class InterpretData {
         return out;
     }
 
-    public ArrayList<Double> calculateMedians(){
+    public List<Double> calculateMedians(){
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.get(0).size(); i++) {
-            ArrayList<Double> column = pullColumn(i);
+            List<Double> column = pullColumn(i);
             if(column.size() % 2 == 0) {
                 out.add((column.get(column.size() / 2) + column.get(column.size() / 2 - 1)) / 2);
             }
@@ -147,10 +148,10 @@ public class InterpretData {
         return out;
     }
 
-    public ArrayList<Double> calculateFirstQuartile(){
+    public List<Double> calculateFirstQuartile(){
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.get(0).size(); i++) {
-            ArrayList<Double> column = pullColumn(i);
+            List<Double> column = pullColumn(i);
             int upperBound = column.size() / 2;
 
             if(column.size() % 2 != 0) {
@@ -172,10 +173,10 @@ public class InterpretData {
      *
      */
 
-    public ArrayList<Double> calculateThirdQuartile(){
+    public List<Double> calculateThirdQuartile(){
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.get(0).size(); i++) {
-            ArrayList<Double> column = pullColumn(i);
+            List<Double> column = pullColumn(i);
             int lowerBound = column.size() / 2;
 
             if(column.size() % 2 != 0 && column.size() > 1) {
@@ -195,17 +196,17 @@ public class InterpretData {
         return out;
     }
 
-    public ArrayList<Double> calculateInterquartileRange(){
-        ArrayList<Double> out = new ArrayList<Double>();
-        ArrayList<Double> first = calculateFirstQuartile();
-        ArrayList<Double> third = calculateThirdQuartile();
+    public List<Double> calculateInterquartileRange(){
+        List<Double> out = new ArrayList<Double>();
+        List<Double> first = calculateFirstQuartile();
+        List<Double> third = calculateThirdQuartile();
         for(int i = 0; i < third.size(); i++) {
             out.add(third.get(i) - first.get(i));
         }
         return out;
     }
 
-    private ArrayList<Double> pullColumn(int column){
+    private List<Double> pullColumn(int column){
         ArrayList<Double> out = new ArrayList<Double>();
         for(int i = 0; i < data.size(); i++) {
             if(data.get(i).size() > column) {
@@ -252,11 +253,11 @@ public class InterpretData {
         return attributes;
     }
 
-    protected ArrayList<ArrayList<Double>> getData(){
+    protected List<List<Double>> getData(){
         return data;
     }
 
-    public ArrayList<Integer> getColumnSizes(){
+    public List<Integer> getColumnSizes(){
         ArrayList<Integer> out = new ArrayList<Integer>();
         for(int i = 0; i < data.get(0).size(); i++) {
             out.add(pullColumn(i).size());
