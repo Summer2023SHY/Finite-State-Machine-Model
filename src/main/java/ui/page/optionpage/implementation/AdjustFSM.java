@@ -27,7 +27,7 @@ public class AdjustFSM extends OptionPage {
     private static final String CATEGORY_EDIT_EVENTS = "Edit FSM Events";
     private static final String CATEGORY_EDIT_TRANSITIONS = "Edit FSM Transitions";
     private static final String CATEGORY_ADMIN = "Admin";
-    private static final String[] CATEGORIES = new String[] { CATEGORY_GENERATE,
+    private static final String[] CATEGORIES = { CATEGORY_GENERATE,
             CATEGORY_EDIT_FSM, CATEGORY_EDIT_STATES, CATEGORY_EDIT_EVENTS, CATEGORY_EDIT_TRANSITIONS, CATEGORY_ADMIN };
     private static final String HELP = "Some line\n" + "Another line\n" + "This will be the help page";
 

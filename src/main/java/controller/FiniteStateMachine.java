@@ -115,13 +115,13 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_ADD_STATE_ATTRIBUTE:
-                requestAttributeChoice(code, model.getStateAttributeList(), "How many states of this type do you want?");
+                requestAttributeChoice(code, AttributeList.STATE_ATTRIBUTES, "How many states of this type do you want?");
                 break;
             case CodeReference.CODE_ADD_EVENT_ATTRIBUTE:
-                requestAttributeChoice(code, model.getEventAttributeList(), "How many events of this type do you want?");
+                requestAttributeChoice(code, AttributeList.EVENT_ATTRIBUTES, "How many events of this type do you want?");
                 break;
             case CodeReference.CODE_ADD_TRANS_ATTRIBUTE:
-                requestAttributeChoice(code, model.getTransitionAttributeList(), "How many transitions of this type do you want?");
+                requestAttributeChoice(code, AttributeList.TRANSITION_ATTRIBUTES, "How many transitions of this type do you want?");
                 break;
 
         //-- FSM Properties  ----------------------------------
@@ -137,21 +137,21 @@ public class FiniteStateMachine implements InputReceiver{
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_FSM_ACCESS_ADD_STATE_ATTRIBUTE:
-                appendSingleChosenAttribute(model.getStateAttributeList(), code);
+                appendSingleChosenAttribute(AttributeList.STATE_ATTRIBUTES, code);
                 break;
             case CodeReference.CODE_FSM_ADD_EVENT_ATTRIBUTE:
                 model.setFSMEventAttributes(currFSM, addAttributeLists(view.getContent(code), model.getFSMEventAttributes(currFSM)));
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_FSM_ACCESS_ADD_EVENT_ATTRIBUTE:
-                appendSingleChosenAttribute(model.getEventAttributeList(), code);
+                appendSingleChosenAttribute(AttributeList.EVENT_ATTRIBUTES, code);
                 break;
             case CodeReference.CODE_FSM_ADD_TRANS_ATTRIBUTE:
                 model.setFSMTransitionAttributes(currFSM, addAttributeLists(view.getContent(code), model.getFSMTransitionAttributes(currFSM)));
                 updateViewFSM(view.getCurrentFSM());
                 break;
             case CodeReference.CODE_FSM_ACCESS_ADD_TRANS_ATTRIBUTE:
-                appendSingleChosenAttribute(model.getTransitionAttributeList(), code);
+                appendSingleChosenAttribute(AttributeList.TRANSITION_ATTRIBUTES, code);
                 break;
             case CodeReference.CODE_FSM_REMOVE_STATE_ATTRIBUTE:
                 model.setFSMStateAttributes(currFSM, subtractAttributeLists(view.getContent(code), model.getFSMStateAttributes(currFSM)));
@@ -624,7 +624,7 @@ public class FiniteStateMachine implements InputReceiver{
         }
     }
 
-    private void requestAttributeChoice(int code, String[] attributes, String phrase) {
+    private void requestAttributeChoice(int code, List<String> attributes, String phrase) {
         List<String> statAttr = view.getContent(code);    //remove existing Attributes from current list
         view.endLoading();
         String use = view.requestUserInputList(attributes, true);

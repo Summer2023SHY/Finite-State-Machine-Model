@@ -23,7 +23,7 @@ public class Operations extends OptionPage{
     private static final String CATEGORY_FSM = "FSM";
     private static final String CATEGORY_QUERIES = "Queries";
 
-    private static final String[] CATEGORIES = new String[] {CATEGORY_TRANS_SYSTEMS, CATEGORY_FSM, CATEGORY_QUERIES};
+    private static final String[] CATEGORIES = {CATEGORY_TRANS_SYSTEMS, CATEGORY_FSM, CATEGORY_QUERIES};
 
     private static final String HELP =
             "Some words\n"

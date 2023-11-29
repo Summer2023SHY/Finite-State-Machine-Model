@@ -745,18 +745,6 @@ public class Manager implements ReceiveMemoryMeasure{
 
     //-- Meta  ------------------------------------------------
 
-    public String[] getStateAttributeList() {
-        return AttributeList.STATE_ATTRIBUTES;
-    }
-
-    public String[] getEventAttributeList() {
-        return AttributeList.EVENT_ATTRIBUTES;
-    }
-
-    public String[] getTransitionAttributeList() {
-        return AttributeList.TRANSITION_ATTRIBUTES;
-    }
-
     public List<String> getReferences(){
         List<String> out = new ArrayList<>();
         out.addAll(fsms.keySet());

@@ -1,6 +1,9 @@
 package model;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class AttributeList {
 
@@ -10,7 +13,9 @@ public class AttributeList {
 
     //-- State  -----------------------------------------------
 
-    public static final String[] STATE_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_INITIAL, AttributeList.ATTRIBUTE_MARKED, AttributeList.ATTRIBUTE_PRIVATE, AttributeList.ATTRIBUTE_BAD, AttributeList.ATTRIBUTE_GOOD};
+    public static final List<String> STATE_ATTRIBUTES = Collections.unmodifiableList(
+        Arrays.asList(AttributeList.ATTRIBUTE_INITIAL, AttributeList.ATTRIBUTE_MARKED,
+                      AttributeList.ATTRIBUTE_PRIVATE, AttributeList.ATTRIBUTE_BAD, AttributeList.ATTRIBUTE_GOOD));
     public static final String ATTRIBUTE_INITIAL = "Initial";
     public static final boolean ATTRIBUTE_AON_INITIAL = true;
     public static final String ATTRIBUTE_MARKED = "Marked";
@@ -24,7 +29,9 @@ public class AttributeList {
 
     //-- Event  -----------------------------------------------
 
-    public static final String[] EVENT_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_OBSERVABLE, AttributeList.ATTRIBUTE_CONTROLLABLE, AttributeList.ATTRIBUTE_ATTACKER_OBSERVABLE};
+    public static final List<String> EVENT_ATTRIBUTES = Collections.unmodifiableList(
+        Arrays.asList(AttributeList.ATTRIBUTE_OBSERVABLE, AttributeList.ATTRIBUTE_CONTROLLABLE,
+                      AttributeList.ATTRIBUTE_ATTACKER_OBSERVABLE));
     public static final String ATTRIBUTE_OBSERVABLE = "Observable";
     public static final boolean ATTRIBUTE_AON_OBSERVABLE = false;
     public static final String ATTRIBUTE_CONTROLLABLE = "Controllable";
@@ -34,7 +41,7 @@ public class AttributeList {
 
     //-- Transitions  -----------------------------------------
 
-    public static final String[] TRANSITION_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_BAD};
+    public static final List<String> TRANSITION_ATTRIBUTES = Collections.singletonList(AttributeList.ATTRIBUTE_BAD);
 
 //---  Instance Variables   -------------------------------------------------------------------
 
