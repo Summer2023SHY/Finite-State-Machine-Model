@@ -1,6 +1,6 @@
 package model.fsm.component;
 
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -123,7 +123,7 @@ public class Entity {
     }
 
     public List<String> getAttributes(){
-        return wrap == null ? new LinkedList<String>() : wrap.getAttributes();
+        return wrap == null ? Collections.emptyList() : wrap.getAttributes();
     }
 
 //---  Miscellaneous   ------------------------------------------------------------------------
