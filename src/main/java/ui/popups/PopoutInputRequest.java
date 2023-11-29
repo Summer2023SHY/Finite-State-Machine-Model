@@ -3,6 +3,7 @@ package ui.popups;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,7 +21,7 @@ public class PopoutInputRequest extends PopoutWindow{
 //---  Instance Variables   -------------------------------------------------------------------
 
     private int entryNum;
-    private volatile boolean ready;
+    private AtomicBoolean ready;
     private List<String> out;
 
 //---  Constructors   -------------------------------------------------------------------------
@@ -29,7 +30,7 @@ public class PopoutInputRequest extends PopoutWindow{
         super(POPUP_WIDTH, POPUP_HEIGHT);
         out = new ArrayList<String>();
         entryNum = num;
-        ready = false;
+        ready = new AtomicBoolean(false);
         int posX = POPUP_WIDTH / 2;
         int posY = POPUP_HEIGHT / 6;
 
@@ -72,7 +73,7 @@ public class PopoutInputRequest extends PopoutWindow{
 //---  Getter Methods   -----------------------------------------------------------------------
 
     public List<String> getSubmitted() {
-        while(!ready) {
+        while(!ready.get()) {
         };
         return out;
     }
@@ -89,7 +90,7 @@ public class PopoutInputRequest extends PopoutWindow{
             for(int i = 0; i < entryNum; i++) {
                 out.add(getStoredText(compileEntryName(i)));
             }
-            ready = true;
+            ready.set(true);
         }
     }
 

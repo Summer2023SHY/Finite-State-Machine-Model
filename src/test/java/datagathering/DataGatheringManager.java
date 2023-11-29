@@ -2,6 +2,8 @@ package datagathering;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class DataGatheringManager implements TestReset{
 
@@ -12,9 +14,9 @@ public class DataGatheringManager implements TestReset{
     private TestTimer clock;
     private TestRunner thread;
 
-    private volatile long timeOutPeriod;
+    private AtomicLong timeOutPeriod;
 
-    public static volatile boolean check;
+    public static AtomicBoolean check = new AtomicBoolean(false);
 
     public void runTest() {
         clockTimer = new Timer();
@@ -26,7 +28,7 @@ public class DataGatheringManager implements TestReset{
             thread = new TestRunner(data);
             resetClock();
             timer.schedule(thread, 0);
-            while(!check) {
+            while(!check.get()) {
 
             }
             if(!data.getFinished()) {
@@ -40,7 +42,7 @@ public class DataGatheringManager implements TestReset{
     }
 
     public void resetTests() {
-        check = false;
+        check.set(false);
     }
 
     public void resetClock() {
@@ -49,15 +51,15 @@ public class DataGatheringManager implements TestReset{
         clock = new TestTimer();
         System.gc();
         Runtime.getRuntime().gc();
-        clockTimer.schedule(clock,  timeOutPeriod);
+        clockTimer.schedule(clock,  timeOutPeriod.get());
     }
 
     public void setTimeOutShort() {
-        timeOutPeriod = TIME_OUT_SHORT;
+        timeOutPeriod.set(TIME_OUT_SHORT);
     }
 
     public void setTimeOutLong() {
-        timeOutPeriod = TIME_OUT_LONG;
+        timeOutPeriod.set(TIME_OUT_LONG);
     }
 
     class TestRunner extends TimerTask{
@@ -85,12 +87,12 @@ public class DataGatheringManager implements TestReset{
 
         public TestTimer() {
             super();
-            check = false;
+            check.set(false);
         }
 
         @Override
         public void run() {
-            check = true;
+            check.set(true);
             System.out.println("Time Out");
         }
 

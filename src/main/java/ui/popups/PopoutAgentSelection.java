@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,7 +31,7 @@ public class PopoutAgentSelection extends PopoutWindow{
     private List<AgentRep> agents;
     private List<String> refEvents;
     private List<String> attributes;
-    private volatile boolean ready;
+    private AtomicBoolean ready = new AtomicBoolean(false);
 
 //---  Constructors   -------------------------------------------------------------------------
 
@@ -158,7 +159,7 @@ public class PopoutAgentSelection extends PopoutWindow{
                 agents.add(new AgentRep(Integer.toString(agents.size() + 1), refEvents, attributes.size()));
                 break;
             case CODE_SUBMIT:
-                ready = true;
+                ready.set(true);;
                 break;
             default:
                 break;
@@ -175,7 +176,7 @@ public class PopoutAgentSelection extends PopoutWindow{
 //---  Getter Methods   -----------------------------------------------------------------------
 
     public List<String> getResult(){
-        while(!ready) {    }
+        while(!ready.get()) {    }
         List<String> out = new ArrayList<String>();
         for(AgentRep a : agents) {
             System.out.println(a.toString());
