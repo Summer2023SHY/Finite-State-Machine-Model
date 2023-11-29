@@ -27,23 +27,23 @@ public class Incremental extends IncrementalMemoryMeasure {
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    public final static int INCREMENTAL_A_BOTH = 0;
-    public final static int INCREMENTAL_A_PLANTS = 1;
-    public final static int INCREMENTAL_A_SPECS = 2;
+    public static final int INCREMENTAL_A_BOTH = 0;
+    public static final int INCREMENTAL_A_PLANTS = 1;
+    public static final int INCREMENTAL_A_SPECS = 2;
 
-    public final static int INCREMENTAL_B_RANDOM = 0;
-    public final static int INCREMENTAL_B_SOONEST = 1;
-    public final static int INCREMENTAL_B_LATEST = 2;
-    public final static int INCREMENTAL_B_LOW_STATE = 3;
-    public final static int INCREMENTAL_B_HIGH_STATE = 4;
-    public final static int INCREMENTAL_B_LOW_EVENTS = 5;
-    public final static int INCREMENTAL_B_HIGH_EVENTS = 6;
-    public final static int INCREMENTAL_B_LOW_TRANS = 7;
-    public final static int INCREMENTAL_B_HIGH_TRANS = 8;
-    public final static int INCREMENTAL_B_SHARE_EVENTS = 9;
-    public final static int INCREMENTAL_B_DIFF_EVENTS = 10;
+    public static final int INCREMENTAL_B_RANDOM = 0;
+    public static final int INCREMENTAL_B_SOONEST = 1;
+    public static final int INCREMENTAL_B_LATEST = 2;
+    public static final int INCREMENTAL_B_LOW_STATE = 3;
+    public static final int INCREMENTAL_B_HIGH_STATE = 4;
+    public static final int INCREMENTAL_B_LOW_EVENTS = 5;
+    public static final int INCREMENTAL_B_HIGH_EVENTS = 6;
+    public static final int INCREMENTAL_B_LOW_TRANS = 7;
+    public static final int INCREMENTAL_B_HIGH_TRANS = 8;
+    public static final int INCREMENTAL_B_SHARE_EVENTS = 9;
+    public static final int INCREMENTAL_B_DIFF_EVENTS = 10;
 
-    public final static int[] INCREMENTAL_B_NO_REJECT = new int[] {INCREMENTAL_B_RANDOM,
+    public static final int[] INCREMENTAL_B_NO_REJECT = new int[] {INCREMENTAL_B_RANDOM,
                                                                    INCREMENTAL_B_LOW_STATE,
                                                                    INCREMENTAL_B_HIGH_STATE,
                                                                    INCREMENTAL_B_LOW_EVENTS,
@@ -51,15 +51,15 @@ public class Incremental extends IncrementalMemoryMeasure {
                                                                    INCREMENTAL_B_LOW_TRANS,
                                                                    INCREMENTAL_B_HIGH_TRANS};
 
-    public final static int COUNTEREXAMPLE_RANDOM = 0;
-    public final static int COUNTEREXAMPLE_SHORT = 1;
-    public final static int COUNTEREXAMPLE_LONG = 2;
-    public final static int COUNTEREXAMPLE_FEWEST_EVENTS = 3;
-    public final static int COUNTEREXAMPLE_MOST_EVENTS = 4;
+    public static final int COUNTEREXAMPLE_RANDOM = 0;
+    public static final int COUNTEREXAMPLE_SHORT = 1;
+    public static final int COUNTEREXAMPLE_LONG = 2;
+    public static final int COUNTEREXAMPLE_FEWEST_EVENTS = 3;
+    public static final int COUNTEREXAMPLE_MOST_EVENTS = 4;
 
-    public final static int NUM_A_HEURISTICS = 3;
-    public final static int NUM_B_HEURISTICS = 11;
-    public final static int NUM_C_HEURISTICS = 5;
+    public static final int NUM_A_HEURISTICS = 3;
+    public static final int NUM_B_HEURISTICS = 11;
+    public static final int NUM_C_HEURISTICS = 5;
 
 //---  Instance Variables   -------------------------------------------------------------------
 

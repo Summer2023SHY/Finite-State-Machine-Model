@@ -7,7 +7,7 @@ import visual.composite.HandlePanel;
 
 public class EntryList extends EntryTextDisplay{
 
-    private final static Font ADD_FONT = new Font("Serif", Font.BOLD, 18);
+    private static final Font ADD_FONT = new Font("Serif", Font.BOLD, 18);
 
     private int addCode;
 

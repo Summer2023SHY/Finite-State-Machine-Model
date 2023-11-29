@@ -9,10 +9,10 @@ public class UStructurePage extends OptionPage{
 
     //-- Scripts  ---------------------------------------------
 
-    private final static String HEADER = "UStructure";
-    private final static String CATEGORY_USTRUC = "Build U-Structure";
+    private static final String HEADER = "UStructure";
+    private static final String CATEGORY_USTRUC = "Build U-Structure";
 
-    private final static String HELP =
+    private static final String HELP =
             "Some words\n"
             + "And more\n"
             + "And more\n";

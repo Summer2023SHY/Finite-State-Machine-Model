@@ -13,9 +13,9 @@ public class GenerateDot {
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static String INITIAL_STATE_MARKER = "ArbitraryUnusedNameNoWorriesJustGrooving";
+    private static final String INITIAL_STATE_MARKER = "ArbitraryUnusedNameNoWorriesJustGrooving";
     //TODO: Make sure there are a lot of potential colors here, preferably prime, to avoid reuse
-    private final static ColorPack[] backgroundColorCycle = new ColorPack[] {new ColorPack(0x4f, 0x4f, 0x4f),
+    private static final ColorPack[] backgroundColorCycle = new ColorPack[] {new ColorPack(0x4f, 0x4f, 0x4f),
                                                                              new ColorPack(0x96, 0x32, 0x32),
                                                                              new ColorPack(0x00, 0x80, 0x00),
                                                                              new ColorPack(0x5b, 0x32, 0x92),
@@ -30,14 +30,14 @@ public class GenerateDot {
                                                                              new ColorPack(0x8b, 0x45, 0x13),
                                                                              };
 
-    private final static String SUB_START = "_{";
-    private final static String SUP_START = "^{";
-    private final static String SCRIPT_END = "}";
+    private static final String SUB_START = "_{";
+    private static final String SUP_START = "^{";
+    private static final String SCRIPT_END = "}";
 
-    private final static String SUB_CONVERT_START = "<sub>";
-    private final static String SUB_CONVERT_END = "</sub>";
-    private final static String SUP_CONVERT_START = "<SUP>";
-    private final static String SUP_CONVERT_END = "</SUP>";
+    private static final String SUB_CONVERT_START = "<sub>";
+    private static final String SUB_CONVERT_END = "</sub>";
+    private static final String SUP_CONVERT_START = "<SUP>";
+    private static final String SUP_CONVERT_END = "</SUP>";
 
 //---  Operations   ---------------------------------------------------------------------------
 

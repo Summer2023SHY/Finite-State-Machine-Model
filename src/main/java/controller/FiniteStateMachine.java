@@ -47,17 +47,17 @@ public class FiniteStateMachine implements InputReceiver{
 
     //-- Config  ----------------------------------------------
 
-    public final static String DOT_ADDRESS_VAR = "dotAddress";
-    public final static String ADDRESS_SETTINGS = "./Finite State Machine Model/settings/";
-    public final static String ADDRESS_IMAGES = "./Finite State Machine Model/images/";
-    public final static String ADDRESS_SOURCES = "./Finite State Machine Model/sources/";
-    public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
+    public static final String DOT_ADDRESS_VAR = "dotAddress";
+    public static final String ADDRESS_SETTINGS = "./Finite State Machine Model/settings/";
+    public static final String ADDRESS_IMAGES = "./Finite State Machine Model/images/";
+    public static final String ADDRESS_SOURCES = "./Finite State Machine Model/sources/";
+    public static final String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 
-    private final static String SEPARATOR = " - ";
-    private final static String SYMBOL_FALSE = "x";
-    private final static String SYMBOL_TRUE = "o";
+    private static final String SEPARATOR = " - ";
+    private static final String SYMBOL_FALSE = "x";
+    private static final String SYMBOL_TRUE = "o";
 
-    private final static String REGEX_NEWLINE_REPLACE = ",;,";
+    private static final String REGEX_NEWLINE_REPLACE = ",;,";
 
 //---  Instance Variables   -------------------------------------------------------------------
 

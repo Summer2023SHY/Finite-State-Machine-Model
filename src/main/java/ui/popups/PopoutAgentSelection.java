@@ -14,14 +14,14 @@ public class PopoutAgentSelection extends PopoutWindow{
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static int WIDTH = 800;
-    private final static int HEIGHT = 600;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
 
-    private final static int CODE_ADD_AGENT = 10;
-    private final static int CODE_SUBMIT = 15;
-    private final static int CODE_TOGGLE_EVENT = 500;
-    private final static int CODE_REMOVE_RANGE = 1000;
-    private final static double BLOCK_SIZE_RATIO = 1.0 / 6;
+    private static final int CODE_ADD_AGENT = 10;
+    private static final int CODE_SUBMIT = 15;
+    private static final int CODE_TOGGLE_EVENT = 500;
+    private static final int CODE_REMOVE_RANGE = 1000;
+    private static final double BLOCK_SIZE_RATIO = 1.0 / 6;
 
     private Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 32);
     private Font SMALLER_FONT = new Font("Serif", Font.BOLD, 10);

@@ -41,7 +41,7 @@ public class GenerateFSM {
     private static final String ALPHABET_STATE = "0123456789";
     /** String constants referenced for consistent naming practices of Events*/
     private static final String ALPHABET_EVENT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private final static int MAX_PERCENTAGE_VALUE = 100;
+    private static final int MAX_PERCENTAGE_VALUE = 100;
 
     private static String SEPARATOR;
     private static String REGION_SEPARATOR;

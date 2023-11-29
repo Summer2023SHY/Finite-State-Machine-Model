@@ -21,9 +21,9 @@ public abstract class EntrySet {
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    protected final static Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 12);
-    private final static int SUBSYSTEM_CODE_DEFAULT = -1500;
-    public final static String SIGNIFIER_TRUE = "t";
+    protected static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 12);
+    private static final int SUBSYSTEM_CODE_DEFAULT = -1500;
+    public static final String SIGNIFIER_TRUE = "t";
 
 //---  Instance Variables   -------------------------------------------------------------------
 

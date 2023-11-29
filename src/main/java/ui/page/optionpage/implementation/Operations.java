@@ -17,15 +17,15 @@ public class Operations extends OptionPage{
 
     //-- Scripts  ---------------------------------------------
 
-    private final static String HEADER = "Operations";
+    private static final String HEADER = "Operations";
 
-    private final static String CATEGORY_TRANS_SYSTEMS = "Transition Systems";
-    private final static String CATEGORY_FSM = "FSM";
-    private final static String CATEGORY_QUERIES = "Queries";
+    private static final String CATEGORY_TRANS_SYSTEMS = "Transition Systems";
+    private static final String CATEGORY_FSM = "FSM";
+    private static final String CATEGORY_QUERIES = "Queries";
 
-    private final static String[] CATEGORIES = new String[] {CATEGORY_TRANS_SYSTEMS, CATEGORY_FSM, CATEGORY_QUERIES};
+    private static final String[] CATEGORIES = new String[] {CATEGORY_TRANS_SYSTEMS, CATEGORY_FSM, CATEGORY_QUERIES};
 
-    private final static String HELP =
+    private static final String HELP =
             "Some words\n"
             + "And more\n"
             + "And more\n";

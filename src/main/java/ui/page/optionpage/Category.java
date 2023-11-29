@@ -14,7 +14,7 @@ public class Category {
 
 //---  Constant Values   ----------------------------------------------------------------------
 
-    private final static Font CATEGORY_FONT = new Font("Serif", Font.BOLD, 14);
+    private static final Font CATEGORY_FONT = new Font("Serif", Font.BOLD, 14);
 
 //---  Instance Variables   -------------------------------------------------------------------
 

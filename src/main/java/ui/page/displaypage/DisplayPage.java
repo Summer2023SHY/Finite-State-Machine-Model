@@ -33,17 +33,17 @@ public class DisplayPage {
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static Font TITLE_FONT = new Font("Serif", Font.BOLD, 22);
-    private final static Font TEXT_FONT = new Font("Serif", Font.BOLD, 16);
-    private final static Font ATTRIBUTE_FONT = new Font("Serif", Font.BOLD, 14);
-    private final static int STAND_IN_CODE = -1;
-    private final static int DEFAULT_ENTRY_SIZE = 25;
+    private static final Font TITLE_FONT = new Font("Serif", Font.BOLD, 22);
+    private static final Font TEXT_FONT = new Font("Serif", Font.BOLD, 16);
+    private static final Font ATTRIBUTE_FONT = new Font("Serif", Font.BOLD, 14);
+    private static final int STAND_IN_CODE = -1;
+    private static final int DEFAULT_ENTRY_SIZE = 25;
 
-    private final static String TITLE_STATES = "States";
-    private final static String TITLE_EVENTS = "Events";
-    private final static String TITLE_TRANS = "Transitions";
+    private static final String TITLE_STATES = "States";
+    private static final String TITLE_EVENTS = "Events";
+    private static final String TITLE_TRANS = "Transitions";
 
-    private final static double VERT_PROP = 7 / (double)12;
+    private static final double VERT_PROP = 7 / (double)12;
 
     private static final File CYCLE_IMG;
     static {

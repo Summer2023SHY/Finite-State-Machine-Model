@@ -13,10 +13,10 @@ public class PopoutInputRequest extends PopoutWindow{
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static int POPUP_WIDTH = 300;
-    private final static int POPUP_HEIGHT = 200;
-    private final static int CODE_SUBMIT = 5;
-    private final static String ELEMENT_NAME_ENTRY = "entry";
+    private static final int POPUP_WIDTH = 300;
+    private static final int POPUP_HEIGHT = 200;
+    private static final int CODE_SUBMIT = 5;
+    private static final String ELEMENT_NAME_ENTRY = "entry";
 
 //---  Instance Variables   -------------------------------------------------------------------
 

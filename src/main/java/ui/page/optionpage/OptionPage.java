@@ -29,8 +29,8 @@ public abstract class OptionPage {
 
 //---  Constant Values   ----------------------------------------------------------------------
 
-    private final static Font HELP_FONT = new Font("Serif", Font.BOLD, 18);
-    protected final static Font OPTIONS_FONT = new Font("Serif", Font.BOLD, 12);
+    private static final Font HELP_FONT = new Font("Serif", Font.BOLD, 18);
+    protected static final Font OPTIONS_FONT = new Font("Serif", Font.BOLD, 12);
 
     private static final File QUESTION_MARK_IMG;
     static {

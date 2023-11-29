@@ -33,11 +33,11 @@ public class FSMUI implements InputHandler{
 //---  Constants   ----------------------------------------------------------------------------
 
     //TODO: Let the ratio change for resizing by user if they wanna change the proportion, piggyback reactToResize prolly
-    private final static double PANEL_RATIO_VERTICAL = 33 / 35.0;
-    private final static String WINDOW_NAME = "Home";
+    private static final double PANEL_RATIO_VERTICAL = 33 / 35.0;
+    private static final String WINDOW_NAME = "Home";
 
-    private final static int DEFAULT_POPUP_WIDTH = 400;
-    private final static int DEFAULT_POPUP_HEIGHT = 250;
+    private static final int DEFAULT_POPUP_WIDTH = 400;
+    private static final int DEFAULT_POPUP_HEIGHT = 250;
 
 //---  Instance Variables   -------------------------------------------------------------------
 

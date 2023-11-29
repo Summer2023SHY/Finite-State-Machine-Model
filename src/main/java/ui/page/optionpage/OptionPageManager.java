@@ -18,8 +18,8 @@ public class OptionPageManager {
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static int ROTATION_MULTIPLIER = 15;
-    private final static int CODE_BASE_OPTIONS_HEADER = 3500;
+    private static final int ROTATION_MULTIPLIER = 15;
+    private static final int CODE_BASE_OPTIONS_HEADER = 3500;
 
 //---  Instance Variables   -------------------------------------------------------------------
 

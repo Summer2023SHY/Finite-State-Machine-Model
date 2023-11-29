@@ -21,10 +21,10 @@ public class Manager implements ReceiveMemoryMeasure{
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static String SEPARATOR = ";,;;,;";
-    private final static String REGION_SEPARATOR = "---";
-    private final static String TRUE_SYMBOL = "o";
-    private final static String FALSE_SYMBOL = "x";
+    private static final String SEPARATOR = ";,;;,;";
+    private static final String REGION_SEPARATOR = "---";
+    private static final String TRUE_SYMBOL = "o";
+    private static final String FALSE_SYMBOL = "x";
 
 //---  Instance Variables   -------------------------------------------------------------------
 

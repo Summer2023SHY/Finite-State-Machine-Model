@@ -20,16 +20,16 @@ public class AdjustFSM extends OptionPage {
 
     // -- Scripts ---------------------------------------------
 
-    private final static String HEADER = "Adjust FSM";
-    private final static String CATEGORY_GENERATE = "Generate FSM";
-    private final static String CATEGORY_EDIT_FSM = "Edit FSM Properties";
-    private final static String CATEGORY_EDIT_STATES = "Edit FSM States";
-    private final static String CATEGORY_EDIT_EVENTS = "Edit FSM Events";
-    private final static String CATEGORY_EDIT_TRANSITIONS = "Edit FSM Transitions";
-    private final static String CATEGORY_ADMIN = "Admin";
-    private final static String[] CATEGORIES = new String[] { CATEGORY_GENERATE,
+    private static final String HEADER = "Adjust FSM";
+    private static final String CATEGORY_GENERATE = "Generate FSM";
+    private static final String CATEGORY_EDIT_FSM = "Edit FSM Properties";
+    private static final String CATEGORY_EDIT_STATES = "Edit FSM States";
+    private static final String CATEGORY_EDIT_EVENTS = "Edit FSM Events";
+    private static final String CATEGORY_EDIT_TRANSITIONS = "Edit FSM Transitions";
+    private static final String CATEGORY_ADMIN = "Admin";
+    private static final String[] CATEGORIES = new String[] { CATEGORY_GENERATE,
             CATEGORY_EDIT_FSM, CATEGORY_EDIT_STATES, CATEGORY_EDIT_EVENTS, CATEGORY_EDIT_TRANSITIONS, CATEGORY_ADMIN };
-    private final static String HELP = "Some line\n" + "Another line\n" + "This will be the help page";
+    private static final String HELP = "Some line\n" + "Another line\n" + "This will be the help page";
 
 //---  Constructors   -------------------------------------------------------------------------
 

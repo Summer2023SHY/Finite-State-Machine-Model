@@ -2,7 +2,7 @@ package ui.page.optionpage.entryset;
 
 public class EntrySetFactory {
 
-    public final static String SIGNIFIER_TRUE = "t";
+    public static final String SIGNIFIER_TRUE = "t";
 
     /** Private constructor */
     private EntrySetFactory() {

@@ -12,8 +12,8 @@ public class HeaderSelect extends HandlePanel{
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static int ROTATION_MULTIPLIER = 10;
-    private final static Font HEADER_FONT = new Font("Serif", Font.BOLD, 12);
+    private static final int ROTATION_MULTIPLIER = 10;
+    private static final Font HEADER_FONT = new Font("Serif", Font.BOLD, 12);
 
 //---  Instance Variables   -------------------------------------------------------------------
 

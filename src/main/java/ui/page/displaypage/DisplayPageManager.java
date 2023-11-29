@@ -17,7 +17,7 @@ public class DisplayPageManager implements InputHandler{
 
 //---  Constants   ----------------------------------------------------------------------------
 
-    private final static int CODE_BASE_DISPLAY_HEADER = 4000;
+    private static final int CODE_BASE_DISPLAY_HEADER = 4000;
 
 //---  Instance Variables   -------------------------------------------------------------------
 

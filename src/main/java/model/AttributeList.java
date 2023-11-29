@@ -10,31 +10,31 @@ public class AttributeList {
 
     //-- State  -----------------------------------------------
 
-    public final static String[] STATE_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_INITIAL, AttributeList.ATTRIBUTE_MARKED, AttributeList.ATTRIBUTE_PRIVATE, AttributeList.ATTRIBUTE_BAD, AttributeList.ATTRIBUTE_GOOD};
-    public final static String ATTRIBUTE_INITIAL = "Initial";
-    public final static boolean ATTRIBUTE_AON_INITIAL = true;
-    public final static String ATTRIBUTE_MARKED = "Marked";
-    public final static boolean ATTRIBUTE_AON_MARKED = true;
-    public final static String ATTRIBUTE_PRIVATE = "Private";
-    public final static boolean ATTRIBUTE_AON_PRIVATE = true;
-    public final static String ATTRIBUTE_BAD = "Bad";
-    public final static boolean ATTRIBUTE_AON_BAD = false;
-    public final static String ATTRIBUTE_GOOD = "Good";
-    public final static boolean ATTRIBUTE_AON_GOOD = false;
+    public static final String[] STATE_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_INITIAL, AttributeList.ATTRIBUTE_MARKED, AttributeList.ATTRIBUTE_PRIVATE, AttributeList.ATTRIBUTE_BAD, AttributeList.ATTRIBUTE_GOOD};
+    public static final String ATTRIBUTE_INITIAL = "Initial";
+    public static final boolean ATTRIBUTE_AON_INITIAL = true;
+    public static final String ATTRIBUTE_MARKED = "Marked";
+    public static final boolean ATTRIBUTE_AON_MARKED = true;
+    public static final String ATTRIBUTE_PRIVATE = "Private";
+    public static final boolean ATTRIBUTE_AON_PRIVATE = true;
+    public static final String ATTRIBUTE_BAD = "Bad";
+    public static final boolean ATTRIBUTE_AON_BAD = false;
+    public static final String ATTRIBUTE_GOOD = "Good";
+    public static final boolean ATTRIBUTE_AON_GOOD = false;
 
     //-- Event  -----------------------------------------------
 
-    public final static String[] EVENT_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_OBSERVABLE, AttributeList.ATTRIBUTE_CONTROLLABLE, AttributeList.ATTRIBUTE_ATTACKER_OBSERVABLE};
-    public final static String ATTRIBUTE_OBSERVABLE = "Observable";
-    public final static boolean ATTRIBUTE_AON_OBSERVABLE = false;
-    public final static String ATTRIBUTE_CONTROLLABLE = "Controllable";
-    public final static boolean ATTRIBUTE_AON_CONTROLLABLE = false;
-    public final static String ATTRIBUTE_ATTACKER_OBSERVABLE = "AttackerObservable";
-    public final static boolean ATTRIBUTE_AON_ATTACKER_OBSERVABLE = true;
+    public static final String[] EVENT_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_OBSERVABLE, AttributeList.ATTRIBUTE_CONTROLLABLE, AttributeList.ATTRIBUTE_ATTACKER_OBSERVABLE};
+    public static final String ATTRIBUTE_OBSERVABLE = "Observable";
+    public static final boolean ATTRIBUTE_AON_OBSERVABLE = false;
+    public static final String ATTRIBUTE_CONTROLLABLE = "Controllable";
+    public static final boolean ATTRIBUTE_AON_CONTROLLABLE = false;
+    public static final String ATTRIBUTE_ATTACKER_OBSERVABLE = "AttackerObservable";
+    public static final boolean ATTRIBUTE_AON_ATTACKER_OBSERVABLE = true;
 
     //-- Transitions  -----------------------------------------
 
-    public final static String[] TRANSITION_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_BAD};
+    public static final String[] TRANSITION_ATTRIBUTES = new String[] {AttributeList.ATTRIBUTE_BAD};
 
 //---  Instance Variables   -------------------------------------------------------------------
 
