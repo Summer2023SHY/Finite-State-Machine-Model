@@ -1932,11 +1932,11 @@ public class DataGathering {
         File f = new File(path);
         if(f.exists()) {
             StringBuilder sb = new StringBuilder();
-            Scanner sc = new Scanner(f);
-            while(sc.hasNextLine()) {
-                sb.append(sc.nextLine() + StringUtils.LF);
+            try (Scanner sc = new Scanner(f)) {
+                while(sc.hasNextLine()) {
+                    sb.append(sc.nextLine() + StringUtils.LF);
+                }
             }
-            sc.close();
             return sb.toString();
         }
         return null;
