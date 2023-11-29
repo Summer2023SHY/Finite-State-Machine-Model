@@ -58,8 +58,14 @@ public class TestFunctionality {
 //---  Operations   ---------------------------------------------------------------------------
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws IOException {
+        FormatConversion.assignPaths(FiniteStateMachine.ADDRESS_IMAGES);
         model = new Manager();
+        File f = new File(FiniteStateMachine.ADDRESS_IMAGES);
+        f = f.getParentFile();
+        defaultWritePath = f.getAbsolutePath() + "/autogenerate";
+        f = new File(defaultWritePath);
+        FileUtils.forceMkdir(f);
         SystemGeneration.assignManager(model);
     }
 
