@@ -30,14 +30,9 @@ public class StateSet {
     public StateSet(String[] in) {
         plant = new String[sizePlants];
         spec = new String[sizeSpecs];
-        for(int i = 0; i < in.length; i++) {
-            if(i < sizePlants) {
-                plant[i] = in[i];
-            }
-            else {
-                spec[i - sizePlants] = in[i];
-            }
-        }
+        System.arraycopy(in, 0, plant, 0, Math.min(in.length, sizePlants));
+        if (sizePlants < in.length)
+            System.arraycopy(in, sizePlants, spec, 0, in.length - sizePlants);
     }
 
 //---  Setter Methods   -----------------------------------------------------------------------
@@ -60,12 +55,8 @@ public class StateSet {
 
     public String[] getStates() {
         String[] out = new String[sizePlants + sizeSpecs];
-        for(int i = 0; i < sizePlants; i++) {
-            out[i] = plant[i];
-        }
-        for(int i = 0; i < sizeSpecs; i++) {
-            out[sizePlants + i] = spec[i];
-        }
+        System.arraycopy(plant, 0, out, 0, sizePlants);
+        System.arraycopy(spec, 0, out, sizePlants, sizeSpecs);
         return out;
     }
 
