@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    log4jVersion = '2.22.0'
+    log4jVersion = '2.22.1'
 }
 
 repositories {
