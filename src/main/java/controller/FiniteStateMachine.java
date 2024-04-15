@@ -19,6 +19,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.*;
 
 import controller.convert.FormatConversion;
 import model.AttributeList;
@@ -58,6 +59,8 @@ public class FiniteStateMachine implements InputReceiver{
     private static final String SYMBOL_TRUE = "o";
 
     private static final String REGEX_NEWLINE_REPLACE = ",;,";
+
+    private static Logger logger = LogManager.getLogger();
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -331,7 +334,7 @@ public class FiniteStateMachine implements InputReceiver{
                     allotFSMToView(ret);
                 } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to trim did not possess attributes: State - Initial, Marked");
-                    e.printStackTrace();
+                    logger.catching(e);
                 }
                 break;
             case CodeReference.CODE_ACCESSIBLE:
@@ -349,7 +352,7 @@ public class FiniteStateMachine implements InputReceiver{
                     allotFSMToView(ret);
                 } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to make coaccessible did not possess attributes: State - Initial, Marked");
-                    e.printStackTrace();
+                    logger.catching(e);
                 }
                 break;
             case CodeReference.CODE_OBSERVER:
@@ -396,7 +399,7 @@ public class FiniteStateMachine implements InputReceiver{
                     view.displayAlert("FSM is " + (res ? StringUtils.EMPTY : "not") + " blocking");
                 } catch (RuntimeException e) {
                     view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Error: FSM given to query Blocking did not possess attributes: State - Initial");
-                    e.printStackTrace();
+                    logger.catching(e);
                 }
                 break;
             case CodeReference.CODE_STATE_EXISTS:
@@ -491,7 +494,7 @@ public class FiniteStateMachine implements InputReceiver{
                         view.updateFSMImage(view.getCurrentFSM(), path);
                 }
                 } catch (IOException e) {
-                    throw new UncheckedIOException(e);
+                    throw logger.throwing(new UncheckedIOException(e));
                 }
                 break;
             default:
@@ -509,7 +512,7 @@ public class FiniteStateMachine implements InputReceiver{
             allotFSMToView(model.readInFSM(lines));
         }
         catch(IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 
@@ -520,7 +523,7 @@ public class FiniteStateMachine implements InputReceiver{
             raf.writeBytes(src);
         }
         catch(IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         System.out.println(f.getPath());
         view.displayAlert((currFSM == null) ? "Error: No selected FSM" : "Source file saved to: " + f.getPath());
@@ -560,6 +563,7 @@ public class FiniteStateMachine implements InputReceiver{
             try {
                 allotFSMToView(    model.readInFSM(model.generateRandomFSM(nom, st, ev, tr, det)));
             } catch (RuntimeException e) {
+                logger.catching(e);
                 view.displayAlert("Failure to Generate new Random FSM, check you have assigned Attributes Correctly.");
             }
         }

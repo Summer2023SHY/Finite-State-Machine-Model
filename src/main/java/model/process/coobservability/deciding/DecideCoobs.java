@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.logging.log4j.*;
+
 import model.fsm.TransitionSystem;
 import model.process.ProcessDES;
 import model.process.coobservability.UStructure;
@@ -32,6 +34,8 @@ public class DecideCoobs implements DecideCondition{
 
     public static final int DECISION_MODE_ENABLE = 1;
     public static final int DECISION_MODE_DISABLE = 0;
+
+    private static Logger logger = LogManager.getLogger();
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -292,7 +296,7 @@ public class DecideCoobs implements DecideCondition{
         try {
             ultPlant = ProcessDES.makeAccessible(ultPlant);
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         // --- */
 

@@ -19,6 +19,7 @@ import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.*;
 
 import controller.FiniteStateMachine;
 import controller.convert.FormatConversion;
@@ -142,7 +143,7 @@ public class DataGathering {
                                                        NUMBER_EXISTING_TEST_RUNS
                                                        };
 
-
+    private static Logger logger = LogManager.getLogger();
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -501,7 +502,7 @@ public class DataGathering {
         }
         catch(IOException e) {
             System.out.println(f.getAbsolutePath());
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 
@@ -538,7 +539,7 @@ public class DataGathering {
         }
         catch (IOException e) {
             System.out.println(f.getAbsolutePath());
-            e.printStackTrace();
+            logger.catching(e);
         }
         return hold;
     }
@@ -552,7 +553,7 @@ public class DataGathering {
             fileWriteInterpretDataOverleafTableGeneral(hold, raf);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 
@@ -685,7 +686,7 @@ public class DataGathering {
         }
         catch(IOException e) {
             System.out.println(f.getAbsolutePath());
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 
@@ -728,7 +729,7 @@ public class DataGathering {
         }
         catch(IOException e) {
             System.out.println(f.getAbsolutePath());
-            e.printStackTrace();
+            logger.catching(e);
         }
         hold.assignTotalNumberTestsNested(counter);
         return hold;
@@ -746,7 +747,7 @@ public class DataGathering {
             fileWriteInterpretDataOverleafTableGeneral(hold, raf);
         }
         catch(IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 
@@ -1894,7 +1895,7 @@ public class DataGathering {
                 raf.writeBytes(text + StringUtils.LF);
             }
             catch(IOException e) {
-                e.printStackTrace();
+                logger.catching(e);
             }
         }
     }
@@ -1921,7 +1922,7 @@ public class DataGathering {
                 raf.writeBytes(StringUtils.LF);
             }
             catch(IOException e) {
-                e.printStackTrace();
+                logger.catching(e);
             }
         }
     }
@@ -1955,7 +1956,7 @@ public class DataGathering {
             return line != null && line.equals(phrase);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return false;
     }
@@ -1979,7 +1980,7 @@ public class DataGathering {
             return out;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return new ArrayList<Integer>();
     }

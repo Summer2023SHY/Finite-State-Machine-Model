@@ -5,10 +5,14 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.logging.log4j.*;
+
 public class DataGatheringManager implements TestReset{
 
     private static long TIME_OUT_LONG =  360000L;
     private static long TIME_OUT_SHORT = 120000L;
+
+    private static Logger logger = LogManager.getLogger();
 
     private Timer clockTimer;
     private TestTimer clock;
@@ -76,7 +80,7 @@ public class DataGatheringManager implements TestReset{
                 data.allInOneRunTests();
             }
             catch(RuntimeException e) {
-                e.printStackTrace();
+                logger.catching(e);
             }
         }
 

@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.*;
 import org.junit.jupiter.api.*;
 
 import controller.FiniteStateMachine;
@@ -44,6 +45,8 @@ public class TestFunctionality {
     private static final String RESULTS_FILE = "output.txt";
 
     private static final String ANALYSIS_FILE = "raw_num.txt";
+
+    private static Logger logger = LogManager.getLogger();
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -944,7 +947,7 @@ public class TestFunctionality {
                 raf.writeBytes(StringUtils.LF);
             }
             catch (IOException e) {
-                e.printStackTrace();
+                logger.catching(e);
             }
         }
     }

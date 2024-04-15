@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.logging.log4j.*;
 
 import controller.InputReceiver;
 import filemeta.FileChooser;
@@ -38,6 +39,8 @@ public class FSMUI implements InputHandler{
 
     private static final int DEFAULT_POPUP_WIDTH = 400;
     private static final int DEFAULT_POPUP_HEIGHT = 250;
+
+    private static Logger logger = LogManager.getLogger();
 
 //---  Instance Variables   -------------------------------------------------------------------
 
@@ -260,7 +263,7 @@ public class FSMUI implements InputHandler{
             return Integer.parseInt(getTextContent(code));
         }
         catch(NumberFormatException e) {
-            e.printStackTrace();
+            logger.catching(e);
             displayAlert("Illegal numeric entry for code: " + code + ". Check that an input expecting a number was not given a non-numeric value.");
             return null;
         }
@@ -271,7 +274,7 @@ public class FSMUI implements InputHandler{
             return Integer.parseInt(getTextContent(code, posit));
         }
         catch(NumberFormatException e) {
-            e.printStackTrace();
+            logger.catching(e);
             displayAlert("Illegal numeric entry for code: " + code + ". Check that an input expecting a number was not given a non-numeric value.");
             return null;
         }
