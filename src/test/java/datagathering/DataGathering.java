@@ -433,12 +433,12 @@ public class DataGathering {
     private void interpretTestBatchDataSimple(String path, String type) {
         generateRawDataFileSimple(path, type);
         InterpretData hold = generateInterpretDataSimple(path, type);
-        outputInterpretDataSimple(hold, path, type, "");
+        outputInterpretDataSimple(hold, path, type, StringUtils.EMPTY);
         hold.setColumnFilter(2);
         hold.setFilterValue(1.0);
-        outputInterpretDataSimple(hold, path, type, "true");
+        outputInterpretDataSimple(hold, path, type, BooleanUtils.TRUE);
         hold.setFilterValue(0.0);
-        outputInterpretDataSimple(hold, path, type, "false");
+        outputInterpretDataSimple(hold, path, type, BooleanUtils.FALSE);
     }
 
     private void generateRawDataFileSimple(String path, String type) {
