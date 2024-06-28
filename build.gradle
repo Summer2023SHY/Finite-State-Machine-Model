@@ -20,7 +20,7 @@ application {
 
 dependencies {
     implementation name: 'svi_18'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.3'
 
     // graphviz-java
     implementation group: 'guru.nidi', name: 'graphviz-java', version: '0.18.1'
